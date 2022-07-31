@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  starknet:
+    image: shardlabs/starknet-devnet:0.2.5-arm
+    entrypoint: ["starknet-devnet", "--host", "0.0.0.0", "--lite-mode"]
+    # worth trying with `--lite-mode` yet
+    # warning: not very well tested yet. 1st suspect if something goes wrong
+    # entrypoint: ["starknet-devnet", "--host", "0.0.0.0", "--lite-mode"]
+    ports:
+      - "5050:5050"
+
+  # ganache:
+  #   image: trufflesuite/ganache:v7.0.3
+  #   ports:
+  #     - "8545:8545"
