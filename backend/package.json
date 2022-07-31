@@ -17,15 +17,20 @@
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.6.8",
     "hardhat": "^2.9.7",
-    "hardhat-gas-reporter": "^1.0.8",
     "hardhat-deploy": "^0.10.5",
+    "hardhat-gas-reporter": "^1.0.8",
+    "node-fetch": "^3.2.10",
     "prettier": "^2.6.2",
     "prettier-plugin-solidity": "^1.0.0-beta.13",
     "solhint": "^3.3.7",
     "solidity-coverage": "^0.7.21"
   },
   "scripts": {
-    "compile" : "./scripts/compile.sh",
-    "test" : "npx hardhat test"
+    "compile": "./scripts/compile.sh",
+    "test": "npx hardhat test",
+    "deploy" : "npx hardhat run scripts/deploy.js"
+  },
+  "dependencies": {
+    "axios": "^0.27.2"
   }
 }
