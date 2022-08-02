@@ -7,6 +7,7 @@ import { AiOutlineTwitter, AiOutlineGithub } from "react-icons/ai";
 import { FaDiscord } from "react-icons/fa";
 import { BsTelegram, BsInstagram } from "react-icons/bs";
 import { SiGmail } from "react-icons/si";
+import DashboardContainer from "~/components/DashboardContainer";
 
 export default function Dashboard() {
   const [user, setUser] = useState<UserProps>({
@@ -54,8 +55,11 @@ export default function Dashboard() {
   return (
     <Wrapper>
       <Profile account={account} user={user} />
+      <DashboardContainer />
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+`;
