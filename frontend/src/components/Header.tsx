@@ -1,9 +1,4 @@
-import {
-  useStarknet,
-  useConnectors,
-  StarknetProvider,
-} from "@starknet-react/core";
-import ConnectWallet from "./ConnectWallet/connect";
+import Connect from "./connect";
 import styled from "styled-components";
 import Link from "next/link";
 
@@ -12,10 +7,7 @@ const NavItems = [
   { title: "Builds", href: "/builds" },
 ];
 
-export default function Header() {
-  const { account } = useStarknet();
-  const { available, connect, disconnect } = useConnectors();
-
+export default function Header({ account }: any) {
   return (
     <Wrapper>
       <LogoContainer>
@@ -29,8 +21,7 @@ export default function Header() {
           </Link>
         ))}
       </Nav>
-
-      <ConnectWallet account={account} />
+      <Connect account={account} />
     </Wrapper>
   );
 }

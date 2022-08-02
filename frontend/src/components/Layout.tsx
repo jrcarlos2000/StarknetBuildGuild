@@ -1,18 +1,15 @@
+import { useStarknet } from "@starknet-react/core";
 import Header from "./Header";
-import {
-  useStarknet,
-  useConnectors,
-  StarknetProvider,
-} from "@starknet-react/core";
 
 interface IProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: IProps) {
+  const { account } = useStarknet();
   return (
     <>
-      <Header />
+      <Header account={account} />
       <main>{children}</main>
     </>
   );
