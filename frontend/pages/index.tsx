@@ -1,11 +1,13 @@
 import type { NextPage } from "next";
-import { ConnectWallet } from "~/components/ConnectWallet";
+
+import Main from "~/components/Main";
+import Header from "~/components/Header";
 
 const Home: NextPage = () => {
   return (
     <div>
-      <h2>Wallet</h2>
-      <ConnectWallet />
+      <Header />
+      <Main />
     </div>
   );
 };

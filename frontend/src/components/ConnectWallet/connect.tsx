@@ -1,17 +1,10 @@
-import { useStarknet, useConnectors, StarknetProvider } from '@starknet-react/core'
-import { Provider } from 'starknet'
+import {
+  useStarknet,
+  useConnectors,
+  StarknetProvider,
+} from "@starknet-react/core";
 export default function ConnectWallet() {
-  const { account } = useStarknet()
-  const { available, connect, disconnect } = useConnectors()
-
-  if (account) {
-    return (
-      <div>
-        <p>Account: {account}</p>
-        <button onClick={() => disconnect()}>Disconnect</button>
-      </div>
-    )
-  }
+  const { available, connect, disconnect } = useConnectors();
 
   return (
     <div>
@@ -21,5 +14,5 @@ export default function ConnectWallet() {
         </button>
       ))}
     </div>
-  )
+  );
 }
