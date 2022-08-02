@@ -28,10 +28,20 @@ describe("Testing", function () {
   this.timeout(10000_000);
   starknet.devnet.restart();
 
-  describe("Types", function () {
+  describe("Core", function () {
 
-    it("Uint256", async function () {
-  
+    it("can read all projects", async function () {
+        const cfCounter = await starknet.getContractFactory('counter');
+        const cCounter = await cfCounter.deploy();
+
+        for(let i = 0;i < 15 ; i++){
+          await cCounter.invoke('add_project')
+        }
+        console.log('done')
+
+        const res = await cCounter.call('get_all_projects');
+        console.log(res)
+
     })
 
   })
