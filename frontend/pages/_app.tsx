@@ -5,6 +5,7 @@ import {
   getInstalledInjectedConnectors,
   StarknetProvider,
 } from "@starknet-react/core";
+import Layout from "~/components/Layout";
 function MyApp({ Component, pageProps }: AppProps) {
   const connectors = getInstalledInjectedConnectors();
   const [showChild, setShowChild] = useState(false);
@@ -24,7 +25,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         connectors={connectors}
         defaultProvider={new Provider({ baseUrl: "http://localhost:5050" })}
       >
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </StarknetProvider>
     );
   }
