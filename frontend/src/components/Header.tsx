@@ -1,4 +1,4 @@
-import Connect from "./connect";
+import Connect from "./Connect";
 import styled from "styled-components";
 import Link from "next/link";
 
@@ -10,27 +10,46 @@ const NavItems = [
 export default function Header({ account }: any) {
   return (
     <Wrapper>
-      <LogoContainer>
-        <Logo src="" />
-        <h3>BuidlGuidl</h3>
-      </LogoContainer>
-      <Nav>
-        {NavItems.map((item) => (
-          <Link href={item.href}>
-            <NavItem>{item.title}</NavItem>
+      <NavContainer>
+        <LogoContainer>
+          <Link href="/">
+            <Logo>BuidlGuidl</Logo>
           </Link>
-        ))}
-      </Nav>
+        </LogoContainer>
+        <Nav>
+          {NavItems.map((item) => (
+            <Link href={item.href}>
+              <NavItem>{item.title}</NavItem>
+            </Link>
+          ))}
+        </Nav>
+      </NavContainer>
       <Connect account={account} />
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-const LogoContainer = styled.div``;
+const NavContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
-const Logo = styled.img``;
+const LogoContainer = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const Logo = styled.a`
+  font-size: 1.5rem;
+  font-weight: 600;
+`;
 
 const Nav = styled.div``;
 

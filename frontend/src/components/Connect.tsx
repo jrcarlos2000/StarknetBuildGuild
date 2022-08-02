@@ -1,27 +1,47 @@
 import { useConnectors } from "@starknet-react/core";
 import styled from "styled-components";
+import { MdCancelPresentation } from "react-icons/md";
+type ConnectProps = { account: string | undefined };
 
-type ConnectWalletProps = { account: string | undefined };
-
-export default function Connect({ account }: ConnectWalletProps) {
+export default function Connect({ account }: ConnectProps) {
   const { disconnect } = useConnectors();
   const { available, connect } = useConnectors();
 
   return (
-    <div>
+    <Wrapper>
       {account ? (
-        <div>
-          <p>Account: {account}</p>
-          <button onClick={() => disconnect()}>Disconnect</button>
-        </div>
+        <AccountContainer>
+          <Account>
+            {account.slice(0, 6)}...{account.slice(29, 35)}
+          </Account>
+          <Disconnect>
+            <MdCancelPresentation onClick={() => disconnect()} />
+          </Disconnect>
+        </AccountContainer>
       ) : (
         <div>
           <Button onClick={() => connect(available[0])}>Connect Wallet</Button>
         </div>
       )}
-    </div>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div``;
+
+const AccountContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const Account = styled.div``;
+
+const Disconnect = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 const Button = styled.div`
   border: 1px solid #282b2f;
