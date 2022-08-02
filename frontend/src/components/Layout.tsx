@@ -1,4 +1,9 @@
 import Header from "./Header";
+import {
+  useStarknet,
+  useConnectors,
+  StarknetProvider,
+} from "@starknet-react/core";
 
 interface IProps {
   children: React.ReactNode;

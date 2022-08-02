@@ -3,12 +3,15 @@ import React, { useState, useEffect } from "react";
 import { Provider } from "starknet";
 import {
   getInstalledInjectedConnectors,
+  useStarknet,
   StarknetProvider,
 } from "@starknet-react/core";
 import Layout from "~/components/Layout";
 function MyApp({ Component, pageProps }: AppProps) {
   const connectors = getInstalledInjectedConnectors();
   const [showChild, setShowChild] = useState(false);
+  const { account } = useStarknet();
+
   useEffect(() => {
     setShowChild(true);
   }, []);
