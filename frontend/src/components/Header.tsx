@@ -5,10 +5,11 @@ import {
 } from "@starknet-react/core";
 import ConnectWallet from "./ConnectWallet/connect";
 import styled from "styled-components";
+import Link from "next/link";
 
 const NavItems = [
-  { title: "Home", href: "/" },
-  { title: "About", href: "/about" },
+  { title: "Dashboard", href: "/dashboard" },
+  { title: "Builds", href: "/builds" },
 ];
 
 export default function Header() {
@@ -23,10 +24,11 @@ export default function Header() {
       </LogoContainer>
       <Nav>
         {NavItems.map((item) => (
-          <NavItem>{item.title}</NavItem>
+          <Link href={item.href}>
+            <NavItem>{item.title}</NavItem>
+          </Link>
         ))}
       </Nav>
-      <>Header</>
 
       <ConnectWallet account={account} />
     </Wrapper>
@@ -39,6 +41,10 @@ const LogoContainer = styled.div``;
 
 const Logo = styled.img``;
 
-const Nav = styled.nav``;
+const Nav = styled.div``;
 
-const NavItem = styled.div``;
+const NavItem = styled.a`
+  &:hover {
+    cursor: pointer;
+  }
+`;
