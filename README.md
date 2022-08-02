@@ -1,6 +1,10 @@
+
 # **BackEnd Setup**
 ```command
 cd backend 
+```
+```command
+npm install 
 ```
 ```
 docker compose up
