@@ -27,14 +27,8 @@ export default function Header() {
         ))}
       </Nav>
       <>Header</>
-      {account ? (
-        <div>
-          <p>Account: {account}</p>
-          <button onClick={() => disconnect()}>Disconnect</button>
-        </div>
-      ) : (
-        <ConnectWallet />
-      )}
+
+      <ConnectWallet account={account} />
     </Wrapper>
   );
 }
