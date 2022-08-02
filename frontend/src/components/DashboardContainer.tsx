@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Builds from "./Builds";
+import Builds from "./Portfolio";
 import Challenges from "./Challenges";
 
 export default function DashboardContainer() {
