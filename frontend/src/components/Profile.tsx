@@ -42,10 +42,6 @@ export default function Profile({
           </CopyButtonContainer>
         </CopyToClipboard>
       </AddressContainer>
-      <Status>
-        <p>{user.status}</p>
-      </Status>
-      <UpdateButton>Update Status</UpdateButton>
       <SocialMediaContainer>
         {user.socialMedia.map((item) => (
           <SocialMediaItem>{item.icon}</SocialMediaItem>
