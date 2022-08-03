@@ -1,5 +1,28 @@
 [
     {
+        "members": [
+            {
+                "name": "owner",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "cid",
+                "offset": 1,
+                "type": "felt"
+            }
+        ],
+        "name": "project_base",
+        "size": 2,
+        "type": "struct"
+    },
+    {
+        "inputs": [],
+        "name": "constructor",
+        "outputs": [],
+        "type": "constructor"
+    },
+    {
         "inputs": [
             {
                 "name": "amount",
@@ -24,8 +47,24 @@
     },
     {
         "inputs": [],
-        "name": "constructor",
+        "name": "get_all_projects",
+        "outputs": [
+            {
+                "name": "res_len",
+                "type": "felt"
+            },
+            {
+                "name": "res",
+                "type": "project_base*"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "add_project",
         "outputs": [],
-        "type": "constructor"
+        "type": "function"
     }
 ]
