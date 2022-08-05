@@ -12,22 +12,25 @@ export default function Connect({ account }: ConnectProps) {
       {account ? (
         <AccountContainer>
           <Account>
-            {account.slice(0, 6)}...{account.slice(29, 35)}
+            {account.slice(0, 6)}...{account.slice(-4)}
           </Account>
           <Disconnect>
             <ImCancelCircle onClick={() => disconnect()} />
           </Disconnect>
         </AccountContainer>
       ) : (
-        <div>
-          <Button onClick={() => connect(available[0])}>Connect Wallet</Button>
-        </div>
+        <Button onClick={() => connect(available[0])}>Connect Wallet</Button>
       )}
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  height: 30px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.7rem; 
+`;
 
 const AccountContainer = styled.div`
   display: flex;
@@ -48,12 +51,18 @@ const Disconnect = styled.div`
 `;
 
 const Button = styled.div`
-  border: 1px solid #282b2f;
   padding: 0.8rem;
-  font-size: 1.3rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  border-radius: 0.4rem;
   margin-right: 1rem;
+  width: 120px;
+  height: 17px;
+  line-height: 17px;
+  color: #ffffff;
+  background-color: #073898;
+  border-radius: 7px;
+  border: none;
+  text-align: center;
 
   &:hover {
     cursor: pointer;
