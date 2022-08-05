@@ -6,6 +6,9 @@ type ConnectProps = { account: string | undefined };
 export default function Connect({ account }: ConnectProps) {
   const { disconnect } = useConnectors();
   const { available, connect } = useConnectors();
+  // const filteredAvailable = available.filter((item)=>{
+  //   return item.options.id == "argent-x";
+  // })
 
   return (
     <Wrapper>
