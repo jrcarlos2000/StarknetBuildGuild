@@ -30,9 +30,13 @@ export default function Header({ account }: any) {
 }
 
 const Wrapper = styled.div`
+  width: calc(100%);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #282b2f;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: #0f0f0f;
 `;
 
 const NavContainer = styled.div`
@@ -47,13 +51,15 @@ const LogoContainer = styled.div`
 `;
 
 const Logo = styled.a`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 600;
 `;
 
 const Nav = styled.div``;
 
 const NavItem = styled.a`
+  margin-left: 1.3rem;
+
   &:hover {
     cursor: pointer;
   }

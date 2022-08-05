@@ -1,5 +1,7 @@
+import { useRouter } from "next/router";
+import Link from "next/link";
 import styled from "styled-components";
-import Project from "~/components/Project";
+import BuildProject from "~/components/BuildProject";
 
 const projectList = [
   {
@@ -24,22 +26,17 @@ const projectList = [
     id: "3",
   },
 ];
+const Build = () => {
 
-export default function Builds() {
+  const router = useRouter();
+  const { id } = router.query;
+  const filteredProject = projectList.filter((project) => project.id === id);
   return (
-    <Wrapper>
-      <h1>Builds</h1>
-      {projectList.map((project, index) => {
-        return <Project key={index} project={project} />;
-      })}
-    </Wrapper>
+    <>
+      <h1>Build: {id}</h1>
+      <BuildProject filteredProject={filteredProject} />
+    </>
   );
-}
+};
 
-const Wrapper = styled.div``;
-
-const SearchContainer = styled.div``;
-
-const SearchInput = styled.input``;
-
-const ProjectsContainer = styled.div``;
+export default Build;
