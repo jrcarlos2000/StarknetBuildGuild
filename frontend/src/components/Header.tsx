@@ -13,7 +13,9 @@ export default function Header({ account }: any) {
       <NavContainer>
         <LogoContainer>
           <Link href="/">
-            <Logo>BuidlGuidl</Logo>
+            <Logo>
+              <strong>StarkGuild</strong>
+            </Logo>
           </Link>
         </LogoContainer>
         <Nav>
@@ -31,17 +33,19 @@ export default function Header({ account }: any) {
 
 const Wrapper = styled.div`
   width: calc(100%);
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #282b2f;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e6e6e6;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: #0f0f0f;
+  background-color: #ffffff;
 `;
 
 const NavContainer = styled.div`
   display: flex;
   align-items: center;
+  padding: 0 1.6rem;
 `;
 
 const LogoContainer = styled.div`
@@ -51,8 +55,7 @@ const LogoContainer = styled.div`
 `;
 
 const Logo = styled.a`
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 1rem;
 `;
 
 const Nav = styled.div``;
