@@ -1,6 +1,6 @@
 import { useConnectors } from "@starknet-react/core";
 import styled from "styled-components";
-import { MdCancelPresentation } from "react-icons/md";
+import { ImCancelCircle } from "react-icons/im";
 type ConnectProps = { account: string | undefined };
 
 export default function Connect({ account }: ConnectProps) {
@@ -15,7 +15,7 @@ export default function Connect({ account }: ConnectProps) {
             {account.slice(0, 6)}...{account.slice(29, 35)}
           </Account>
           <Disconnect>
-            <MdCancelPresentation onClick={() => disconnect()} />
+            <ImCancelCircle onClick={() => disconnect()} />
           </Disconnect>
         </AccountContainer>
       ) : (
@@ -33,9 +33,13 @@ const AccountContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-right: 1rem;
 `;
 
-const Account = styled.div``;
+const Account = styled.div`
+  font-size: 0.8rem;
+  margin-right: 1rem;
+`;
 
 const Disconnect = styled.div`
   &:hover {

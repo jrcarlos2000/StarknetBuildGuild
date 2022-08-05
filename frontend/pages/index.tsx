@@ -4,9 +4,11 @@ import Main from "~/components/Main";
 
 const Home: NextPage = () => {
   return (
-    <div>
-      <Main />
-    </div>
+    <>
+      <div>
+        <Main />
+      </div>
+    </>
   );
 };
 
