@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { BsSuitHeart } from "react-icons/bs";
 import Link from "next/link";
 import { useStarknet } from "@starknet-react/core";
+import Account from "./Account";
 
 export default function BuildProject(project: any) {
   const { account } = useStarknet();
@@ -19,11 +20,7 @@ export default function BuildProject(project: any) {
         </Thumbnail>
       </Link>
       <ProjectInfo>
-        <Link href={`/builds/${myProject.id}`}>
-          <Title>
-            <p>{myProject.title}</p>
-          </Title>
-        </Link>
+        <Title>{myProject.title}</Title>
         <Description>{myProject.description}</Description>
       </ProjectInfo>
       <ButtonContainer>
@@ -46,7 +43,7 @@ export default function BuildProject(project: any) {
           <span>31</span>
         </LikeButton>
       </ButtonContainer>
-      {account}
+      <Account />
     </Wrapper>
   );
 }
@@ -68,11 +65,7 @@ const Thumbnail = styled.a`
 
 const ProjectInfo = styled.div``;
 
-const Title = styled.a`
-  &:hover {
-    cursor: pointer;
-  }
-`;
+const Title = styled.p``;
 
 const Description = styled.p``;
 

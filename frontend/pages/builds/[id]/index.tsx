@@ -27,16 +27,17 @@ const projectList = [
   },
 ];
 const Build = () => {
-
   const router = useRouter();
   const { id } = router.query;
   const filteredProject = projectList.filter((project) => project.id === id);
+  
   return (
-    <>
-      <h1>Build: {id}</h1>
+    <Wrapper>
       <BuildProject filteredProject={filteredProject} />
-    </>
+    </Wrapper>
   );
 };
 
 export default Build;
+
+const Wrapper = styled.div``;
