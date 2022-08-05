@@ -31,7 +31,9 @@ const TitleContainer = styled.div`
   align-items: center;
 `;
 
-const Title = styled.p``;
+const Title = styled.h2`
+  font-size: 1.25rem;
+`;
 
 const ChallengesContainer = styled.div`
   border: 1px solid black;

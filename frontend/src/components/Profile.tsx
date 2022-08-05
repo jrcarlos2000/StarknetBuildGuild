@@ -19,9 +19,11 @@ export type UserProps = {
 export default function Profile({
   account,
   user,
+  className,
 }: {
   account: any;
   user: UserProps;
+  className?: string;
 }) {
   const [copied, setCopied] = useState(false);
   if (!account) {
@@ -32,10 +34,14 @@ export default function Profile({
     alert("Copied to clipboard");
   }
   return (
-    <Wrapper>
-      <ProfilePicture src={user.image} />
+    <Wrapper className={className}>
+      <ProfilePictureWrapper>
+        <ProfilePicture src={user.image} />
+      </ProfilePictureWrapper>
       <AddressContainer>
-        <Address>{account}</Address>
+        <Address>
+          {account.slice(0, 6)}...{account.slice(60)}
+        </Address>
         <CopyToClipboard text={account} onCopy={onCopy}>
           <CopyButtonContainer>
             <FiCopy />
@@ -55,11 +61,27 @@ export default function Profile({
 }
 
 const Wrapper = styled.div`
-  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #cacbcb;
+  border-radius: 0.5rem;
+  padding: 14px;
+`;
+
+const ProfilePictureWrapper = styled.div`
+  display: flex;
+  width: 208px;
+  height: 208px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  align-items: center;
+  background: #f2f2f2;
 `;
 
 const ProfilePicture = styled.img`
-  width: 30%;
+  width: 100%;
 `;
 
 const AddressContainer = styled.div`
@@ -72,6 +94,8 @@ const CopyButtonContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
+  display: flex;
+
 `;
 
 const Status = styled.div`
@@ -97,4 +121,6 @@ const SocialMediaItem = styled.div`
   }
 `;
 
-const DateJoined = styled.div``;
+const DateJoined = styled.div`
+  color: #4a5568;
+`;
