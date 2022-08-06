@@ -12,25 +12,20 @@ import DashboardContainer from "~/components/DashboardContainer";
 export default function Dashboard() {
   const [user, setUser] = useState<UserProps>({
     image: "",
-    status: "",
+    description: "",
     joined: "",
     socialMedia: [{ name: "", link: "", icon: "" }],
   });
   useEffect(() => {
     setUser({
       image: "https://source.unsplash.com/random",
-      status: "Happy",
+      description: "I'm a dev hahahahahahahahahahahahahaha",
       joined: "July 2022",
       socialMedia: [
         {
           name: "twitter",
           link: "https://twitter.com/",
           icon: <AiOutlineTwitter />,
-        },
-        {
-          name: "discord",
-          link: "https://discord.com/",
-          icon: <FaDiscord />,
         },
         {
           name: "telegram",
@@ -42,20 +37,14 @@ export default function Dashboard() {
           link: "https://github.com/",
           icon: <AiOutlineGithub />,
         },
-        { name: "gmail", link: "https://gmail.com/", icon: <SiGmail /> },
-        {
-          name: "instagram",
-          link: "https://instagram.com/",
-          icon: <BsInstagram />,
-        },
       ],
     });
   }, []);
   const { account } = useStarknet();
   return (
     <Wrapper>
-      <Profile account={account} user={user} className="profile"/>
-      <DashboardContainer className="dashboard-container"/>
+      <Profile account={account} user={user} className="profile" />
+      <DashboardContainer className="dashboard-container" />
     </Wrapper>
   );
 }
@@ -66,8 +55,7 @@ const Wrapper = styled.div`
   column-gap: 4rem;
   grid-template-columns: 1fr 4fr;
   grid-template-rows: auto;
-  grid-template-areas: 
-    "profile dashcon";
+  grid-template-areas: "profile dashcon";
 
   .profile {
     grid-area: profile;

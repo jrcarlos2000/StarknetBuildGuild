@@ -1,7 +1,4 @@
 import styled from "styled-components";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useState } from "react";
-import { FiCopy } from "react-icons/fi";
 import Account from "./Account";
 
 type SocialMediaProps = {
@@ -12,7 +9,7 @@ type SocialMediaProps = {
 
 export type UserProps = {
   image: string;
-  status: string;
+  description: string;
   joined: string;
   socialMedia: SocialMediaProps[];
 };
@@ -34,7 +31,8 @@ export default function Profile({
       <ProfilePictureWrapper>
         <ProfilePicture src={user.image} />
       </ProfilePictureWrapper>
-      <Account copyable/>
+      <Account copyable size="large" />
+      <Description>{user.description}</Description>
       <SocialMediaContainer>
         {user.socialMedia.map((item) => (
           <SocialMediaItem>{item.icon}</SocialMediaItem>
@@ -72,37 +70,21 @@ const ProfilePicture = styled.img`
   width: 100%;
 `;
 
-const AddressContainer = styled.div`
-  display: flex;
-`;
-
-const Address = styled.p``;
-
-const CopyButtonContainer = styled.div`
-  &:hover {
-    cursor: pointer;
-  }
-  display: flex;
-`;
-
-const Status = styled.div`
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
-  padding: 0 1rem;
-  margin: 0 2rem;
-`;
-
-const UpdateButton = styled.button`
-  &:hover {
-    cursor: pointer;
-  }
+const Description = styled.div`
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  margin-bottom: 1.3rem;
+  padding: 1rem 0.3rem;
 `;
 
 const SocialMediaContainer = styled.div`
   display: flex;
+  margin-left: 1rem;
 `;
 
 const SocialMediaItem = styled.div`
+  font-size: 1.3rem;
+  margin-right: 1.3rem;
   &:hover {
     cursor: pointer;
   }
