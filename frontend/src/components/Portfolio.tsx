@@ -1,15 +1,14 @@
 import styled from "styled-components";
-import Link from "next/link";
 import Modal from "react-modal";
-import { useRouter } from "next/router";
 Modal.setAppElement("#__next");
 import { useState } from "react";
 import NewBuildModal from "./NewBuildModal";
+import Project from "./Project";
 
 const BuildsList = [
-  { name: "Build 1", id: 1 },
-  { name: "Build 2", id: 2 },
-  { name: "Build 3", id: 3 },
+  // { name: "Build 1", id: 1 },
+  // { name: "Build 2", id: 2 },
+  // { name: "Build 3", id: 3 },
 ];
 
 export default function Builds() {
@@ -49,17 +48,24 @@ export default function Builds() {
         </Modal>
       </TitleContainer>
       <BuildsContainer>
-        <>
-          {BuildsList.map((item) => (
-            <BuildsItem>{item.name}</BuildsItem>
-          ))}
-        </>
+        {BuildsList.length === 0 ? (
+          <NoBuilds />
+        ) : (
+          BuildsList.map((item) => <Project key={item.id}>{item.name}</Project>)
+        )}
       </BuildsContainer>
     </Wrapper>
   );
 }
+const NoBuilds = () => (
+  <NoBuildsContainer>
+    <NoBuildsText>This builder doesn&apos;t have any builds.</NoBuildsText>
+  </NoBuildsContainer>
+);
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  margin-bottom: 3rem;
+`;
 
 const TitleContainer = styled.div`
   display: flex;
@@ -67,16 +73,40 @@ const TitleContainer = styled.div`
   align-items: center;
 `;
 
-const Title = styled.p``;
+const Title = styled.h2`
+  font-size: 1.5rem;
+`;
 
 const Button = styled.button`
+  padding: 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-right: 1rem;
+  color: #ffffff;
+  background-color: #073898;
+  border-radius: 7px;
+  border: none;
+  text-align: center;
+
   &:hover {
     cursor: pointer;
   }
 `;
 
 const BuildsContainer = styled.div`
-  border: 1px solid black;
+  padding-top: 8px;
 `;
 
-const BuildsItem = styled.div``;
+const NoBuildsContainer = styled.div`
+  display: flex;
+  border: 1px solid #cacbcb;
+  border-radius: 0.5rem;
+  min-height: 200px;
+  align-items: center;
+`;
+
+const NoBuildsText = styled.p`
+  text-align: center;
+  width: 100%;
+  color: #4a5568;
+`;
