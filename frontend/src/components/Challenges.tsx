@@ -5,6 +5,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import Link from "next/link";
+import { capitalize } from "src/utils/capitalize";
 import styled from "styled-components";
 
 export type ChallengeStatus = "accepted" | "in-progress" | "rejected";
@@ -14,10 +15,6 @@ export type ChallengeData = {
   contract: string;
   demo: string;
   status: ChallengeStatus;
-};
-
-const capitalize = (str: string): string => {
-  return `${str.slice(0, 1).toUpperCase()}${str.slice(1)}`;
 };
 
 const columnHelper = createColumnHelper<ChallengeData>();
