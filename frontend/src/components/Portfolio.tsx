@@ -63,7 +63,9 @@ const NoBuilds = () => (
   </NoBuildsContainer>
 );
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  margin-bottom: 3rem;
+`;
 
 const TitleContainer = styled.div`
   display: flex;
@@ -72,7 +74,7 @@ const TitleContainer = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 1.25rem;
+  font-size: 1.5rem;
 `;
 
 const Button = styled.button`
@@ -92,7 +94,7 @@ const Button = styled.button`
 `;
 
 const BuildsContainer = styled.div`
-padding-top: 8px;
+  padding-top: 8px;
 `;
 
 const NoBuildsContainer = styled.div`

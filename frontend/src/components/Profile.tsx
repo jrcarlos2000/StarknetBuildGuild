@@ -67,6 +67,7 @@ const Wrapper = styled.div`
   border: 1px solid #cacbcb;
   border-radius: 0.5rem;
   padding: 14px;
+  height: fit-content;
 `;
 
 const ProfilePictureWrapper = styled.div`

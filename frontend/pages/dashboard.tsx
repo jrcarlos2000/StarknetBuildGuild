@@ -68,7 +68,6 @@ const Wrapper = styled.div`
   grid-template-rows: auto;
   grid-template-areas: 
     "profile dashcon";
-  border: 1px solid red;
 
   .profile {
     grid-area: profile;
