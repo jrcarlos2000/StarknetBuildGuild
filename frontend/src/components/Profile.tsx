@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useState } from "react";
 import { FiCopy } from "react-icons/fi";
+import Account from "./Account";
 
 type SocialMediaProps = {
   name: string;
@@ -19,29 +20,21 @@ export type UserProps = {
 export default function Profile({
   account,
   user,
+  className,
 }: {
   account: any;
   user: UserProps;
+  className?: string;
 }) {
-  const [copied, setCopied] = useState(false);
   if (!account) {
     return <div>Loading...</div>;
   }
-  function onCopy() {
-    setCopied(true);
-    alert("Copied to clipboard");
-  }
   return (
-    <Wrapper>
-      <ProfilePicture src={user.image} />
-      <AddressContainer>
-        <Address>{account}</Address>
-        <CopyToClipboard text={account} onCopy={onCopy}>
-          <CopyButtonContainer>
-            <FiCopy />
-          </CopyButtonContainer>
-        </CopyToClipboard>
-      </AddressContainer>
+    <Wrapper className={className}>
+      <ProfilePictureWrapper>
+        <ProfilePicture src={user.image} />
+      </ProfilePictureWrapper>
+      <Account copyable/>
       <SocialMediaContainer>
         {user.socialMedia.map((item) => (
           <SocialMediaItem>{item.icon}</SocialMediaItem>
@@ -55,11 +48,28 @@ export default function Profile({
 }
 
 const Wrapper = styled.div`
-  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #cacbcb;
+  border-radius: 0.5rem;
+  padding: 14px;
+  height: fit-content;
+`;
+
+const ProfilePictureWrapper = styled.div`
+  display: flex;
+  width: 208px;
+  height: 208px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  align-items: center;
+  background: #f2f2f2;
 `;
 
 const ProfilePicture = styled.img`
-  width: 30%;
+  width: 100%;
 `;
 
 const AddressContainer = styled.div`
@@ -72,6 +82,7 @@ const CopyButtonContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
+  display: flex;
 `;
 
 const Status = styled.div`
@@ -97,4 +108,6 @@ const SocialMediaItem = styled.div`
   }
 `;
 
-const DateJoined = styled.div``;
+const DateJoined = styled.div`
+  color: #4a5568;
+`;

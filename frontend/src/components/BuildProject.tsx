@@ -43,7 +43,7 @@ export default function BuildProject(project: any) {
           <span>31</span>
         </LikeButton>
       </ButtonContainer>
-      <Account />
+      <Account thumbnail/>
     </Wrapper>
   );
 }

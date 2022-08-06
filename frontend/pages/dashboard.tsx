@@ -54,12 +54,26 @@ export default function Dashboard() {
   const { account } = useStarknet();
   return (
     <Wrapper>
-      <Profile account={account} user={user} />
-      <DashboardContainer />
+      <Profile account={account} user={user} className="profile"/>
+      <DashboardContainer className="dashboard-container"/>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  display: flex;
+  display: grid;
+  padding-top: 40px;
+  column-gap: 4rem;
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "profile dashcon";
+
+  .profile {
+    grid-area: profile;
+  }
+
+  .dashboard-container {
+    grid-area: dashcon;
+  }
 `;
