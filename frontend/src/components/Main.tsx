@@ -47,7 +47,7 @@ export default function Main() {
           </MainContainer>
           <PictureContainer>
             <Picture>
-              <Image width="700px" height="800px" src={castle} />
+              <Image width="700px" height="800px" src={stark} />
             </Picture>
           </PictureContainer>
         </>
