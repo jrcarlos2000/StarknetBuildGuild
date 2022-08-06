@@ -1,6 +1,8 @@
 import Connect from "./Connect";
 import styled from "styled-components";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 const NavItems = [
   { title: "Dashboard", href: "/dashboard" },
@@ -8,6 +10,15 @@ const NavItems = [
 ];
 
 export default function Header({ account }: any) {
+  const router = useRouter();
+  const makeStyle = (href: string) => ({
+    color: router.asPath === href ? "blue" : "black",
+  });
+  const makeHandleClick = (href: string) => (e: any) => {
+    e.preventDefault();
+    router.push(href);
+  };
+
   return (
     <Wrapper>
       <NavContainer>
@@ -18,13 +29,19 @@ export default function Header({ account }: any) {
             </Logo>
           </Link>
         </LogoContainer>
-        <Nav>
-          {NavItems.map((item) => (
-            <Link href={item.href}>
-              <NavItem>{item.title}</NavItem>
-            </Link>
-          ))}
-        </Nav>
+        {account && (
+          <>
+            {NavItems.map((item: any) => (
+              <NavItem
+                href={item.href}
+                onClick={makeHandleClick(item.href)}
+                style={makeStyle(item.href)}
+              >
+                {item.title}
+              </NavItem>
+            ))}
+          </>
+        )}
       </NavContainer>
       <Connect account={account} />
     </Wrapper>
@@ -58,11 +75,9 @@ const Logo = styled.a`
   font-size: 1rem;
 `;
 
-const Nav = styled.div``;
-
 const NavItem = styled.a`
+  text-decoration: none;
   margin-left: 1.3rem;
-
   &:hover {
     cursor: pointer;
   }
