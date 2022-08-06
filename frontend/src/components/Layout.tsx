@@ -13,6 +13,7 @@ interface IProps {
 
 export default function Layout({ children }: IProps) {
   const { account } = useStarknet();
+  // const account = '121312312312312';
   const { contract: cUserRegistry } = useUserRegistryContract();
   const { data: registryResult } = useStarknetCall({
     contract: cUserRegistry,
@@ -57,6 +58,6 @@ const Wrapper = styled.div`
   display: grid;
   place-items: center;
   font-family: "Open Sans", sans-serif;
-  background-color: #ffffff;
+  background-color: #fcfbf8;
   flex: 1;
 `;

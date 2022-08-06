@@ -4,12 +4,11 @@ import { ImCancelCircle } from "react-icons/im";
 type ConnectProps = { account: string | undefined };
 
 export default function Connect({ account }: ConnectProps) {
-  const { disconnect } = useConnectors();
-  const { available, connect } = useConnectors();
-  // const filteredAvailable = available.filter((item)=>{
-  //   return item.options.id == "argent-x";
-  // })
-
+  const { available, connect, disconnect } = useConnectors();
+  const filteredAvailable = available.filter((item)=>{
+    return item.options.id == "argent-x";
+  })
+  console.log('filetered connectors', filteredAvailable)
   return (
     <Wrapper>
       {account ? (
