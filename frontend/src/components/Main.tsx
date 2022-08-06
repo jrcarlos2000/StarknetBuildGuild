@@ -49,6 +49,7 @@ export default function Main() {
 
 const Wrapper = styled.div`
   display: flex;
+  background-color: #fcfbf8;
 `;
 
 const MainContainer = styled.div`

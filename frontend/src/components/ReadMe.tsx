@@ -24,4 +24,6 @@ export default function ReadMe({ url }: any) {
   );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  margin-top: 2rem;
+`;
