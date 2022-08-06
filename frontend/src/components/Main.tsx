@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Image from "next/image";
 import castle from "../../assets/image/castle.png";
 import { FaEthereum } from "react-icons/fa";
+import { useStarknet } from "@starknet-react/core";
+import Registration from "./Registration";
 
 const info = {
   builders: 530,
@@ -10,40 +12,47 @@ const info = {
 };
 
 export default function Main() {
+  const { account } = useStarknet();
   return (
     <Wrapper>
-      <MainContainer>
-        <TitleContainer>
-          <Title>StarkGuild</Title>
-          <Version>v1</Version>
-        </TitleContainer>
-        <Description>
-          A curated group of Ethereum builders creating products, prototypes,
-          and tutorials to enrich the web3 ecosystem.
-        </Description>
-        <InfoBoxContainer>
-          <InfoBox>
-            <Number>{info.builders}</Number>
-            <Unit>builders</Unit>
-          </InfoBox>
-          <InfoBox>
-            <Number>{info.builds}</Number>
-            <Unit>builds</Unit>
-          </InfoBox>
-          <InfoBox>
-            <IconContainer>
-              <FaEthereum />
-              <Number>{info.streamed}</Number>
-            </IconContainer>
-            <Unit>streamed</Unit>
-          </InfoBox>
-        </InfoBoxContainer>
-      </MainContainer>
-      <PictureContainer>
-        <Picture>
-          <Image width="700px" height="800px" src={castle} />
-        </Picture>
-      </PictureContainer>
+      {account ? (
+        <Registration/>
+      ) : (
+        <>
+          <MainContainer>
+            <TitleContainer>
+              <Title>StarkGuild</Title>
+              <Version>v1</Version>
+            </TitleContainer>
+            <Description>
+              A curated group of Ethereum builders creating products,
+              prototypes, and tutorials to enrich the web3 ecosystem.
+            </Description>
+            <InfoBoxContainer>
+              <InfoBox>
+                <Number>{info.builders}</Number>
+                <Unit>builders</Unit>
+              </InfoBox>
+              <InfoBox>
+                <Number>{info.builds}</Number>
+                <Unit>builds</Unit>
+              </InfoBox>
+              <InfoBox>
+                <IconContainer>
+                  <FaEthereum />
+                  <Number>{info.streamed}</Number>
+                </IconContainer>
+                <Unit>streamed</Unit>
+              </InfoBox>
+            </InfoBoxContainer>
+          </MainContainer>
+          <PictureContainer>
+            <Picture>
+              <Image width="700px" height="800px" src={castle} />
+            </Picture>
+          </PictureContainer>
+        </>
+      )}
     </Wrapper>
   );
 }
@@ -51,6 +60,7 @@ export default function Main() {
 const Wrapper = styled.div`
   display: flex;
   background-color: #fcfbf8;
+  padding-top: 1.5rem;
 `;
 
 const MainContainer = styled.div`
