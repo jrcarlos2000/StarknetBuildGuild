@@ -14,7 +14,7 @@ const ERC721_symbol = starknet.shortStringToBigInt("CAR");
 const tokenDecimals = ethers.utils.parseUnits("1");
 let cAccount, cAccount0, cAccount1, cVault, cNFT, cDummyToken;
 
-const COUNTER = "counter";
+const REGISTRY = "user_registry";
 
 const feltToString = (val) => {
   return starknet.bigIntToShortString(val);
@@ -32,19 +32,19 @@ const increaseTime = async (timestamp) => {
 const main = async () => {
   const chainId = await starknet.devnet.hre.getChainId();
   console.log(chainId);
-  const cfCounter = await starknet.getContractFactory(COUNTER);
-  const cCounter = await cfCounter.deploy();
+  const cfUserRegistry = await starknet.getContractFactory(REGISTRY);
+  const cUserRegistry = await cfUserRegistry.deploy();
   try {
-    fs.copyFileSync(cCounter.abiPath, `../frontend/src/abis/${COUNTER}.json`);
+    fs.copyFileSync(cUserRegistry.abiPath, `../frontend/src/abis/${REGISTRY}.json`);
   } catch (err) {
     console.error(err);
   }
   let contractAddresses = {}
-  contractAddresses[COUNTER] = cCounter.address;
+  contractAddresses[REGISTRY] = cUserRegistry.address;
   const data = JSON.stringify(contractAddresses);
   try {
     fs.writeFileSync("../frontend/src/utils/contractAddresses.json", data);
-  } catch (error) {
+  } catch (err) {
     console.error(err);
   }
 };

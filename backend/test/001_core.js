@@ -38,10 +38,10 @@ describe("Testing", function () {
       cAccount0 = await starknet.deployAccount('OpenZeppelin');
     })
   });
-  describe("user_registration", function () {
+  describe("user_registry", function () {
     it("can create new user", async function () {
       const cfUserRegistration = await starknet.getContractFactory(
-        "user_registration"
+        "user_registry"
       );
       const cUserRegistration = await cfUserRegistration.deploy();
 
@@ -58,7 +58,7 @@ describe("Testing", function () {
 
     it("read right info", async function () {
       const cfUserRegistration = await starknet.getContractFactory(
-        "user_registration"
+        "user_registry"
       );
       const cUserRegistration = await cfUserRegistration.deploy();
 
@@ -83,7 +83,7 @@ describe("Testing", function () {
 
     it("cant create user twice", async function () {
       const cfUserRegistration = await starknet.getContractFactory(
-        "user_registration"
+        "user_registry"
       );
       const cUserRegistration = await cfUserRegistration.deploy();
 
@@ -117,7 +117,7 @@ describe("Testing", function () {
 
     it("cant registered if github username is taken", async function () {
       const cfUserRegistration = await starknet.getContractFactory(
-        "user_registration"
+        "user_registry"
       );
       const cUserRegistration = await cfUserRegistration.deploy();
 
