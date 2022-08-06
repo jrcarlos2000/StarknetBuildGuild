@@ -23,6 +23,23 @@
         "type": "constructor"
     },
     {
+        "inputs": [
+            {
+                "name": "sender_address",
+                "type": "felt"
+            }
+        ],
+        "name": "check_user_registered",
+        "outputs": [
+            {
+                "name": "is_registered",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "get_user_info",
         "outputs": [

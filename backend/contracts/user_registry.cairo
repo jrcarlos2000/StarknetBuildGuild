@@ -35,6 +35,12 @@ func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
 end
 
 @view
+func check_user_registered{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(sender_address : felt) -> (is_registered : felt):
+    let (is_registered) = user_registered.read(sender_address)
+    return (is_registered=is_registered)
+end
+
+@view
 func get_user_info{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
         github : github_username, ipfs_url_len : felt, ipfs_url : felt*):
 
