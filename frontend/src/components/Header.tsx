@@ -26,7 +26,7 @@ export default function Header({ account }: any) {
           ))}
         </Nav>
       </NavContainer>
-      {/* <Connect account={account} /> */}
+      <Connect account={account} />
     </Wrapper>
   );
 }

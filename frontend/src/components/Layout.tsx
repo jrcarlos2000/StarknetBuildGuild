@@ -37,7 +37,7 @@ export default function Layout({ children }: IProps) {
       <Header account={account} />
       <main>{children}</main>
       <button onClick={() => {callRegister({
-      args: [encodeShortString('jrcarlossssss'),encodeShortString('2000'),['0001','0002','0003']],
+      args: [encodeShortString('jrcarlosss'),encodeShortString('2000'),['0001','0002','0003']],
       metadata: { method: 'register', message: 'register user' },
     })}}>add dummy user</button>
     <button onClick={async () => {
