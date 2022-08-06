@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useState } from "react";
 import { FiCopy } from "react-icons/fi";
+import Account from "./Account";
 
 type SocialMediaProps = {
   name: string;
@@ -25,29 +26,15 @@ export default function Profile({
   user: UserProps;
   className?: string;
 }) {
-  const [copied, setCopied] = useState(false);
   if (!account) {
     return <div>Loading...</div>;
-  }
-  function onCopy() {
-    setCopied(true);
-    alert("Copied to clipboard");
   }
   return (
     <Wrapper className={className}>
       <ProfilePictureWrapper>
         <ProfilePicture src={user.image} />
       </ProfilePictureWrapper>
-      <AddressContainer>
-        <Address>
-          {account.slice(0, 6)}...{account.slice(60)}
-        </Address>
-        <CopyToClipboard text={account} onCopy={onCopy}>
-          <CopyButtonContainer>
-            <FiCopy />
-          </CopyButtonContainer>
-        </CopyToClipboard>
-      </AddressContainer>
+      <Account copyable/>
       <SocialMediaContainer>
         {user.socialMedia.map((item) => (
           <SocialMediaItem>{item.icon}</SocialMediaItem>
@@ -96,7 +83,6 @@ const CopyButtonContainer = styled.div`
     cursor: pointer;
   }
   display: flex;
-
 `;
 
 const Status = styled.div`
