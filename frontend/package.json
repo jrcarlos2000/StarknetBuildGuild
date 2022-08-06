@@ -22,7 +22,9 @@
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "18.1.0",
     "react-icons": "^4.4.0",
+    "react-markdown": "^8.0.3",
     "react-modal": "^3.15.1",
+    "remark-gfm": "^3.0.1",
     "starknet": "^3.10.0",
     "styled-components": "^5.3.5"
   },
