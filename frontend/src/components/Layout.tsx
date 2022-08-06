@@ -22,6 +22,5 @@ const Wrapper = styled.div`
   display: grid;
   place-items: center;
   font-family: "Open Sans", sans-serif;
-  background-color: #ffffff;
   flex: 1;
 `;
