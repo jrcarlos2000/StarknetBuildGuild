@@ -7,13 +7,15 @@ import { encodeShortString } from "starknet/dist/utils/shortString";
 import React, { useState, useMemo } from "react";
 import axios from 'Axios';
 import { hexToDecimalString } from "starknet/utils/number";
+import starknet from 'starknet';
+import { fromCallsToExecuteCalldataWithNonce } from "starknet/dist/utils/transaction";
+
 interface IProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: IProps) {
   const { account } = useStarknet();
-  // const account = '121312312312312';
   const { contract: cUserRegistry } = useUserRegistryContract();
   const { data: registryResult } = useStarknetCall({
     contract: cUserRegistry,
@@ -32,13 +34,14 @@ export default function Layout({ children }: IProps) {
   }, [registryResult]);
   console.log('debugging layout : txs ', transactions)
   console.log('Debugging Layout :', registryValue)
+  console.log('debugging invoke data :', CheckData)
   return (
     <Wrapper>
       <Header account={account} />
       <main>{children}</main>
       <button onClick={() => {callRegister({
-      args: [encodeShortString('jrcarlosss'),encodeShortString('2000'),['0001','0002','0003']],
-      metadata: { method: 'register', message: 'register user' },
+      args: [encodeShortString('jrcassraalosss'),encodeShortString('2000'),['0001','0002','0003']],
+      metadata: { method: 'register', message: 'register user' , nonce : '0x3'},
     })}}>add dummy user</button>
     <button onClick={async () => {
           await axios.post("http://localhost:5050/mint", {
