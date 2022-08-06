@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
-import castle from "../../assets/image/castle.png";
+import stark from "../../assets/image/stark.png";
 import { FaEthereum } from "react-icons/fa";
 
 const info = {
@@ -18,8 +18,7 @@ export default function Main() {
           <Version>v1</Version>
         </TitleContainer>
         <Description>
-          A curated group of Ethereum builders creating products, prototypes,
-          and tutorials to enrich the web3 ecosystem.
+          A decentralized group of Builders of Starknet creating products, prototypes, and tutorials to enrich the web3 ecosystem.
         </Description>
         <InfoBoxContainer>
           <InfoBox>
@@ -41,7 +40,7 @@ export default function Main() {
       </MainContainer>
       <PictureContainer>
         <Picture>
-          <Image width="700px" height="800px" src={castle} />
+          <Image width="600px" height="500px" src={stark} />
         </Picture>
       </PictureContainer>
     </Wrapper>
@@ -54,7 +53,7 @@ const Wrapper = styled.div`
 
 const MainContainer = styled.div`
   width: 50%;
-  padding: 216px 50px 50px 216px;
+  padding: 70px 20px 70px 20px;
   place-items: center;
 `;
 
