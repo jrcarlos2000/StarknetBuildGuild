@@ -105,7 +105,7 @@ export default function NewBuildModal({
           rows={3}
           onChange={makeChangeHandler("coBuilders")}
         />
-        <SectionTitle>Image</SectionTitle>
+        <SectionTitle>Images</SectionTitle>
         <FileUploaderContainer>
           <FileUploader
             handleChange={multiFileUploadHandler}
