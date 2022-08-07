@@ -1,6 +1,8 @@
 import { useConnectors } from "@starknet-react/core";
 import styled from "styled-components";
 import { ImCancelCircle } from "react-icons/im";
+import Account from "./Account";
+
 type ConnectProps = { account: string | undefined };
 
 export default function Connect({ account }: ConnectProps) {
@@ -13,9 +15,7 @@ export default function Connect({ account }: ConnectProps) {
     <Wrapper>
       {account ? (
         <AccountContainer>
-          <Account>
-            {account.slice(0, 6)}...{account.slice(-4)}
-          </Account>
+          <Account />
           <Disconnect>
             <ImCancelCircle onClick={() => disconnect()} />
           </Disconnect>
@@ -31,22 +31,16 @@ const Wrapper = styled.div`
   height: 30px;
   display: flex;
   align-items: center;
-  margin-bottom: 0.7rem; 
+  margin-bottom: 0.7rem;
 `;
 
 const AccountContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-right: 1rem;
-`;
-
-const Account = styled.div`
-  font-size: 0.8rem;
-  margin-right: 1rem;
 `;
 
 const Disconnect = styled.div`
+  margin-left: 0.8rem;
   &:hover {
     cursor: pointer;
   }

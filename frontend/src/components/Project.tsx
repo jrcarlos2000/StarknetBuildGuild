@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Project({ project }: any) {
   if (!project) {
-    return <div>Loading...</div>;
+    return <NoProject>No Project</NoProject>;
   }
   return (
     <Wrapper>
@@ -38,15 +38,17 @@ export default function Project({ project }: any) {
   );
 }
 
+const NoProject = styled.div``;
+
 const Wrapper = styled.div`
-  width: 30%;
-  border: 1px solid black;
-  flex: 1;
+  border: 1px solid red;
+  width: 100%;
+  height: 100%;
 `;
 
 const Thumbnail = styled.a`
   img {
-    width: 40%;
+    width: 100%;
   }
   &:hover {
     cursor: pointer;

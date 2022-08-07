@@ -1,7 +1,6 @@
 import Connect from "./Connect";
 import styled from "styled-components";
 import Link from "next/link";
-import { useState } from "react";
 import { useRouter } from "next/router";
 
 const NavItems = [
@@ -72,7 +71,7 @@ const LogoContainer = styled.div`
 `;
 
 const Logo = styled.a`
-  font-size: 1rem;
+  font-size: 1.2rem;
 `;
 
 const NavItem = styled.a`

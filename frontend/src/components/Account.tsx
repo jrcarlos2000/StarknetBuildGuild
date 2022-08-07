@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useStarknet } from "@starknet-react/core";
 import Image from "next/image";
 import castle from "../../assets/image/castle.png";
@@ -10,9 +10,11 @@ import { useState } from "react";
 export default function Account({
   thumbnail = false,
   copyable = false,
+  size = "small",
 }: {
   thumbnail?: boolean;
   copyable?: boolean;
+  size?: "small" | "large";
 }) {
   const { account } = useStarknet();
   const [copied, setCopied] = useState<boolean>(false);
@@ -25,13 +27,13 @@ export default function Account({
   return (
     <Wrapper>
       {thumbnail ? <Picture src={castle} width="45px" height="45px" /> : <></>}
-      <Address>
+      <Address size={size}>
         {account?.slice(0, 6)}...{account?.slice(-4)}
       </Address>
       {copyable && account ? (
         <CopyToClipboard text={account} onCopy={onCopy}>
           <CopyButtonContainer>
-            {copied ? <TiTick fill="green" size={24}/> : <FiCopy size={20}/>}
+            {copied ? <TiTick fill="green" size={24} /> : <FiCopy size={20} />}
           </CopyButtonContainer>
         </CopyToClipboard>
       ) : (
@@ -40,6 +42,20 @@ export default function Account({
     </Wrapper>
   );
 }
+
+const sizeStyles = css<{ size: string }>`
+  ${(props) =>
+    props.size === "large" &&
+    css`
+      font-size: 1.8rem;
+      font-weight: 500;
+    `}
+  ${(props) =>
+    props.size === "small" &&
+    css`
+      font-size: 1rem;
+    `}
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -52,6 +68,7 @@ const Picture = styled(Image)`
 
 const Address = styled.p`
   margin-left: 1rem;
+  ${sizeStyles}
 `;
 
 const CopyButtonContainer = styled.div`
