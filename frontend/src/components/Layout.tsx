@@ -11,7 +11,7 @@ export default function Layout({ children }: IProps) {
   return (
     <Wrapper>
       <Header account={account} />
-      <main>{children}</main>
+      <Main>{children}</Main>
     </Wrapper>
   );
 }
@@ -21,6 +21,10 @@ const Wrapper = styled.div`
   max-width: 100vw;
   display: grid;
   place-items: center;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Poppins", sans-serif;
   flex: 1;
+`;
+
+const Main = styled.div`
+  height: 100vh;
 `;

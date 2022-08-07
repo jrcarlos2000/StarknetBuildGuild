@@ -47,7 +47,13 @@ export default function Builds() {
   );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 50px 50px;
+  grid-gap: 3rem;
+  margin: 3rem 15rem;
+`;
 
 const SearchContainer = styled.div`
   display: flex;
