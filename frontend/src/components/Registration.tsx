@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { PropsWithChildren, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
+import { Button } from "./commons/Button";
 
 export type RegisterFormData = {
   name?: string;
@@ -80,7 +81,6 @@ export default function Registration() {
         <SectionTitle required>Image</SectionTitle>
         <FileUploaderContainer>
           <FileUploader
-            className=""
             handleChange={fileChangeHandler}
             types={["jpg", "png", "gif"]}
           />
@@ -155,19 +155,6 @@ const SectionTextarea = styled.textarea`
   -webkit-appearance: none;
   ::placeholder {
     color: #9a9b9c;
-  }
-`;
-
-const Button = styled.button`
-  font-weight: 500;
-  color: #ffffff;
-  background-color: #073898;
-  border-radius: 7px;
-  border: none;
-  text-align: center;
-  padding: 0.8rem;
-  &:hover {
-    cursor: pointer;
   }
 `;
 
