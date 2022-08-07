@@ -39,6 +39,7 @@ export default function Dashboard() {
     description: "",
     joined: "",
     socialMedia: [{ name: "", link: "", icon: "" }],
+    name : ""
   });
 
   console.log('Debugging Dashboard : ', userInfo);
@@ -46,6 +47,7 @@ export default function Dashboard() {
   useEffect(() => {
     setUser({
       image: userInfo.image,
+      name : userInfo.name,
       description: userInfo.description,
       joined: userInfo.joinDate,
       socialMedia: [
