@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import Modal from "react-modal";
-Modal.setAppElement("#__next");
 import { useState } from "react";
-import NewBuildModal from "./NewBuildModal";
+import NewBuildModal, { NewBuildFormData } from "./NewBuildModal";
 import Project from "./Project";
+import { Button } from "./commons/Button";
+
+Modal.setAppElement("#__next");
+
 
 const BuildsList = [
   // { name: "Build 1", id: 1 },
@@ -21,13 +24,21 @@ export default function Builds() {
       bottom: "auto",
       transform: "translate(-50%, -50%)",
       backgroundColor: "white",
-      padding: "1rem",
+      paddingLeft: "1rem",
+      paddingRight: "1rem",
+      paddingBottom: "2.5rem",
       border: "none",
     },
     overlay: {
       backgroundColor: "rgba(168, 180, 202, 0.75)",
     },
   };
+
+  const onSubmit = (data: NewBuildFormData) => {
+    console.log(data);
+  }
+
+
   return (
     <Wrapper>
       <TitleContainer>
@@ -44,7 +55,7 @@ export default function Builds() {
           onRequestClose={() => setIsOpen(false)}
           style={customStyles}
         >
-          <NewBuildModal setIsOpen={setIsOpen} />
+          <NewBuildModal setIsOpen={setIsOpen} onSubmit={onSubmit}/>
         </Modal>
       </TitleContainer>
       <BuildsContainer>
@@ -75,22 +86,6 @@ const TitleContainer = styled.div`
 
 const Title = styled.h2`
   font-size: 1.5rem;
-`;
-
-const Button = styled.button`
-  padding: 0.8rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  margin-right: 1rem;
-  color: #ffffff;
-  background-color: #073898;
-  border-radius: 7px;
-  border: none;
-  text-align: center;
-
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 const BuildsContainer = styled.div`

@@ -1,120 +1,92 @@
 import styled from "styled-components";
-import { AiOutlineClose } from "react-icons/ai";
 import { PropsWithChildren, useState } from "react";
-import { Button } from "./commons/Button";
 import { FileUploader } from "react-drag-drop-files";
+import { Button } from "./commons/Button";
 
-export type NewBuildFormData = {
+export type RegisterFormData = {
   name?: string;
   description?: string;
-  repoUrl?: string;
-  liveDemoUrl?: string;
-  youtubeUrl?: string;
-  coBuilders?: string[];
-  images?: FileList;
+  github?: string;
+  telegram?: string;
+  twitter?: string;
+  file?: File;
 };
 
-export type SubmitCallback = (data: NewBuildFormData) => void;
-
-export default function NewBuildModal({
-  setIsOpen,
-  onSubmit,
-}: {
-  setIsOpen: any;
-  onSubmit: SubmitCallback;
-}) {
-  const [formData, setFormData] = useState<NewBuildFormData>();
+export default function Registration() {
+  const [formData, setFormData] = useState<RegisterFormData>();
 
   const submitForm = () => {
     if (
       formData === undefined ||
       !formData?.name ||
       !formData?.description ||
-      !formData?.repoUrl
+      !formData?.github ||
+      !formData?.file
     ) {
       alert("Please fill in all required data!");
     } else {
-      onSubmit(formData);
-      setIsOpen(false);
+      console.log(formData);
     }
   };
 
-  const makeChangeHandler = (keyName: string) => (e: any) => {
-    let newValue = e.target.value;
-    if(keyName === 'coBuilders') {
-      newValue = (newValue as string).split(',').map(v => v.trim());
-    }
+  const fileChangeHandler = (file: File) => {
     setFormData((prevState) => ({
       ...prevState,
-      [keyName]: newValue,
+      file,
     }));
   };
 
-  const multiFileUploadHandler = (files: FileList) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: files,
+  const makeChangeHandler = (keyName: string) => (e: any) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [keyName]: e.target.value,
     }));
   };
 
   return (
     <Wrapper>
       <TitleContainer>
-        <Title>New Build</Title>
-        <CancelButton>
-          <AiOutlineClose
-            onClick={() => {
-              setIsOpen(false);
-            }}
-          />
-        </CancelButton>
+        <Title>Registration</Title>
       </TitleContainer>
       <SectionContainer>
-        <SectionTitle required>Build name</SectionTitle>
+        <SectionTitle required>Name</SectionTitle>
         <SectionInput
-          placeholder="Build name"
-          required
+          placeholder="Your name"
           onChange={makeChangeHandler("name")}
+          required
         />
         <SectionTitle required>Description</SectionTitle>
         <SectionTextarea
-          placeholder="Write a short description for this build. (Please include searchable keywords)"
+          placeholder="Write a short description to introduce yourself."
           rows={4}
+          maxLength={50}
           required
           onChange={makeChangeHandler("description")}
         />
-        <SectionTitle required>Public Repo URL</SectionTitle>
+        <SectionTitle required>Github</SectionTitle>
         <SectionInput
-          placeholder="https://..."
-          required
-          onChange={makeChangeHandler("repoUrl")}
+          placeholder="Your github account"
+          onChange={makeChangeHandler("github")}
         />
-        <SectionTitle>Live Demo URL</SectionTitle>
+        <SectionTitle>Telegram Handle</SectionTitle>
         <SectionInput
-          placeholder="https://..."
-          onChange={makeChangeHandler("liveDemoUrl")}
+          placeholder="Your telegram handle"
+          onChange={makeChangeHandler("telegram")}
         />
-        <SectionTitle>YouTube URL</SectionTitle>
+        <SectionTitle>Website</SectionTitle>
         <SectionInput
-          placeholder="https://..."
-          onChange={makeChangeHandler("youtubeUrl")}
+          placeholder="Your twitter handle"
+          onChange={makeChangeHandler("twitter")}
         />
-        <SectionTitle>Co-Builders</SectionTitle>
-        <SectionTextarea
-          placeholder="Seperate your co-builder's wallet address seperated by commas. E.g. 0x0..2132, 0x2..231"
-          rows={3}
-          onChange={makeChangeHandler("coBuilders")}
-        />
-        <SectionTitle>Images</SectionTitle>
+        <SectionTitle required>Image</SectionTitle>
         <FileUploaderContainer>
           <FileUploader
-            handleChange={multiFileUploadHandler}
+            handleChange={fileChangeHandler}
             types={["jpg", "png", "gif"]}
-            multiple={true}
           />
         </FileUploaderContainer>
       </SectionContainer>
-      <Button onClick={submitForm}>Submit</Button>
+      <Button onClick={submitForm}>Register</Button>
     </Wrapper>
   );
 }
@@ -150,13 +122,7 @@ const Title = styled.p`
   margin: 0;
 `;
 
-const CancelButton = styled.div`
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const SectionContainer = styled.div`
+const SectionContainer = styled.form`
   display: flex;
   flex-direction: column;
   padding: 0.5rem;

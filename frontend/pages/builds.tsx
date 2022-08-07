@@ -1,4 +1,6 @@
+import { useState } from "react";
 import styled from "styled-components";
+import { SearchBar } from "~/components/commons/SearchBar";
 import Project from "~/components/Project";
 
 const projectList = [
@@ -26,8 +28,18 @@ const projectList = [
 ];
 
 export default function Builds() {
+  const [searchText, setSearchText] = useState("");
+
   return (
     <Wrapper>
+      <SearchContainer>
+        <SearchBar
+          width="280px"
+          placeholder="Search builds"
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+      </SearchContainer>
+      <h1>Builds</h1>
       {projectList.map((project, index) => {
         return <Project key={index} project={project} />;
       })}
@@ -42,3 +54,14 @@ const Wrapper = styled.div`
   grid-gap: 3rem;
   margin: 3rem 15rem;
 `;
+
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2rem;
+`;
+
+const SearchInput = styled.input``;
+
+const ProjectsContainer = styled.div``;
