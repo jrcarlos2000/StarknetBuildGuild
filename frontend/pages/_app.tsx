@@ -6,6 +6,8 @@ import {
   StarknetProvider,
 } from "@starknet-react/core";
 import Layout from "~/components/Layout";
+import "../styles/reset.css";
+
 function MyApp({ Component, pageProps }: AppProps) {
   const connectors = getInstalledInjectedConnectors();
   const [showChild, setShowChild] = useState(false);
