@@ -25,5 +25,5 @@ export default function ReadMe({ url }: any) {
 }
 
 const Wrapper = styled.div`
-  padding: 2rem 0 3rem 0;
+  padding-bottom: 3rem;
 `;
