@@ -26,22 +26,21 @@ export default function Layout({ children }: IProps) {
   const { transactions } = useStarknetTransactionManager()
   const {invoke : callRegister, data : CheckData} = useStarknetInvoke({contract : cUserRegistry, method : 'register'})
 
+  ///DEBUGGING
+  console.log('Debugging Transactions',transactions);
   const registryValue = useMemo(() => {
     if (registryResult && registryResult.length > 0) {
       const value = toBN(registryResult[0]);
       return value.toString(10);
     }
   }, [registryResult]);
-  console.log('debugging layout : txs ', transactions)
-  console.log('Debugging Layout :', registryValue)
-  console.log('debugging invoke data :', CheckData)
   return (
     <Wrapper>
       <Header account={account} />
       <main>{children}</main>
       <button onClick={() => {callRegister({
       args: [encodeShortString('jrcassraalosss'),encodeShortString('2000'),['0001','0002','0003']],
-      metadata: { method: 'register', message: 'register user' , nonce : '0x3'},
+      metadata: { method: 'register', message: 'register user'},
     })}}>add dummy user</button>
     <button onClick={async () => {
           await axios.post("http://localhost:5050/mint", {

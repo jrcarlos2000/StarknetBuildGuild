@@ -32,121 +32,157 @@ describe("Testing", function () {
   this.timeout(10000_000);
   starknet.devnet.restart();
 
-  describe('set up fixture', function () {
-    it('deploy testing accounts', async function (){
-      cAccount = await starknet.deployAccount('OpenZeppelin');
-      cAccount0 = await starknet.deployAccount('OpenZeppelin');
-    })
-  });
-  describe("user_registry", function () {
-    it("can create new user", async function () {
-      const cfUserRegistration = await starknet.getContractFactory(
-        "user_registry"
-      );
-      const cUserRegistration = await cfUserRegistration.deploy();
+  let test = feltToString(32943697896359711813808435248n);
+  console.log(test)
 
-      await cUserRegistration.invoke("register", {
-        github_prefix: stringToFelt("jrcarlos"),
-        github_suffix: stringToFelt("2000"),
-        ipfs_url: [
-          stringToFelt("0001"),
-          stringToFelt("0002"),
-          stringToFelt("0003"),
-        ],
-      });
-    });
+  // describe('set up fixture', function () {
+  //   it('deploy testing accounts', async function (){
+  //     cAccount = await starknet.deployAccount('OpenZeppelin');
+  //     cAccount0 = await starknet.deployAccount('OpenZeppelin');
+  //   })
+  // });
+  // describe("user_registry", function () {
+  //   it("can create new user", async function () {
+  //     const cfUserRegistration = await starknet.getContractFactory(
+  //       "user_registry"
+  //     );
+  //     const cUserRegistration = await cfUserRegistration.deploy();
 
-    it("read right info", async function () {
-      const cfUserRegistration = await starknet.getContractFactory(
-        "user_registry"
-      );
-      const cUserRegistration = await cfUserRegistration.deploy();
+  //     await cUserRegistration.invoke("register", {
+  //       github_prefix: stringToFelt("jrcarlos"),
+  //       github_suffix: stringToFelt("2000"),
+  //       ipfs_url: [
+  //         stringToFelt("0001"),
+  //         stringToFelt("0002"),
+  //         stringToFelt("0003"),
+  //       ],
+  //     });
+  //   });
 
-      await cAccount.invoke(cUserRegistration,"register", {
-        github_prefix: stringToFelt("jrcarlos"),
-        github_suffix: stringToFelt("2000"),
-        ipfs_url: [
-          stringToFelt("0001"),
-          stringToFelt("0002"),
-          stringToFelt("0003"),
-        ],
-      });
+  //   it("read right info", async function () {
+  //     const cfUserRegistration = await starknet.getContractFactory(
+  //       "user_registry"
+  //     );
+  //     const cUserRegistration = await cfUserRegistration.deploy();
 
-      const user_info = await cAccount.call(cUserRegistration,'get_user_info');
-      expect(user_info['github']['prefix']).to.be.equal(stringToFelt('jrcarlos'));
-      expect(user_info['github']['suffix']).to.be.equal(stringToFelt('2000'));
-      expect(user_info['ipfs_url_len']).to.be.equal(3n);  
-      expect(user_info['ipfs_url'][0]).to.be.equal(stringToFelt('0001')); 
-      expect(user_info['ipfs_url'][1]).to.be.equal(stringToFelt('0002')); 
-      expect(user_info['ipfs_url'][2]).to.be.equal(stringToFelt('0003')); 
-    });
+  //     await cAccount.invoke(cUserRegistration,"register", {
+  //       github_prefix: stringToFelt("jrcarlos"),
+  //       github_suffix: stringToFelt("2000"),
+  //       ipfs_url: [
+  //         stringToFelt("0001"),
+  //         stringToFelt("0002"),
+  //         stringToFelt("0003"),
+  //       ],
+  //     });
 
-    it("cant create user twice", async function () {
-      const cfUserRegistration = await starknet.getContractFactory(
-        "user_registry"
-      );
-      const cUserRegistration = await cfUserRegistration.deploy();
+  //     const user_info = await cAccount.call(cUserRegistration,'get_user_info');
+  //     expect(user_info['github']['prefix']).to.be.equal(stringToFelt('jrcarlos'));
+  //     expect(user_info['github']['suffix']).to.be.equal(stringToFelt('2000'));
+  //     expect(user_info['ipfs_url_len']).to.be.equal(3n);  
+  //     expect(user_info['ipfs_url'][0]).to.be.equal(stringToFelt('0001')); 
+  //     expect(user_info['ipfs_url'][1]).to.be.equal(stringToFelt('0002')); 
+  //     expect(user_info['ipfs_url'][2]).to.be.equal(stringToFelt('0003')); 
+  //   });
 
-      await cAccount.invoke(cUserRegistration,"register", {
-        github_prefix: stringToFelt("jrcarlos"),
-        github_suffix: stringToFelt("2000"),
-        ipfs_url: [
-          stringToFelt("0001"),
-          stringToFelt("0002"),
-          stringToFelt("0003"),
-        ],
-      });
+  //   it("cant create user twice", async function () {
+  //     const cfUserRegistration = await starknet.getContractFactory(
+  //       "user_registry"
+  //     );
+  //     const cUserRegistration = await cfUserRegistration.deploy();
 
-      let shouldFail = false;
+  //     await cAccount.invoke(cUserRegistration,"register", {
+  //       github_prefix: stringToFelt("jrcarlos"),
+  //       github_suffix: stringToFelt("2000"),
+  //       ipfs_url: [
+  //         stringToFelt("0001"),
+  //         stringToFelt("0002"),
+  //         stringToFelt("0003"),
+  //       ],
+  //     });
 
-      try {
-        await cAccount.call(cUserRegistration,"register", {
-          github_prefix: stringToFelt("jrcarlos2"),
-          github_suffix: stringToFelt("2000"),
-          ipfs_url: [
-            stringToFelt("0001"),
-            stringToFelt("0002"),
-            stringToFelt("0003"),
-          ],
-        });
-      }catch (e){
-        shouldFail = true;
-      }
-      expect(shouldFail).to.be.equal(true)
-    });
+  //     let shouldFail = false;
 
-    it("cant registered if github username is taken", async function () {
-      const cfUserRegistration = await starknet.getContractFactory(
-        "user_registry"
-      );
-      const cUserRegistration = await cfUserRegistration.deploy();
+  //     try {
+  //       await cAccount.call(cUserRegistration,"register", {
+  //         github_prefix: stringToFelt("jrcarlos2"),
+  //         github_suffix: stringToFelt("2000"),
+  //         ipfs_url: [
+  //           stringToFelt("0001"),
+  //           stringToFelt("0002"),
+  //           stringToFelt("0003"),
+  //         ],
+  //       });
+  //     }catch (e){
+  //       shouldFail = true;
+  //     }
+  //     expect(shouldFail).to.be.equal(true)
+  //   });
 
-      await cAccount.invoke(cUserRegistration,"register", {
-        github_prefix: stringToFelt("jrcarlos"),
-        github_suffix: stringToFelt("2000"),
-        ipfs_url: [
-          stringToFelt("0001"),
-          stringToFelt("0002"),
-          stringToFelt("0003"),
-        ],
-      });
+  //   it("cant registered if github username is taken", async function () {
+  //     const cfUserRegistration = await starknet.getContractFactory(
+  //       "user_registry"
+  //     );
+  //     const cUserRegistration = await cfUserRegistration.deploy();
 
-      let shouldFail = false;
+  //     await cAccount.invoke(cUserRegistration,"register", {
+  //       github_prefix: stringToFelt("jrcarlos"),
+  //       github_suffix: stringToFelt("2000"),
+  //       ipfs_url: [
+  //         stringToFelt("0001"),
+  //         stringToFelt("0002"),
+  //         stringToFelt("0003"),
+  //       ],
+  //     });
 
-      try {
-        await cAccount0.call(cUserRegistration,"register", {
-          github_prefix: stringToFelt("jrcarlos"),
-          github_suffix: stringToFelt("2000"),
-          ipfs_url: [
-            stringToFelt("0001"),
-            stringToFelt("0002"),
-            stringToFelt("0003"),
-          ],
-        });
-      }catch (e){
-        shouldFail = true;
-      }
-      expect(shouldFail).to.be.equal(true)
-    });
-  });
+  //     let shouldFail = false;
+
+  //     try {
+  //       await cAccount0.call(cUserRegistration,"register", {
+  //         github_prefix: stringToFelt("jrcarlos"),
+  //         github_suffix: stringToFelt("2000"),
+  //         ipfs_url: [
+  //           stringToFelt("0001"),
+  //           stringToFelt("0002"),
+  //           stringToFelt("0003"),
+  //         ],
+  //       });
+  //     }catch (e){
+  //       shouldFail = true;
+  //     }
+  //     expect(shouldFail).to.be.equal(true)
+  //   });
+  //   it("short github link", async function () {
+  //     const cfUserRegistration = await starknet.getContractFactory(
+  //       "user_registry"
+  //     );
+  //     const cUserRegistration = await cfUserRegistration.deploy();
+
+  //     await cAccount.invoke(cUserRegistration,"register", {
+  //       github_prefix: stringToFelt("jrcarlos"),
+  //       github_suffix: stringToFelt("."),
+  //       ipfs_url: [
+  //         stringToFelt("0001"),
+  //         stringToFelt("0002"),
+  //         stringToFelt("0003"),
+  //       ],
+  //     });
+
+  //     let shouldFail = false;
+
+  //     try {
+  //       await cAccount0.call(cUserRegistration,"register", {
+  //         github_prefix: stringToFelt("jrcarlos"),
+  //         github_suffix: stringToFelt("."),
+  //         ipfs_url: [
+  //           stringToFelt("0001"),
+  //           stringToFelt("0002"),
+  //           stringToFelt("0003"),
+  //         ],
+  //       });
+  //     }catch (e){
+  //       shouldFail = true;
+  //     }
+  //     expect(shouldFail).to.be.equal(true)
+  //   });
+  // });
 });

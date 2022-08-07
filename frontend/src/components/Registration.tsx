@@ -1,6 +1,13 @@
 import styled from "styled-components";
 import { PropsWithChildren, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
+import { useStarknet,useStarknetInvoke,useStarknetTransactionManager } from "@starknet-react/core";
+import { NFTStorage } from 'nft.storage';
+import process from 'process';
+import { useUserRegistryContract } from "~/hooks/UserRegistry";
+import { encodeShortString } from "starknet/dist/utils/shortString";
+import { divideLongString} from '../utils/core';
+// import dotenv
 
 export type RegisterFormData = {
   name?: string;
@@ -13,18 +20,56 @@ export type RegisterFormData = {
 
 export default function Registration() {
   const [formData, setFormData] = useState<RegisterFormData>();
-
-  const submitForm = () => {
+  const {account} = useStarknet();
+  const [buttonMsg, setButtonMsg] = useState('Register');
+  const {contract : cUserRegistry} = useUserRegistryContract();
+  const { transactions } = useStarknetTransactionManager()
+  const {invoke : callRegister} = useStarknetInvoke({contract : cUserRegistry, method : 'register'})
+  const submitForm = async () => {
     if (
       formData === undefined ||
       !formData?.name ||
       !formData?.description ||
       !formData?.github ||
       !formData?.file
+
     ) {
       alert("Please fill in all required data!");
     } else {
-      console.log(formData);
+      setButtonMsg('Storing in Ipfs ...');
+      const nftStorageClient = new NFTStorage({ token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || ''});
+      const nftMetadata = await nftStorageClient.store({
+        image: formData.file,
+        name: formData.name,
+        description: formData.description,
+      })
+      setButtonMsg('Loading...');
+
+      //github usernames can have up to 39 characters
+      //second part of the string is hardcoded to "." if the string is less than 31
+
+      //parse github username
+      let githubPrefix, githubSuffix;
+      if(formData.github.length > 31){
+        githubPrefix = formData.github.slice(0,31);
+        githubSuffix = formData.github.slice(31,formData.github.length);
+        githubSuffix.concat('.');
+      }else{
+        githubPrefix = formData.github;
+        githubSuffix = '.'
+      }
+      //parse nft metadata url
+      let metadataURI = divideLongString(nftMetadata['url']).map((item) => {
+        return encodeShortString(item);
+      });
+
+      console.log(githubPrefix,githubSuffix,metadataURI);
+
+      await callRegister({
+        args: [encodeShortString(githubPrefix),encodeShortString(githubSuffix),metadataURI],
+        metadata: { method: 'register', message: 'register user'},
+      })
+      setButtonMsg('Register');
     }
   };
 
@@ -86,7 +131,7 @@ export default function Registration() {
           />
         </FileUploaderContainer>
       </SectionContainer>
-      <Button onClick={submitForm}>Register</Button>
+      <Button onClick={submitForm}>{buttonMsg}</Button>
     </Wrapper>
   );
 }

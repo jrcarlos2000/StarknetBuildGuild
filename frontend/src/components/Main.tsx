@@ -1,9 +1,12 @@
 import styled from "styled-components";
+import { useStarknet , useStarknetCall} from "@starknet-react/core";
+import { useMemo } from "react";
 import Image from "next/image";
 import stark from "../../assets/image/stark.png";
 import { FaEthereum } from "react-icons/fa";
-import { useStarknet } from "@starknet-react/core";
 import Registration from "./Registration";
+import { toBN, hexToDecimalString } from "starknet/dist/utils/number";
+import { useUserRegistryContract } from "~/hooks/UserRegistry";
 
 const info = {
   builders: 530,
@@ -13,9 +16,25 @@ const info = {
 
 export default function Main() {
   const { account } = useStarknet();
+  const {contract : cUserRegistry} = useUserRegistryContract();
+
+  const { data: registryResult } = useStarknetCall({
+    contract: cUserRegistry,
+    method: "check_user_registered",
+    args: [account],
+    options: { watch : true },
+  });
+
+  const registryValue = useMemo(() => {
+    if (registryResult && registryResult.length > 0) {
+      const value = toBN(registryResult[0]);
+      return value.toString(10);
+    }
+  }, [registryResult]);
+
   return (
     <Wrapper>
-      {account ? (
+      {registryValue == 0 && account? (
         <Registration/>
       ) : (
         <>
@@ -47,7 +66,7 @@ export default function Main() {
           </MainContainer>
           <PictureContainer>
             <Picture>
-              <Image width="700px" height="800px" src={stark} />
+              <Image width="800px" height="600px" src={stark} />
             </Picture>
           </PictureContainer>
         </>
