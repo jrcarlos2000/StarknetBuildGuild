@@ -3,18 +3,11 @@ import Modal from "react-modal";
 import { useState } from "react";
 import NewBuildModal, { NewBuildFormData } from "./NewBuildModal";
 import Project from "./Project";
-import { Button } from "./commons/Button";
+import { PrimaryBlueButton } from "./commons/PrimaryBlueButton";
 
 Modal.setAppElement("#__next");
 
-
-const BuildsList = [
-  { name: "Build 1", id: 1 },
-  { name: "Build 2", id: 2 },
-  { name: "Build 3", id: 3 },
-];
-
-export default function Builds() {
+export default function Builds({ projects }: { projects: any[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const customStyles = {
     content: {
@@ -36,33 +29,32 @@ export default function Builds() {
 
   const onSubmit = (data: NewBuildFormData) => {
     console.log(data);
-  }
-
+  };
 
   return (
     <Wrapper>
       <TitleContainer>
         <Title>Builds</Title>
-        <Button
+        <PrimaryBlueButton
           onClick={() => {
             setIsOpen(true);
           }}
         >
           Submit New Build
-        </Button>
+        </PrimaryBlueButton>
         <Modal
           isOpen={isOpen}
           onRequestClose={() => setIsOpen(false)}
           style={customStyles}
         >
-          <NewBuildModal setIsOpen={setIsOpen} onSubmit={onSubmit}/>
+          <NewBuildModal setIsOpen={setIsOpen} onSubmit={onSubmit} />
         </Modal>
       </TitleContainer>
       <BuildsContainer>
-        {BuildsList.length === 0 ? (
+        {projects.length === 0 ? (
           <NoBuilds />
         ) : (
-          BuildsList.map((item) => <Project key={item.id}>{item.name}</Project>)
+          projects.map((p) => <Project key={p.id} project={p} />)
         )}
       </BuildsContainer>
     </Wrapper>
@@ -90,6 +82,10 @@ const Title = styled.h2`
 
 const BuildsContainer = styled.div`
   padding-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1.5rem;
+  margin: auto;
 `;
 
 const NoBuildsContainer = styled.div`

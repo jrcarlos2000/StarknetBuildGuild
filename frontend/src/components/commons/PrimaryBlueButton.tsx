@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Button = styled.button`
+export const PrimaryBlueButton = styled.button`
   font-weight: 500;
   color: #ffffff;
   background-color: #073898;
