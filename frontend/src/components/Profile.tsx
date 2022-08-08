@@ -12,6 +12,7 @@ export type UserProps = {
   description: string;
   joined: string;
   socialMedia: SocialMediaProps[];
+  name : string;
 };
 
 export default function Profile({
@@ -31,7 +32,11 @@ export default function Profile({
       <ProfilePictureWrapper>
         <ProfilePicture src={user.image} />
       </ProfilePictureWrapper>
-      <Account copyable size="large" />
+      <AccountWrapper>
+        <Address>
+          {user.name}
+        </Address>
+      </AccountWrapper>
       <Description>{user.description}</Description>
       <SocialMediaContainer>
         {user.socialMedia.map((item) => (
@@ -89,7 +94,15 @@ const SocialMediaItem = styled.div`
     cursor: pointer;
   }
 `;
-
 const DateJoined = styled.div`
   color: #4a5568;
+`;
+const AccountWrapper = styled.div`
+display: flex;
+align-items: center;
+`;
+
+const Address = styled.p`
+  margin-left: 1rem;
+  font-size: 1rem;
 `;

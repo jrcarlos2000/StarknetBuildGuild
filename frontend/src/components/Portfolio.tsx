@@ -9,9 +9,9 @@ Modal.setAppElement("#__next");
 
 
 const BuildsList = [
-  // { name: "Build 1", id: 1 },
-  // { name: "Build 2", id: 2 },
-  // { name: "Build 3", id: 3 },
+  { name: "Build 1", id: 1 },
+  { name: "Build 2", id: 2 },
+  { name: "Build 3", id: 3 },
 ];
 
 export default function Builds() {

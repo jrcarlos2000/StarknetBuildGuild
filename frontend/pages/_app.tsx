@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   } else {
     return (
       <StarknetProvider
-        autoConnect={true}
+        autoConnect={false}
         connectors={connectors}
         defaultProvider={new Provider({ baseUrl: "http://localhost:5050" })}
       >

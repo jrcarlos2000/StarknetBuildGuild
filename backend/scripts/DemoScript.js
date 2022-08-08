@@ -9,9 +9,6 @@ const {
   iterativelyCheckStatus,
 } = require("@shardlabs/starknet-hardhat-plugin/dist/src/types");
 const fs = require("fs");
-const ERC721_name = starknet.shortStringToBigInt("Carlos");
-const ERC721_symbol = starknet.shortStringToBigInt("CAR");
-const tokenDecimals = ethers.utils.parseUnits("1");
 let cAccount, cAccount0, cAccount1, cVault, cNFT, cDummyToken;
 
 const REGISTRY = "user_registry";
@@ -30,23 +27,10 @@ const increaseTime = async (timestamp) => {
 };
 
 const main = async () => {
-  const chainId = await starknet.devnet.hre.getChainId();
-  console.log(chainId);
-  const cfUserRegistry = await starknet.getContractFactory(REGISTRY);
-  const cUserRegistry = await cfUserRegistry.deploy();
-  try {
-    fs.copyFileSync(cUserRegistry.abiPath, `../frontend/src/abis/${REGISTRY}.json`);
-  } catch (err) {
-    console.error(err);
-  }
-  let contractAddresses = {}
-  contractAddresses[REGISTRY] = cUserRegistry.address;
-  const data = JSON.stringify(contractAddresses);
-  try {
-    fs.writeFileSync("../frontend/src/utils/contractAddresses.json", data);
-  } catch (err) {
-    console.error(err);
-  }
+  const status = await axios.get("http://localhost:5050/tx_status", {
+    tx_hash : '0x67f34aad01c633cb043d30ca17405fadc3458ab28221bc9c1840eb2e098fce8'
+  });
+  console.log(status);
 };
 
 main().then(() => {
