@@ -115,6 +115,9 @@ const MainContainer = styled.div`
   width: 100%;
   margin-right: 2rem;
 `;
+const Thumbnail = styled(Image)``;
+
+const MainContainer = styled.div``;
 
 const ProjectInfo = styled.div``;
 
