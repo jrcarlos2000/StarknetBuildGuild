@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { BiLinkExternal } from "react-icons/bi";
 import Link from "next/link";
@@ -7,20 +7,55 @@ import Account from "./Account";
 import Image from "next/image";
 import castle from "../../assets/image/castle.png";
 import { useState } from "react";
+import { FaDonate } from "react-icons/fa";
+import Modal from "react-modal";
+Modal.setAppElement("#__next");
+import DonateModal from "./DonateModal";
 
 export default function BuildProject(project: any) {
   const { account } = useStarknet();
   const [liked, setLiked] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "white",
+      padding: "1rem",
+      border: "none",
+    },
+    overlay: {
+      backgroundColor: "rgba(168, 180, 202, 0.75)",
+    },
+  };
   const { filteredProject } = project;
   const myProject = filteredProject[0];
   if (!myProject) {
     return <div>Loading...</div>;
   }
+
   return (
     <Wrapper>
       <MainContainer>
         <ProjectInfo>
-          <Title>{myProject.title}</Title>
+          <TitleContainer>
+            <Title>{myProject.title}</Title>
+            <FaDonate
+              onClick={() => {
+                setIsOpenModal(true);
+              }}
+            />
+            <Modal
+              isOpen={isOpenModal}
+              onRequestClose={() => setIsOpenModal(false)}
+              style={customStyles}
+            >
+              <DonateModal setIsOpenModal={setIsOpenModal} />
+            </Modal>
+          </TitleContainer>
           <ButtonContainer>
             <Link href="/">
               <CodeButton onClick={() => console.log("code clicked")}>
@@ -80,11 +115,39 @@ const MainContainer = styled.div`
   width: 100%;
   margin-right: 2rem;
 `;
-
 const ProjectInfo = styled.div``;
+
+const flashing = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const flashIcon = css`
+  animation: ${flashing} 1500ms linear infinite;
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  & > svg {
+    font-size: 1.3rem;
+    ${flashIcon}
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;
 
 const Title = styled.strong`
   font-size: 1.3rem;
+  margin-right: 1.3rem;
 `;
 
 const Description = styled.p``;

@@ -37,18 +37,7 @@ export default function Layout({ children }: IProps) {
   return (
     <Wrapper>
       <Header account={account} />
-      <main>{children}</main>
-      <button onClick={() => {callRegister({
-      args: [encodeShortString('jrcassraalosss'),encodeShortString('2000'),['0001','0002','0003']],
-      metadata: { method: 'register', message: 'register user'},
-    })}}>add dummy user</button>
-    <button onClick={async () => {
-          await axios.post("http://localhost:5050/mint", {
-            address:
-              account,
-            amount: 1000000000000000000,
-          });
-        }}>get testnet eth</button>
+      <Main>{children}</Main>
     </Wrapper>
   );
 

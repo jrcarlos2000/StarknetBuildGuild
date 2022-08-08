@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import BuildProject from "~/components/BuildProject";
 import ReadMe from "~/components/ReadMe";
+import { useState } from "react";
+import { BsFillCaretRightFill, BsFillCaretDownFill } from "react-icons/bs";
 
 const projectList = [
   {
@@ -28,6 +30,7 @@ const projectList = [
   },
 ];
 const Build = () => {
+  const [isShow, setIsShow] = useState(false);
   const router = useRouter();
   const { id } = router.query;
   const filteredProject = projectList.filter((project) => project.id === id);
@@ -35,7 +38,27 @@ const Build = () => {
   return (
     <Wrapper>
       <BuildProject filteredProject={filteredProject} />
-      <ReadMe url={projectList[0].link} />
+      <ToggleContainer>
+        {isShow ? (
+          <Toggle>
+            <BsFillCaretDownFill
+              onClick={() => {
+                setIsShow(false);
+              }}
+            />
+          </Toggle>
+        ) : (
+          <Toggle>
+            <BsFillCaretRightFill
+              onClick={() => {
+                setIsShow(true);
+              }}
+            />
+          </Toggle>
+        )}
+        <p>ReadMe.md</p>
+      </ToggleContainer>
+      {isShow && <ReadMe url={projectList[0].link} />}
     </Wrapper>
   );
 };
@@ -44,4 +67,20 @@ export default Build;
 
 const Wrapper = styled.div`
   width: 50vw;
+`;
+
+const ToggleContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Toggle = styled.div`
+  & > svg {
+    font-size: 1.3rem;
+    margin-right: 0.7rem;
+    padding-top: 0.3rem;
+  }
+  &:hover {
+    cursor: pointer;
+  }
 `;
