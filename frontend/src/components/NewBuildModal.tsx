@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import { PropsWithChildren, useState } from "react";
-import { Button } from "./commons/Button";
+import { PrimaryBlueButton } from "./commons/PrimaryBlueButton";
 import { FileUploader } from "react-drag-drop-files";
 
 export type NewBuildFormData = {
@@ -41,8 +41,8 @@ export default function NewBuildModal({
 
   const makeChangeHandler = (keyName: string) => (e: any) => {
     let newValue = e.target.value;
-    if(keyName === 'coBuilders') {
-      newValue = (newValue as string).split(',').map(v => v.trim());
+    if (keyName === "coBuilders") {
+      newValue = (newValue as string).split(",").map((v) => v.trim());
     }
     setFormData((prevState) => ({
       ...prevState,
@@ -114,7 +114,7 @@ export default function NewBuildModal({
           />
         </FileUploaderContainer>
       </SectionContainer>
-      <Button onClick={submitForm}>Submit</Button>
+      <PrimaryBlueButton onClick={submitForm}>Submit</PrimaryBlueButton>
     </Wrapper>
   );
 }

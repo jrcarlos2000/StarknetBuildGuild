@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Builds from "./Portfolio";
+import Builds from "./Builds";
 import Challenges, { ChallengeData } from "./Challenges";
 
 const data: ChallengeData[] = [
@@ -23,10 +23,10 @@ const data: ChallengeData[] = [
   },
 ]
 
-export default function DashboardContainer({className}: {className?: string}) {
+export default function DashboardContainer({projects=[], className}: {className?: string, projects: any[]}) {
   return (
     <Wrapper className={className}>
-      <Builds />
+      <Builds projects={projects} />
       <Challenges data={data}/>
     </Wrapper>
   );
