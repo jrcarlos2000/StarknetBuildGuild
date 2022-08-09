@@ -7,6 +7,10 @@ import {
 } from "@starknet-react/core";
 import Layout from "~/components/Layout";
 import "../styles/reset.css";
+import ReactModal from "react-modal";
+
+ReactModal.setAppElement("#__next");
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   const connectors = getInstalledInjectedConnectors();
