@@ -29,6 +29,22 @@ const projectList = [
     id: "3",
   },
 ];
+
+const pools = [
+  {
+    id: 1,
+    name: "pool-1",
+  },
+  {
+    id: 2,
+    name: "pool-2",
+  },
+  {
+    id: 3,
+    name: "pool-3",
+  },
+];
+
 const Build = () => {
   const [isShow, setIsShow] = useState(false);
   const router = useRouter();
@@ -37,7 +53,7 @@ const Build = () => {
 
   return (
     <Wrapper isShow={isShow}>
-      <BuildProject filteredProject={filteredProject} />
+      <BuildProject filteredProject={filteredProject} pools={pools}/>
       <ToggleContainer>
         {isShow ? (
           <Toggle>

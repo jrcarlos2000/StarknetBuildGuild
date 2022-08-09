@@ -13,13 +13,19 @@ import { Button } from "./commons/Button";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { AddProjectToPoolModal } from "./AddProjectToPoolModal";
 
-export default function BuildProject(project: any) {
+export default function BuildProject({
+  filteredProject,
+  pools,
+}: {
+  filteredProject: any;
+  pools: any[];
+}) {
   const [isLiked, setIsLiked] = useState(false);
   const [isAddedToPool, setIsAddedToPool] = useState(false);
   const [isDonateModalOpen, setDonateModalOpen] = useState(false);
   const [isAddProjectToPoolModalOpen, setAddProjectToPoolModalOpen] =
     useState(false);
-  const { filteredProject } = project;
+
   const myProject = filteredProject[0];
   if (!myProject) {
     return <div>Loading...</div>;
@@ -33,6 +39,7 @@ export default function BuildProject(project: any) {
         onClose={() => setDonateModalOpen(false)}
       />
       <AddProjectToPoolModal
+        pools={pools}
         isOpen={isAddProjectToPoolModalOpen}
         onClose={() => setAddProjectToPoolModalOpen(false)}
       />
