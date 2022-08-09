@@ -128,6 +128,7 @@ const Wrapper = styled.div`
   background-color: #0d122b;
   display: flex;
   padding-top: 1.5rem;
+  height: 100vh;
 `;
 
 const MainContainer = styled.div`
