@@ -25,6 +25,48 @@ const projectList = [
     link: "http://localhost:3000/",
     id: "3",
   },
+  {
+    title: "Project 3",
+    description: "This is a project3",
+    image: "https://source.unsplash.com/random",
+    link: "http://localhost:3000/",
+    id: "3",
+  },
+  {
+    title: "Project 3",
+    description: "This is a project3",
+    image: "https://source.unsplash.com/random",
+    link: "http://localhost:3000/",
+    id: "3",
+  },
+  {
+    title: "Project 3",
+    description: "This is a project3",
+    image: "https://source.unsplash.com/random",
+    link: "http://localhost:3000/",
+    id: "3",
+  },
+  {
+    title: "Project 3",
+    description: "This is a project3",
+    image: "https://source.unsplash.com/random",
+    link: "http://localhost:3000/",
+    id: "3",
+  },
+  {
+    title: "Project 3",
+    description: "This is a project3",
+    image: "https://source.unsplash.com/random",
+    link: "http://localhost:3000/",
+    id: "3",
+  },
+  {
+    title: "Project 3",
+    description: "This is a project3",
+    image: "https://source.unsplash.com/random",
+    link: "http://localhost:3000/",
+    id: "3",
+  },
 ];
 
 export default function Builds() {
@@ -39,18 +81,22 @@ export default function Builds() {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </SearchContainer>
-      <h1>Builds</h1>
-      {projectList.map((project, index) => {
-        return <Project key={index} project={project} />;
-      })}
+      <MainContainer>
+        {projectList.map((project, index) => {
+          return <Project key={index} project={project} />;
+        })}
+      </MainContainer>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
+  height: 100%;
+`;
+
+const MainContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 50px 50px;
   grid-gap: 3rem;
   margin: 3rem 15rem;
 `;
@@ -61,7 +107,3 @@ const SearchContainer = styled.div`
   justify-content: space-around;
   padding: 2rem;
 `;
-
-const SearchInput = styled.input``;
-
-const ProjectsContainer = styled.div``;

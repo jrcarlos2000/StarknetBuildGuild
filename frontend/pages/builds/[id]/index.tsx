@@ -44,4 +44,5 @@ export default Build;
 
 const Wrapper = styled.div`
   width: 50vw;
+  color: #fff;
 `;

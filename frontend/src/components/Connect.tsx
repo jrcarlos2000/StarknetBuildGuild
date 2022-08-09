@@ -2,22 +2,22 @@ import { useConnectors } from "@starknet-react/core";
 import styled from "styled-components";
 import { ImCancelCircle } from "react-icons/im";
 import Account from "./Account";
-import {Button} from '../components/commons/Button';
+import { Button } from "../components/commons/Button";
 type ConnectProps = { account: string | undefined };
 
 export default function Connect({ account }: ConnectProps) {
   const { available, connect, disconnect } = useConnectors();
-  const filteredAvailable = available.filter((item)=>{
+  const filteredAvailable = available.filter((item) => {
     return item.options.id == "argent-x";
-  })
-  console.log('filetered connectors', filteredAvailable)
+  });
+  console.log("filetered connectors", filteredAvailable);
   return (
     <Wrapper>
       {account ? (
         <AccountContainer>
           <Account />
           <Disconnect>
-            <ImCancelCircle onClick={() => disconnect()} />
+            <Button onClick={() => disconnect()}>Disconnect</Button>
           </Disconnect>
         </AccountContainer>
       ) : (
@@ -32,6 +32,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 0.7rem;
+  color: #fff;
 `;
 
 const AccountContainer = styled.div`
@@ -45,5 +46,3 @@ const Disconnect = styled.div`
     cursor: pointer;
   }
 `;
-
-

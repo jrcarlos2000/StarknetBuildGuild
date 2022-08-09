@@ -22,7 +22,11 @@ const columnHelper = createColumnHelper<ChallengeData>();
 const tableCols = [
   columnHelper.accessor("name", {
     header: "NAME",
-    cell: (info) => <strong><Link href={"/"}>{info.getValue()}</Link></strong>,
+    cell: (info) => (
+      <strong>
+        <Link href={"/"}>{info.getValue()}</Link>
+      </strong>
+    ),
   }),
   columnHelper.accessor("contract", {
     header: "CONTRACT",
@@ -50,7 +54,7 @@ export default function Challenges({ data }: { data: ChallengeData[] }) {
   });
   return (
     <Wrapper>
-        <Title>Challenges</Title>
+      <Title>Challenges</Title>
       <ChallengesTable>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -95,8 +99,9 @@ const Title = styled.h2`
 `;
 
 const ChallengeRow = styled.tr`
-  border-bottom: 1px solid #EDF2F7;
-  th, td {
+  border-bottom: 1px solid #edf2f7;
+  th,
+  td {
     padding-left: 1rem;
     padding-right: 1rem;
   }
@@ -105,7 +110,7 @@ const ChallengeRow = styled.tr`
     padding-bottom: 1.5rem;
   }
   th {
-    color: #4A5568;
+    color: #4a5568;
     font-size: 0.75rem;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
@@ -123,7 +128,7 @@ const ChallengesTable = styled.table`
 
   a {
     text-decoration: none;
-    color: #319795;
+    color: #7753f6;
   }
 
   a:hover {
@@ -146,10 +151,10 @@ const ChallengeStatusPill = styled.span<{ status: ChallengeStatus }>`
       : props.status === "rejected"
       ? "#F56565"
       : "#F6E05E"};
-      color: ${(props) =>
-        props.status === "accepted"
-          ? "#22543D"
-          : props.status === "rejected"
-          ? "#822727"
-          : "#9C4221"};
+  color: ${(props) =>
+    props.status === "accepted"
+      ? "#22543D"
+      : props.status === "rejected"
+      ? "#822727"
+      : "#9C4221"};
 `;

@@ -7,7 +7,8 @@ import {
 } from "@starknet-react/core";
 import Layout from "~/components/Layout";
 import "../styles/reset.css";
-
+import { ThemeProvider } from "styled-components";
+import { theme } from "../styles/theme";
 function MyApp({ Component, pageProps }: AppProps) {
   const connectors = getInstalledInjectedConnectors();
   const [showChild, setShowChild] = useState(false);
@@ -27,9 +28,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         connectors={connectors}
         defaultProvider={new Provider({ baseUrl: "http://localhost:5050" })}
       >
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <ThemeProvider theme={theme}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
       </StarknetProvider>
     );
   }

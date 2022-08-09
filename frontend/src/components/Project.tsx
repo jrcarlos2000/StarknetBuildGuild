@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { BsSuitHeart } from "react-icons/bs";
 import Link from "next/link";
+import { Button } from "../components/commons/Button";
 
 export default function Project({ project }: any) {
   if (!project) {
@@ -19,7 +20,11 @@ export default function Project({ project }: any) {
             <p>{project.title}</p>
           </Title>
         </Link>
-        <Description>{project.description}</Description>
+        <Description>
+          {project.description.length > 30
+            ? `${project.description.slice(0, 29)}...`
+            : `${project.description}`}
+        </Description>
       </ProjectInfo>
       <ButtonContainer>
         <Link href="/">
@@ -41,9 +46,9 @@ export default function Project({ project }: any) {
 const NoProject = styled.div``;
 
 const Wrapper = styled.div`
-  border: 1px solid red;
   width: 100%;
   height: 100%;
+  color: #fff;
 `;
 
 const Thumbnail = styled.a`
@@ -58,6 +63,8 @@ const Thumbnail = styled.a`
 const ProjectInfo = styled.div``;
 
 const Title = styled.a`
+  font-size: 1.3rem;
+  font-weight: 600;
   &:hover {
     cursor: pointer;
   }
@@ -65,17 +72,21 @@ const Title = styled.a`
 
 const Description = styled.p``;
 
-const ButtonContainer = styled.div``;
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+`;
 
 const ViewButtonContainer = styled.a``;
 
-const ViewButton = styled.button`
+const ViewButton = styled(Button)`
   &:hover {
     cursor: pointer;
   }
 `;
 
-const LikeButton = styled.button`
+const LikeButton = styled(Button)`
   &:hover {
     cursor: pointer;
   }
