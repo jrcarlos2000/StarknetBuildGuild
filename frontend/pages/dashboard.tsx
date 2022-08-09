@@ -119,6 +119,7 @@ export default function Dashboard() {
 }
 
 const Wrapper = styled.div`
+  color: #fff;
   display: grid;
   padding-top: 40px;
   column-gap: 4rem;

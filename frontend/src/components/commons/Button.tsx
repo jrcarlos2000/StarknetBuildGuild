@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const PrimaryBlueButton = styled.button`
+export const Button = styled.button`
   font-weight: 500;
   color: #ffffff;
   background-color: #7853f7;
@@ -12,3 +12,4 @@ export const PrimaryBlueButton = styled.button`
     cursor: pointer;
   }
 `;
+

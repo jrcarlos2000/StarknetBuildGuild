@@ -51,12 +51,12 @@ export default function Header({ account }: any) {
 const Wrapper = styled.div`
   width: calc(100%);
   padding: 1rem 2rem;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid #0d122b;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #0f0f0f;
-  background-color: #ffffff;
+  color: #7753f6;
+  background-color: #0d122b;
 `;
 
 const NavContainer = styled.div`
@@ -77,8 +77,10 @@ const Logo = styled.a`
 
 const NavItem = styled.a`
   text-decoration: none;
+  color: #fff !important;
   margin-left: 1.3rem;
   &:hover {
     cursor: pointer;
+    color: #7753f6 !important;
   }
 `;

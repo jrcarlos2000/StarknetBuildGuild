@@ -1,8 +1,7 @@
 import { useConnectors } from "@starknet-react/core";
 import styled from "styled-components";
-import { ImCancelCircle } from "react-icons/im";
 import Account from "./Account";
-import { PrimaryBlueButton } from "../components/commons/PrimaryBlueButton";
+import { Button } from "../components/commons/Button";
 type ConnectProps = { account: string | undefined };
 
 export default function Connect({ account }: ConnectProps) {
@@ -17,13 +16,11 @@ export default function Connect({ account }: ConnectProps) {
         <AccountContainer>
           <Account />
           <Disconnect>
-            <ImCancelCircle onClick={() => disconnect()} />
+            <Button onClick={() => disconnect()}>Disconnect</Button>
           </Disconnect>
         </AccountContainer>
       ) : (
-        <PrimaryBlueButton onClick={() => connect(available[0])}>
-          Connect Wallet
-        </PrimaryBlueButton>
+        <Button onClick={() => connect(available[0])}>Connect Wallet</Button>
       )}
     </Wrapper>
   );
@@ -34,6 +31,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 0.7rem;
+  color: #fff;
 `;
 
 const AccountContainer = styled.div`
