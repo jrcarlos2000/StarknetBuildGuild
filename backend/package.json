@@ -4,7 +4,7 @@
     "@nomiclabs/hardhat-ethers": "^2.0.6",
     "@nomiclabs/hardhat-etherscan": "^3.0.4",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
-    "@shardlabs/starknet-hardhat-plugin": "^0.6.0",
+    "@shardlabs/starknet-hardhat-plugin": "^0.6.2",
     "chai": "^4.3.6",
     "dotenv": "^16.0.1",
     "eslint": "^7.32.0",
@@ -27,8 +27,8 @@
   },
   "scripts": {
     "compile": "./scripts/compile.sh",
-    "test": "npx hardhat test",
-    "deploy" : "npx hardhat run scripts/deploy.js"
+    "deploy": "FLAGS=deploy npx hardhat test ",
+    "test" : "npx hardhat test"
   },
   "dependencies": {
     "axios": "^0.27.2"

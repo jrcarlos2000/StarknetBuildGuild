@@ -40,12 +40,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "name": "sender_address",
-                "type": "felt"
-            }
-        ],
+        "inputs": [],
         "name": "get_user_info",
         "outputs": [
             {
