@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import BuildProject from "~/components/BuildProject";
 import ReadMe from "~/components/ReadMe";
 import { useState } from "react";
@@ -36,7 +36,7 @@ const Build = () => {
   const filteredProject = projectList.filter((project) => project.id === id);
 
   return (
-    <Wrapper>
+    <Wrapper isShow={isShow}>
       <BuildProject filteredProject={filteredProject} />
       <ToggleContainer>
         {isShow ? (
@@ -65,8 +65,22 @@ const Build = () => {
 
 export default Build;
 
+const height = css<{ isShow: boolean }>`
+  ${(props) =>
+    props.isShow === true &&
+    css`
+      height: 100%;
+    `}
+  ${(props) =>
+    props.isShow === false &&
+    css`
+      height: 100vh;
+    `}
+`;
 const Wrapper = styled.div`
   width: 50vw;
+  ${height};
+  color: #fff;
 `;
 
 const ToggleContainer = styled.div`

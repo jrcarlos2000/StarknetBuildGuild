@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
+import { Button } from "./commons/Button";
 import { OutlineButton } from "./commons/OutlineButton";
 import { Whitespaces } from "./commons/Whitespaces";
 import { shortenParagraph } from "src/utils/shortenParagraph";
@@ -25,7 +26,7 @@ export default function Project({ project }: any) {
         <Description>{shortenParagraph(project.description, 140)}</Description>
         <Whitespaces />
         <ViewButtonContainer>
-          <Link href="/">
+          <Link href={`/builds/${project.id}`}>
             <ViewButton onClick={() => console.log("view clicked")}>
               View
             </ViewButton>
@@ -47,6 +48,7 @@ const NoProject = styled.div``;
 
 const Wrapper = styled.div`
   border: 1px solid #e2e8f0;
+  color: #fff;
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
@@ -82,35 +84,33 @@ const ProjectInfo = styled.div`
   padding-bottom: 1rem;
 `;
 
-const Title = styled.p`
+const Title = styled.a`
+  font-size: 1.3rem;
+  font-weight: 600;
   &:hover {
     cursor: pointer;
     text-decoration: underline;
   }
-  padding: 0;
-  margin: 0;
-  font-weight: 600;
 `;
 
 const Description = styled.p`
-  padding: 0;
-  margin: 0;
   overflow: true;
   text-overflow: ellipsis;
-  color: #4a5568;
+  color: #cacbcb;
   flex-grow: 2;
 `;
 
 const ViewButtonContainer = styled.div`
   display: flex;
   width: 100%;
-  margin-top: 0.5rem;
 `;
 
-const ViewButton = styled(OutlineButton)`
+const ViewButton = styled(Button)`
   flex-grow: 1;
 `;
 
 const LikeButtonContainer = styled.div`
   margin-left: 0.5rem;
+  height: 100%;
+  margin-top: 0.2rem;
 `;
