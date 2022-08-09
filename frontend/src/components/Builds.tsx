@@ -1,31 +1,11 @@
 import styled from "styled-components";
-import Modal from "react-modal";
 import { useState } from "react";
 import NewBuildModal, { NewBuildFormData } from "./NewBuildModal";
 import Project from "./Project";
 import { PrimaryBlueButton } from "./commons/PrimaryBlueButton";
 
-Modal.setAppElement("#__next");
-
 export default function Builds({ projects }: { projects: any[] }) {
   const [isOpen, setIsOpen] = useState(false);
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: "white",
-      paddingLeft: "1rem",
-      paddingRight: "1rem",
-      paddingBottom: "2.5rem",
-      border: "none",
-    },
-    overlay: {
-      backgroundColor: "rgba(168, 180, 202, 0.75)",
-    },
-  };
 
   const onSubmit = (data: NewBuildFormData) => {
     console.log(data);
@@ -33,6 +13,14 @@ export default function Builds({ projects }: { projects: any[] }) {
 
   return (
     <Wrapper>
+      {/* Modal */}
+      <NewBuildModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onSubmit={onSubmit}
+      />
+
+      {/* Contents */}
       <TitleContainer>
         <Title>Builds</Title>
         <PrimaryBlueButton
@@ -42,13 +30,6 @@ export default function Builds({ projects }: { projects: any[] }) {
         >
           Submit New Build
         </PrimaryBlueButton>
-        <Modal
-          isOpen={isOpen}
-          onRequestClose={() => setIsOpen(false)}
-          style={customStyles}
-        >
-          <NewBuildModal setIsOpen={setIsOpen} onSubmit={onSubmit} />
-        </Modal>
       </TitleContainer>
       <BuildsContainer>
         {projects.length === 0 ? (

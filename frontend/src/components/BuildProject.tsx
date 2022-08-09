@@ -1,6 +1,6 @@
 import styled, { css, keyframes } from "styled-components";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
-import { BiLinkExternal } from "react-icons/bi";
+import { BiLinkExternal, BiAddToQueue } from "react-icons/bi";
 import Link from "next/link";
 import { useStarknet } from "@starknet-react/core";
 import Account from "./Account";
@@ -8,29 +8,16 @@ import Image from "next/image";
 import castle from "../../assets/image/castle.png";
 import { useState } from "react";
 import { FaDonate } from "react-icons/fa";
-import Modal from "react-modal";
-Modal.setAppElement("#__next");
 import DonateModal from "./DonateModal";
+import { AddProjectToPoolModal } from "./AddProjectToPoolModal";
 
 export default function BuildProject(project: any) {
   const { account } = useStarknet();
   const [liked, setLiked] = useState(false);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: "white",
-      padding: "1rem",
-      border: "none",
-    },
-    overlay: {
-      backgroundColor: "rgba(168, 180, 202, 0.75)",
-    },
-  };
+  const [isDonateModalOpen, setDonateModalOpen] = useState(false);
+  const [isAddProjectToPoolModalOpen, setAddProjectToPoolModalOpen] =
+    useState(false);
+
   const { filteredProject } = project;
   const myProject = filteredProject[0];
   if (!myProject) {
@@ -39,22 +26,26 @@ export default function BuildProject(project: any) {
 
   return (
     <Wrapper>
+      {/* Modals */}
+      <DonateModal
+        isOpen={isDonateModalOpen}
+        onClose={() => setDonateModalOpen(false)}
+      />
+      <AddProjectToPoolModal
+        isOpen={isAddProjectToPoolModalOpen}
+        onClose={() => setAddProjectToPoolModalOpen(false)}
+      />
+
+      {/* Contents */}
       <MainContainer>
         <ProjectInfo>
           <TitleContainer>
             <Title>{myProject.title}</Title>
             <FaDonate
               onClick={() => {
-                setIsOpenModal(true);
+                setDonateModalOpen(true);
               }}
             />
-            <Modal
-              isOpen={isOpenModal}
-              onRequestClose={() => setIsOpenModal(false)}
-              style={customStyles}
-            >
-              <DonateModal setIsOpenModal={setIsOpenModal} />
-            </Modal>
           </TitleContainer>
           <ButtonContainer>
             <Link href="/">
@@ -77,6 +68,12 @@ export default function BuildProject(project: any) {
               )}
               <span>31</span>
             </LikeButton>
+            <AddProjectToPoolButton
+              onClick={() => setAddProjectToPoolModalOpen(true)}
+            >
+              Add Project To Pool
+              <BiAddToQueue />
+            </AddProjectToPoolButton>
           </ButtonContainer>
           <Description>{myProject.description}</Description>
         </ProjectInfo>
@@ -84,7 +81,6 @@ export default function BuildProject(project: any) {
       </MainContainer>
       <Link href={myProject.link}>
         <ThumbnailContainer>
-          {/* <Thumbnail src={myProject.image} width="40px" height="40px" /> */}
           <Thumbnail src={castle} layout="fill" objectFit="cover" />
         </ThumbnailContainer>
       </Link>
@@ -178,6 +174,8 @@ const Button = styled.button`
 const CodeButton = styled(Button)``;
 
 const DemoButton = styled(Button)``;
+
+const AddProjectToPoolButton = styled(Button)``;
 
 const LikeButton = styled(Button)`
   background-color: #fff;

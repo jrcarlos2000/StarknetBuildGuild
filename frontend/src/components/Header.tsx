@@ -32,6 +32,7 @@ export default function Header({ account }: any) {
           <>
             {NavItems.map((item: any) => (
               <NavItem
+                key={item.href}
                 href={item.href}
                 onClick={makeHandleClick(item.href)}
                 style={makeStyle(item.href)}

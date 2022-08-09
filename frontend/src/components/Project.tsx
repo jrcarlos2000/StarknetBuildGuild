@@ -58,11 +58,14 @@ const Wrapper = styled.div`
 const Thumbnail = styled.a`
   img {
     height: 100%;
+    width: 100%;
+    object-fit: contain;
   }
   height: 200px;
   width: 100%;
   background: #f2f2f2;
   text-align: center;
+  vertical-align: center;
   &:hover {
     cursor: pointer;
   }
