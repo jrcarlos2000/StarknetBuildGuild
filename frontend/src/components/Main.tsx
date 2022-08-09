@@ -14,8 +14,7 @@ import { toBN, hexToDecimalString } from "starknet/dist/utils/number";
 import { useUserRegistryContract } from "~/hooks/UserRegistry";
 import { encodeShortString } from "starknet/dist/utils/shortString";
 import axios from "Axios";
-import starknet from "starknet";
-import { fromCallsToExecuteCalldataWithNonce } from "starknet/dist/utils/transaction";
+import { Button } from "./commons/Button";
 
 const info = {
   builders: 530,
@@ -207,13 +206,8 @@ const Picture = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  flex-direction: column;
-`;
-
-const Button = styled.button`
-  background-color: #fff;
-  border: none;
-  border-radius: 10px;
-  width: 140px;
-  height: 60px;
+  margin-top: 3rem;
+  & > button {
+    margin-right: 1rem;
+  }
 `;

@@ -1,15 +1,7 @@
-import {
-  useStarknet,
-  useStarknetCall,
-  useStarknetInvoke,
-  useStarknetTransactionManager,
-} from "@starknet-react/core";
+import { useStarknet } from "@starknet-react/core";
 import Header from "./Header";
 import styled from "styled-components";
-import { useUserRegistryContract } from "~/hooks/UserRegistry";
-import { toBN } from "starknet/dist/utils/number";
-import React, { useState, useMemo } from "react";
-import { hexToDecimalString } from "starknet/utils/number";
+import React from "react";
 
 interface IProps {
   children: React.ReactNode;

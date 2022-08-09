@@ -110,7 +110,7 @@ const ChallengeRow = styled.tr`
     padding-bottom: 1.5rem;
   }
   th {
-    color: #4a5568;
+    color: #cacbcb;
     font-size: 0.75rem;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;

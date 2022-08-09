@@ -113,7 +113,7 @@ export default function Dashboard() {
   return (
     <Wrapper>
       <Profile account={account} user={user} className="profile" />
-      <DashboardContainer className="dashboard-container" projects={projects}/>
+      <DashboardContainer className="dashboard-container" projects={projects} />
     </Wrapper>
   );
 }
@@ -122,6 +122,7 @@ const Wrapper = styled.div`
   color: #fff;
   display: grid;
   padding-top: 40px;
+  padding-bottom: 140px;
   column-gap: 4rem;
   grid-template-columns: 1fr 4fr;
   grid-template-rows: auto;
