@@ -105,6 +105,7 @@ export default function Builds() {
     args : [],
     options : {watch : true}
   });
+  
   useEffect(()=>{
     async function asyncFn() {
       if(allBuildResult && allBuildResult.length > 0){
@@ -114,7 +115,14 @@ export default function Builds() {
     asyncFn();
   },[allBuildResult])
 
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    setSearchText(e.target.value);
+  };
 
+  const filteredProject = allBuilds?.filter((project: any) => {
+    return project.title.toUpperCase().includes(searchText.toUpperCase());
+  });
 
   return (
     <Wrapper>
@@ -122,11 +130,11 @@ export default function Builds() {
         <SearchBar
           width="280px"
           placeholder="Search builds"
-          onChange={(e) => setSearchText(e.target.value)}
+          onChange={handleSearch}
         />
       </SearchContainer>
       <ProjectList>
-        {allBuilds.map((project, index) => {
+        {filteredProject?.map((project: any, index: any) => {
           return <Project key={index} project={project} />;
         })}
       </ProjectList>
@@ -137,6 +145,7 @@ export default function Builds() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 10rem;
 `;
 
 const ProjectList = styled.div`

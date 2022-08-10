@@ -6,6 +6,7 @@ import { Whitespaces } from "./commons/Whitespaces";
 import { shortenParagraph } from "src/utils/shortenParagraph";
 import { LikeButton } from "./commons/LikeButton";
 import { useState } from "react";
+import { PoolTag } from "./commons/PoolTag";
 
 export default function Project({ project }: any) {
   const [isLiked, setIsLiked] = useState(false);
@@ -20,9 +21,12 @@ export default function Project({ project }: any) {
         </Thumbnail>
       </Link>
       <ProjectInfo>
-        <Link href={`/builds/${project.id}`}>
-          <Title>{project.title}</Title>
-        </Link>
+        <TitleContainer>
+          <Link href={`/builds/${project.id}`}>
+            <Title>{project.title}</Title>
+          </Link>
+          <PoolTag>Pool Address</PoolTag>
+        </TitleContainer>
         <Description>{shortenParagraph(project.description, 140)}</Description>
         <Whitespaces />
         <ViewButtonContainer>
@@ -82,6 +86,11 @@ const ProjectInfo = styled.div`
   padding-right: 1rem;
   padding-left: 1rem;
   padding-bottom: 1rem;
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Title = styled.a`
