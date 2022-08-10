@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { SearchBar } from "~/components/commons/SearchBar";
+import { Whitespaces } from "~/components/commons/Whitespaces";
 import Project from "~/components/Project";
 
 const projects = [
@@ -123,6 +124,7 @@ export default function Builds() {
           return <Project key={index} project={project} />;
         })}
       </ProjectList>
+      <Whitespaces/>
     </Wrapper>
   );
 }

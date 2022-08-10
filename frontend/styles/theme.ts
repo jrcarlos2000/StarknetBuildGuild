@@ -1,6 +1,8 @@
 export const theme = {
   bgColor: "#1B1B50",
   orange: "#FE4A04",
-  purple: "#B562EB",
+  purple: "#7753f6",
+  lightPurple: "#967cf2",
+  white: "#FFFFFF",
   red: "#s43356E",
 };

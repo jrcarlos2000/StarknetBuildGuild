@@ -10,9 +10,7 @@ const NavItems = [
 
 export default function Header({ account }: any) {
   const router = useRouter();
-  const makeStyle = (href: string) => ({
-    color: router.asPath === href ? "#7753f6" : "#fff",
-  });
+
   const makeHandleClick = (href: string) => (e: any) => {
     e.preventDefault();
     router.push(href);
@@ -33,10 +31,10 @@ export default function Header({ account }: any) {
           <>
             {NavItems.map((item: any) => (
               <NavItem
+                selected={router.asPath === item.href}
                 key={item.href}
                 href={item.href}
                 onClick={makeHandleClick(item.href)}
-                style={makeStyle(item.href)}
               >
                 {item.title}
               </NavItem>
@@ -77,12 +75,12 @@ const Logo = styled.a`
   font-size: 1.2rem;
 `;
 
-const NavItem = styled.a`
+const NavItem = styled.a<{ selected: boolean }>`
   text-decoration: none;
-  color: #fff !important;
+  color: ${(props) => props.selected ? props.theme.purple : props.theme.white};
   margin-left: 1.3rem;
   &:hover {
     cursor: pointer;
-    color: #7753f6 !important;
+    color: ${(props) => props.theme.lightPurple};
   }
 `;
