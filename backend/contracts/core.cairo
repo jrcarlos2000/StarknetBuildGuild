@@ -1,14 +1,15 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.math import assert_not_zero
 from starkware.cairo.common.alloc import alloc
-from starkware.cairo.common.math import assert_le, assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address, get_contract_address, deploy
 from structs.buidl_struct import BuidlInfo, PoolInfo, PoolReadInfo
+from starkware.cairo.common.uint256 import Uint256
 from openzeppelin.access.ownable.library import Ownable
+from openzeppelin.token.erc20.IERC20 import IERC20
 from interfaces.IUserRegistrar import IUserRegistrar
 from interfaces.IQfPool import IQfPool
-from starkware.cairo.common.uint256 import Uint256
 
 # init stuff
 @storage_var
@@ -322,12 +323,7 @@ func get_all_builds{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
-}(
-    current_index: felt, 
-    total_length: felt, 
-    res_len: felt, 
-    res: BuidlInfo*
-) -> (res_len: felt, res: BuidlInfo*): 
+}() -> (res_len: felt, res: BuidlInfo*): 
     let (len) = total_buidl.read()
     let (info: BuidlInfo*) = alloc()
 
@@ -414,7 +410,7 @@ func add_buidl_to_pool{
 
     # check pool id exist
     let (_pool_info) = pool_info.read(pool_id=pool_id)
-    local _pool_info = _pool_info
+    local _pool_info: PoolInfo = _pool_info
     assert_not_zero(_pool_info.address)
 
     # check if buidl is correct
@@ -478,7 +474,7 @@ func admin_verify_work{
     alloc_locals
     Ownable.assert_only_owner()
 
-    let (build) = buidls.read(buidl_id)
+    let (build) = buidls.read(build_id)
      # check pool id exist
     with_attr error_message("Build doesnt have a pool"):
         assert_not_zero(build.pool_addr)
@@ -502,7 +498,7 @@ func vote{
     let (caller) = get_caller_address()
     assert_user_is_registered(caller)
 
-    let (build) = buidls.read(buidl_id)
+    let (build) = buidls.read(build_id)
      # check pool id exist
     with_attr error_message("Build doesnt have a pool"):
         assert_not_zero(build.pool_addr)

@@ -90,7 +90,7 @@ describe("Deploying", function () {
         stream_end_time_: 99999999999111111n
     });
 
-    const currPoolId = await cCore.call('get_current_pool_id');
+    const currPoolId = await cCore.call('get_current_pool_length');
     console.log('currently %s pools deployed', currPoolId);
 
   });

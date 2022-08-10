@@ -45,18 +45,18 @@ export default function Registration() {
       setButtonMsg("Storing in Ipfs ...");
 
       // UNCOMMENT HERE
-      // const nftStorageClient = new NFTStorage({
-      //   token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
-      // });
-      // const nftMetadata = await nftStorageClient.store({
-      //   image: formData.file,
-      //   name: formData.name,
-      //   description: formData.description,
-      // });
-      // setButtonMsg("Loading...");
+      const nftStorageClient = new NFTStorage({
+        token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
+      });
+      const nftMetadata = await nftStorageClient.store({
+        image: formData.file,
+        name: formData.name,
+        description: formData.description,
+      });
+      setButtonMsg("Loading...");
 
       //COMMENT HERE
-      let nftMetadata = {"url" : "www.google.com"};
+      // let nftMetadata = {"url" : "www.google.com"};
       //---------------------------------
 
       //github usernames can have up to 39 characters

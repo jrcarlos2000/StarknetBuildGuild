@@ -2,45 +2,80 @@
     {
         "members": [
             {
-                "name": "ipfs_link_len",
+                "name": "address",
                 "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "vote_start_time",
+                "offset": 1,
+                "type": "felt"
+            },
+            {
+                "name": "vote_end_time",
+                "offset": 2,
+                "type": "felt"
+            },
+            {
+                "name": "stream_start_time",
+                "offset": 3,
+                "type": "felt"
+            },
+            {
+                "name": "stream_end_time",
+                "offset": 4,
                 "type": "felt"
             }
         ],
-        "name": "BuidlInfo",
-        "size": 1,
+        "name": "PoolInfo",
+        "size": 5,
         "type": "struct"
     },
     {
         "members": [
             {
-                "name": "pool_id",
+                "name": "address",
                 "offset": 0,
                 "type": "felt"
             },
             {
-                "name": "pool_addr",
+                "name": "vote_start_time",
                 "offset": 1,
                 "type": "felt"
             },
             {
-                "name": "project_id",
+                "name": "vote_end_time",
                 "offset": 2,
                 "type": "felt"
             },
             {
-                "name": "buidl_id",
+                "name": "stream_start_time",
                 "offset": 3,
                 "type": "felt"
             },
             {
-                "name": "user_addr",
+                "name": "stream_end_time",
                 "offset": 4,
                 "type": "felt"
+            },
+            {
+                "name": "total_matched",
+                "offset": 5,
+                "type": "Uint256"
+            },
+            {
+                "name": "total_divisor",
+                "offset": 7,
+                "type": "Uint256"
+            },
+            {
+                "name": "total_project_contributed_fund",
+                "offset": 9,
+                "type": "Uint256"
             }
         ],
-        "name": "BuidlProjectMapping",
-        "size": 5,
+        "name": "PoolReadInfo",
+        "size": 11,
         "type": "struct"
     },
     {
@@ -58,6 +93,43 @@
         ],
         "name": "Uint256",
         "size": 2,
+        "type": "struct"
+    },
+    {
+        "members": [
+            {
+                "name": "ipfs_link_len",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "pool_id",
+                "offset": 1,
+                "type": "felt"
+            },
+            {
+                "name": "pool_addr",
+                "offset": 2,
+                "type": "felt"
+            },
+            {
+                "name": "project_id",
+                "offset": 3,
+                "type": "felt"
+            },
+            {
+                "name": "buidl_id",
+                "offset": 4,
+                "type": "felt"
+            },
+            {
+                "name": "user_addr",
+                "offset": 5,
+                "type": "felt"
+            }
+        ],
+        "name": "BuidlInfo",
+        "size": 6,
         "type": "struct"
     },
     {
@@ -160,7 +232,7 @@
     },
     {
         "inputs": [],
-        "name": "get_current_pool_id",
+        "name": "get_current_pool_length",
         "outputs": [
             {
                 "name": "res",
@@ -177,11 +249,27 @@
                 "type": "felt"
             }
         ],
-        "name": "get_pool_address",
+        "name": "get_pool_info_by_pool_id",
         "outputs": [
             {
                 "name": "res",
+                "type": "PoolInfo"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "get_all_pools",
+        "outputs": [
+            {
+                "name": "res_len",
                 "type": "felt"
+            },
+            {
+                "name": "res",
+                "type": "PoolReadInfo*"
             }
         ],
         "stateMutability": "view",
@@ -213,14 +301,24 @@
     {
         "inputs": [
             {
-                "name": "user_addr",
+                "name": "ipfs_len",
                 "type": "felt"
+            },
+            {
+                "name": "ipfs",
+                "type": "felt*"
             }
         ],
-        "name": "get_user_current_buidl_id",
+        "name": "add_buidl",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "get_current_build_count",
         "outputs": [
             {
-                "name": "id",
+                "name": "res",
                 "type": "felt"
             }
         ],
@@ -230,15 +328,11 @@
     {
         "inputs": [
             {
-                "name": "user_addr",
-                "type": "felt"
-            },
-            {
                 "name": "buidl_id",
                 "type": "felt"
             }
         ],
-        "name": "get_user_buidl",
+        "name": "get_builds_by_id",
         "outputs": [
             {
                 "name": "res",
@@ -249,13 +343,8 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "name": "user_addr",
-                "type": "felt"
-            }
-        ],
-        "name": "get_all_user_buidl",
+        "inputs": [],
+        "name": "get_all_builds",
         "outputs": [
             {
                 "name": "res_len",
@@ -272,130 +361,12 @@
     {
         "inputs": [
             {
-                "name": "user_addr",
-                "type": "felt"
-            },
-            {
                 "name": "buidl_id",
                 "type": "felt"
             }
         ],
-        "name": "get_user_buidl_ipfs_full",
+        "name": "get_build_ipfs",
         "outputs": [
-            {
-                "name": "res_len",
-                "type": "felt"
-            },
-            {
-                "name": "res",
-                "type": "felt*"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "user_addr",
-                "type": "felt"
-            },
-            {
-                "name": "buidl_id",
-                "type": "felt"
-            },
-            {
-                "name": "current_index",
-                "type": "felt"
-            },
-            {
-                "name": "ipfs_len",
-                "type": "felt"
-            },
-            {
-                "name": "link_len",
-                "type": "felt"
-            },
-            {
-                "name": "link",
-                "type": "felt*"
-            }
-        ],
-        "name": "get_user_buidl_ipfs",
-        "outputs": [
-            {
-                "name": "ipfs_res_link_len",
-                "type": "felt"
-            },
-            {
-                "name": "ipfs_res_link",
-                "type": "felt*"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "user_addr",
-                "type": "felt"
-            }
-        ],
-        "name": "get_user_buidl_project_len",
-        "outputs": [
-            {
-                "name": "len",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "user_addr",
-                "type": "felt"
-            },
-            {
-                "name": "index",
-                "type": "felt"
-            }
-        ],
-        "name": "get_user_buidl_project_mapping",
-        "outputs": [
-            {
-                "name": "res",
-                "type": "BuidlProjectMapping"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "user_addr",
-                "type": "felt"
-            }
-        ],
-        "name": "get_all_user_buidl_project_mapping",
-        "outputs": [
-            {
-                "name": "res_len",
-                "type": "felt"
-            },
-            {
-                "name": "res",
-                "type": "BuidlProjectMapping*"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
             {
                 "name": "ipfs_len",
                 "type": "felt"
@@ -405,23 +376,7 @@
                 "type": "felt*"
             }
         ],
-        "name": "add_buidl",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "pool_id",
-                "type": "felt"
-            },
-            {
-                "name": "amount",
-                "type": "Uint256"
-            }
-        ],
-        "name": "admin_init_matched_fund_in_pool",
-        "outputs": [],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -442,26 +397,7 @@
     {
         "inputs": [
             {
-                "name": "pool_id",
-                "type": "felt"
-            },
-            {
-                "name": "project_id",
-                "type": "felt"
-            },
-            {
-                "name": "amount",
-                "type": "Uint256"
-            }
-        ],
-        "name": "vote",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "pool_id",
+                "name": "buidl_id",
                 "type": "felt"
             },
             {
@@ -480,11 +416,7 @@
     {
         "inputs": [
             {
-                "name": "pool_id",
-                "type": "felt"
-            },
-            {
-                "name": "project_id",
+                "name": "build_id",
                 "type": "felt"
             },
             {
@@ -499,11 +431,22 @@
     {
         "inputs": [
             {
-                "name": "pool_id",
+                "name": "build_id",
                 "type": "felt"
             },
             {
-                "name": "owner",
+                "name": "amount",
+                "type": "Uint256"
+            }
+        ],
+        "name": "vote",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "buidl_id",
                 "type": "felt"
             }
         ],

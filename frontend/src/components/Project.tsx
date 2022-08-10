@@ -15,7 +15,7 @@ export default function Project({ project }: any) {
   }
   return (
     <Wrapper>
-      <Link href={project.link}>
+      <Link href={`http://localhost:3000/builds/${project.id}`}>
         <Thumbnail>
           <img src={project.image} />
         </Thumbnail>
@@ -23,9 +23,9 @@ export default function Project({ project }: any) {
       <ProjectInfo>
         <TitleContainer>
           <Link href={`/builds/${project.id}`}>
-            <Title>{project.title}</Title>
+            <Title>{project.name}</Title>
           </Link>
-          <PoolTag>Pool Address</PoolTag>
+          <PoolTag>{project.poolId}</PoolTag>
         </TitleContainer>
         <Description>{shortenParagraph(project.description, 140)}</Description>
         <Whitespaces />

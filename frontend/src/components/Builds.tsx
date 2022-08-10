@@ -28,17 +28,17 @@ export default function Builds({ projects }: { projects: any[] }) {
   const onSubmit = async (data: NewBuildFormData) => {
 
     // UNCOMMENT HERE
-    // const nftStorageClient = new NFTStorage({
-    //   token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
-    // });
-    // const blob = new Blob([JSON.stringify(data, null, 2)], {type : 'application/json'});
-    // const nftMetadata = await nftStorageClient.store({
-    //   image : data.images? data.images[0] : blob,
-    //   name : data.name,
-    //   description : data.description
-    // });
+    const nftStorageClient = new NFTStorage({
+      token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
+    });
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type : 'application/json'});
+    const nftMetadata = await nftStorageClient.store({
+      image : data.images? data.images[0] : blob,
+      name : data.name,
+      description : data.description
+    });
     //COMMENT HERE
-    let nftMetadata = {"url" : "www.google.com"};
+    // let nftMetadata = {"url" : "www.google.com"};
     let metadataURI = divideLongString(nftMetadata["url"]).map((item) => {
       return encodeShortString(item);
     });
@@ -48,11 +48,11 @@ export default function Builds({ projects }: { projects: any[] }) {
       ],
       metadata: { method: "add_buidl", message: "adding build" },
     });
-    await callAddBuildToPool({
-      args : [1,1],
-      metadata : { method : "add_buidl_to_pool", message : "lets add this build to a pool"},
-    }
-    )
+    // await callAddBuildToPool({
+    //   args : [1,1],
+    //   metadata : { method : "add_buidl_to_pool", message : "lets add this build to a pool"},
+    // }
+    // )
   };
 
   return (
@@ -76,7 +76,7 @@ export default function Builds({ projects }: { projects: any[] }) {
         </PrimaryBlueButton>
       </TitleContainer>
       <BuildsContainer>
-        {projects.length === 0 ? (
+        {!projects || projects.length === 0 ? (
           <NoBuilds />
         ) : (
           projects.map((p) => <Project key={p.id} project={p} />)
