@@ -12,8 +12,8 @@ const projectList = [
     id: "1",
   },
   {
-    title: "Project 2",
-    description: "This is a project2",
+    title: "Project 3",
+    description: "This is a jhbkjbk",
     image: "https://source.unsplash.com/random",
     link: "http://localhost:3000/",
     id: "2",

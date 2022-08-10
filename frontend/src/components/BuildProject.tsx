@@ -2,7 +2,7 @@ import styled, { css, keyframes } from "styled-components";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { BiLinkExternal, BiAddToQueue } from "react-icons/bi";
 import Link from "next/link";
-import { useStarknet } from "@starknet-react/core";
+import { useStarknet, useStarknetInvoke, useStarknetTransactionManager } from "@starknet-react/core";
 import Account from "./Account";
 import Image from "next/image";
 import castle from "../../assets/image/castle.png";
@@ -10,6 +10,7 @@ import { useState } from "react";
 import { FaDonate } from "react-icons/fa";
 import DonateModal from "./DonateModal";
 import { AddProjectToPoolModal } from "./AddProjectToPoolModal";
+import { useCoreContract } from "~/hooks/Core";
 
 export default function BuildProject(project: any) {
   const { account } = useStarknet();
@@ -17,7 +18,12 @@ export default function BuildProject(project: any) {
   const [isDonateModalOpen, setDonateModalOpen] = useState(false);
   const [isAddProjectToPoolModalOpen, setAddProjectToPoolModalOpen] =
     useState(false);
-
+  const { contract: cCore } = useCoreContract();
+  const { transactions } = useStarknetTransactionManager();
+  const { invoke: callRegister } = useStarknetInvoke({
+      contract: cCore,
+      method: "add_buidl",
+  });
   const { filteredProject } = project;
   const myProject = filteredProject[0];
   if (!myProject) {

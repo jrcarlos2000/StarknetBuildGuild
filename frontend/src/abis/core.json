@@ -27,10 +27,20 @@
                 "name": "project_id",
                 "offset": 2,
                 "type": "felt"
+            },
+            {
+                "name": "buidl_id",
+                "offset": 3,
+                "type": "felt"
+            },
+            {
+                "name": "user_addr",
+                "offset": 4,
+                "type": "felt"
             }
         ],
         "name": "BuidlProjectMapping",
-        "size": 3,
+        "size": 5,
         "type": "struct"
     },
     {
@@ -243,6 +253,52 @@
             {
                 "name": "user_addr",
                 "type": "felt"
+            }
+        ],
+        "name": "get_all_user_buidl",
+        "outputs": [
+            {
+                "name": "res_len",
+                "type": "felt"
+            },
+            {
+                "name": "res",
+                "type": "BuidlInfo*"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "user_addr",
+                "type": "felt"
+            },
+            {
+                "name": "buidl_id",
+                "type": "felt"
+            }
+        ],
+        "name": "get_user_buidl_ipfs_full",
+        "outputs": [
+            {
+                "name": "res_len",
+                "type": "felt"
+            },
+            {
+                "name": "res",
+                "type": "felt*"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "user_addr",
+                "type": "felt"
             },
             {
                 "name": "buidl_id",
@@ -312,6 +368,27 @@
             {
                 "name": "res",
                 "type": "BuidlProjectMapping"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "user_addr",
+                "type": "felt"
+            }
+        ],
+        "name": "get_all_user_buidl_project_mapping",
+        "outputs": [
+            {
+                "name": "res_len",
+                "type": "felt"
+            },
+            {
+                "name": "res",
+                "type": "BuidlProjectMapping*"
             }
         ],
         "stateMutability": "view",

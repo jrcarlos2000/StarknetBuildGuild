@@ -7,7 +7,8 @@ import { AiOutlineTwitter, AiOutlineGithub } from "react-icons/ai";
 import { BsTelegram } from "react-icons/bs";
 import DashboardContainer from "~/components/DashboardContainer";
 import { useUserRegistryContract } from "~/hooks/UserRegistry";
-import { parseUserInfo } from "../src/utils/core";
+import { parseUserInfo, fetchAllBuildInfo } from "../src/utils/core";
+import { useCoreContract } from "~/hooks/Core";
 
 const projects = [
   {
@@ -59,21 +60,45 @@ const projects = [
 export default function Dashboard() {
   const { account } = useStarknet();
   const { contract: cUserRegistry } = useUserRegistryContract();
+  const { contract: cCore } = useCoreContract();
+  const [userInfo, setUserInfo] = useState<any>({});
+  const [userProjects, setUserProjects] = useState<any>({});
   const { data: registryResult } = useStarknetCall({
     contract: cUserRegistry,
     method: "get_user_info",
-    args: [account ? account : 0],
+    args: [account ? account : '0'],
     options: { watch: false },
   });
-  const [userInfo, setUserInfo] = useState<any>({});
+  const { data: userBuidlIdResult } = useStarknetCall({
+    contract: cCore,
+    method: "get_user_current_buidl_id",
+    args: [account ? account : '0'],
+    options: { watch: true },
+  });
+  const { data: userProjectsResult } = useStarknetCall({
+    contract: cCore,
+    method: "get_all_user_buidl_project_mapping",
+    args: [account ? account : '0'],
+    options: { watch: true },
+  });
   useEffect(() => {
     async function asyncFn() {
-      if (registryResult && registryResult.length > 0) {
+      if (account && registryResult && registryResult.length > 0) {
         setUserInfo(await parseUserInfo(registryResult));
       }
     }
     asyncFn();
   }, [registryResult]);
+  useEffect(() => {
+    async function asyncFn() {
+      if (account && userBuidlIdResult && userBuidlIdResult.length > 0) {
+        setUserProjects(await fetchAllBuildInfo(userBuidlIdResult,userProjectsResult, cCore, account));
+      }
+    }
+    asyncFn();
+  }, [userBuidlIdResult, userProjectsResult]);
+
+  console.log('debugging dashboard ', userProjects);
 
   const [user, setUser] = useState<UserProps>({
     image: "",
@@ -83,7 +108,7 @@ export default function Dashboard() {
     name: "",
   });
 
-  console.log("Debugging Dashboard : ", userInfo);
+  console.log("Debugging Dashboard : ", account, registryResult);
 
   useEffect(() => {
     setUser({

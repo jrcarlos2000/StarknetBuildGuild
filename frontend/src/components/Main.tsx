@@ -7,6 +7,7 @@ import { FaEthereum } from "react-icons/fa";
 import Registration from "./Registration";
 import { toBN, hexToDecimalString } from "starknet/dist/utils/number";
 import { useUserRegistryContract } from "~/hooks/UserRegistry";
+import axios from "axios";
 
 const info = {
   builders: 530,
@@ -71,6 +72,12 @@ export default function Main() {
           </PictureContainer>
         </>
       )}
+      <button onClick={async ()=>{
+        await axios.post("http://localhost:5050/mint", {
+          'address' : `${account}`,
+          'amount' : 1000000000000000000
+        });
+      }}> get testnet tokens</button>
     </Wrapper>
   );
 }

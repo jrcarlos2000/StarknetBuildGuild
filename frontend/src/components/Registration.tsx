@@ -71,6 +71,8 @@ export default function Registration() {
         return encodeShortString(item);
       });
 
+      console.log(metadataURI);
+
       console.log(githubPrefix, githubSuffix, metadataURI);
 
       await callRegister({
@@ -142,7 +144,7 @@ export default function Registration() {
           />
         </FileUploaderContainer>
       </SectionContainer>
-      <PrimaryBlueButton onClick={submitForm}>Register</PrimaryBlueButton>
+      <PrimaryBlueButton onClick={submitForm}>{buttonMsg}</PrimaryBlueButton>
     </Wrapper>
   );
 }

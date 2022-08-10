@@ -36,6 +36,10 @@ func current_pool_id() -> (id: felt):
 end
 
 @storage_var
+func total_buidl_len() -> (len: felt):
+end
+
+@storage_var
 func user_current_buidl_id(user_addr: felt) -> (id: felt):
 end
 
@@ -205,6 +209,60 @@ func get_user_buidl{
 end
 
 @view
+func get_all_user_buidl{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(user_addr: felt) -> (res_len: felt, res: BuidlInfo*):
+    let (info: BuidlInfo*) = alloc()
+    let (length) = user_current_buidl_id.read(user_addr)
+    let (res_len, res) = get_all_user_buidl_internal(user_addr, 0, length, 0, info)
+
+    return (res_len, res)
+end
+
+func get_all_user_buidl_internal{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(
+    user_addr: felt,
+    current_index: felt, 
+    total_length: felt, 
+    info_len: felt, 
+    info: BuidlInfo*) -> (res_len: felt, res: BuidlInfo*):
+
+    if total_length == 0: 
+        return (res_len=info_len, res=info)
+    end
+
+    let (current_info) = user_buidl.read(user_addr, current_index+1)
+    assert info[current_index] = current_info
+
+    let (res_len, res) = get_all_user_buidl_internal(user_addr, current_index+1, total_length-1, info_len+1, info)
+
+    return (res_len, res)
+end
+
+@view 
+func get_user_buidl_ipfs_full{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr,
+    }(
+        user_addr: felt, 
+        buidl_id: felt
+    ) -> (res_len: felt, res: felt*):
+
+    let (info) = user_buidl.read(user_addr, buidl_id)
+    let length = info.ipfs_link_len
+    let (link: felt*) = alloc()
+    let (res_len, res) = get_user_buidl_ipfs(user_addr, buidl_id, 0, length, 0, link)
+
+    return (res_len, res)
+end
+
+@view
 func get_user_buidl_ipfs{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
@@ -256,6 +314,66 @@ func get_user_buidl_project_mapping{
     let (res) = user_buidl_project_mapping.read(user_addr, index)
     return(res=res)
 end
+
+@view 
+func get_all_user_buidl_project_mapping{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(user_addr: felt) -> (res_len: felt, res: BuidlProjectMapping*):
+    let (length) = user_buidl_project_len.read(user_addr)
+    let (mapping: BuidlProjectMapping*) = alloc()
+    let (res_len, res) = get_all_user_buidl_project_mapping_internal(user_addr, 0, length, 0, mapping)
+    return (res_len, res)
+end
+
+func get_all_user_buidl_project_mapping_internal{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(
+    user_addr: felt,
+    current_index: felt, 
+    total_length: felt, 
+    mapping_len: felt, 
+    mapping: BuidlProjectMapping*) -> (res_len: felt, res: BuidlProjectMapping*):
+
+    if total_length == 0: 
+        return (res_len=mapping_len, res=mapping)
+    end
+
+    let (current_mapping) = user_buidl_project_mapping.read(user_addr, current_index)
+    assert mapping[current_index] = current_mapping
+
+    let (res_len, res) = get_all_user_buidl_project_mapping_internal(user_addr, current_index+1, total_length-1, mapping_len+1, mapping)
+
+    return (res_len, res)
+end
+
+
+# func get_all_user_buidl_internal{
+#     syscall_ptr : felt*,
+#     pedersen_ptr : HashBuiltin*,
+#     range_check_ptr,
+# }(
+#     user_addr: felt,
+#     current_index: felt, 
+#     total_length: felt, 
+#     info_len: felt, 
+#     info: BuidlInfo*) -> (res_len: felt, res: BuidlInfo*):
+
+#     if total_length == 0: 
+#         return (res_len=info_len, res=info)
+#     end
+
+#     let (current_info) = user_buidl.read(user_addr, current_index+1)
+#     assert info[current_index] = current_info
+
+#     let (res_len, res) = get_all_user_buidl_internal(user_addr, current_index+1, total_length-1, info_len+1, info)
+
+#     return (res_len, res)
+# end
+
 
 @external 
 func add_buidl{
@@ -384,7 +502,7 @@ func add_buidl_to_pool{
                             )
 
     # store in build_project_mapping
-    let mapping = BuidlProjectMapping(pool_id, pool_addr, project_id)
+    let mapping = BuidlProjectMapping(pool_id, pool_addr, project_id, buidl_id, caller)
 
     let (current_len) = user_buidl_project_len.read(caller)
     user_buidl_project_len.write(caller, current_len+1)
