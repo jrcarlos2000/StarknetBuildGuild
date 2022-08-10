@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FormSelect, FormSelectItem } from "./commons/FormSelect";
 import { CustomModal } from "./commons/modal";
 import { PrimaryBlueButton } from "./commons/PrimaryBlueButton";
-import { FormSelectEmpty } from "./FormSelectEmpty";
+import { PoolsSelectEmpty } from "./PoolsSelectEmpty";
 
 export const AddProjectToPoolModal = ({
   pools,
@@ -22,7 +22,7 @@ export const AddProjectToPoolModal = ({
             ))}
           </FormSelect>
         ) : (
-          <FormSelectEmpty />
+          <PoolsSelectEmpty />
         )}
       </FormWrapper>
       <ButtonWrapper>

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const FormSelectEmpty = () => 
+export const PoolsSelectEmpty = () => 
 <EmptyContainer>
     There&apos;s not active pools currently.
 </EmptyContainer>;
