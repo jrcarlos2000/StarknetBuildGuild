@@ -62,24 +62,18 @@ export default function Dashboard() {
   const { contract: cUserRegistry } = useUserRegistryContract();
   const { contract: cCore } = useCoreContract();
   const [userInfo, setUserInfo] = useState<any>({});
-  const [userProjects, setUserProjects] = useState<any>({});
+  const [userBuilds, setUserBuilds] = useState<any>({});
   const { data: registryResult } = useStarknetCall({
     contract: cUserRegistry,
     method: "get_user_info",
     args: [account ? account : '0'],
     options: { watch: false },
   });
-  const { data: userBuidlIdResult } = useStarknetCall({
-    contract: cCore,
-    method: "get_user_current_buidl_id",
-    args: [account ? account : '0'],
-    options: { watch: true },
-  });
-  const { data: userProjectsResult } = useStarknetCall({
-    contract: cCore,
-    method: "get_all_user_buidl_project_mapping",
-    args: [account ? account : '0'],
-    options: { watch: true },
+  const {data : allBuildResult} = useStarknetCall({
+    contract : cCore,
+    method : "get_all_builds",
+    args : [],
+    options : {watch : true}
   });
   useEffect(() => {
     async function asyncFn() {
@@ -91,14 +85,14 @@ export default function Dashboard() {
   }, [registryResult]);
   useEffect(() => {
     async function asyncFn() {
-      if (account && userBuidlIdResult && userBuidlIdResult.length > 0) {
-        setUserProjects(await fetchAllBuildInfo(userBuidlIdResult,userProjectsResult, cCore, account));
+      if (account && allBuildResult && allBuildResult.length > 0) {
+        setUserBuilds(await fetchAllBuildInfo(allBuildResult, cCore, { account : account}));
       }
     }
     asyncFn();
-  }, [userBuidlIdResult, userProjectsResult]);
+  }, [allBuildResult]);
 
-  console.log('debugging dashboard ', userProjects);
+  console.log('debugging dashboard : userBuilds', userBuilds);
 
   const [user, setUser] = useState<UserProps>({
     image: "",
@@ -108,7 +102,7 @@ export default function Dashboard() {
     name: "",
   });
 
-  console.log("Debugging Dashboard : ", account, registryResult);
+  console.log("Debugging Dashboard : user ", account, registryResult);
 
   useEffect(() => {
     setUser({

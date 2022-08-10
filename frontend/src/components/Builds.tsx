@@ -18,33 +18,41 @@ export default function Builds({ projects }: { projects: any[] }) {
       contract: cCore,
       method: "add_buidl",
   });
+  const {invoke : callAddBuildToPool} = useStarknetInvoke({
+    contract : cCore,
+    method : "add_buidl_to_pool"
+  })
 
   console.log('debugging add new buidl',transactions);
 
   const onSubmit = async (data: NewBuildFormData) => {
 
-    const nftStorageClient = new NFTStorage({
-      token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
-    });
-    const blob = new Blob([JSON.stringify(data, null, 2)], {type : 'application/json'});
-    const nftMetadata = await nftStorageClient.store({
-      image : data.images? data.images[0] : blob,
-      name : data.name,
-      description : data.description
-    });
-    console.log('debugging builds ', nftMetadata.url);
-    //parse nft metadata url
+    // UNCOMMENT HERE
+    // const nftStorageClient = new NFTStorage({
+    //   token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
+    // });
+    // const blob = new Blob([JSON.stringify(data, null, 2)], {type : 'application/json'});
+    // const nftMetadata = await nftStorageClient.store({
+    //   image : data.images? data.images[0] : blob,
+    //   name : data.name,
+    //   description : data.description
+    // });
+    //COMMENT HERE
+    let nftMetadata = {"url" : "www.google.com"};
     let metadataURI = divideLongString(nftMetadata["url"]).map((item) => {
       return encodeShortString(item);
     });
-
-    console.log('adding new buidl',data);
     await callAddBuidl({
       args: [
         metadataURI,
       ],
       metadata: { method: "add_buidl", message: "adding build" },
     });
+    await callAddBuildToPool({
+      args : [1,1],
+      metadata : { method : "add_buidl_to_pool", message : "lets add this build to a pool"},
+    }
+    )
   };
 
   return (

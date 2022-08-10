@@ -2,8 +2,11 @@ import { useRouter } from "next/router";
 import styled, { css } from "styled-components";
 import BuildProject from "~/components/BuildProject";
 import ReadMe from "~/components/ReadMe";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsFillCaretRightFill, BsFillCaretDownFill } from "react-icons/bs";
+import { useStarknetCall } from "@starknet-react/core";
+import { useCoreContract } from "~/hooks/Core";
+import { fetchBuildInfo } from "src/utils/core";
 
 const projectList = [
   {
@@ -47,13 +50,32 @@ const pools = [
 
 const Build = () => {
   const [isShow, setIsShow] = useState(false);
+  const [build, setBuild] = useState<any>([]);
   const router = useRouter();
   const { id } = router.query;
   const filteredProject = projectList.filter((project) => project.id === id);
+  const {contract : cCore} = useCoreContract();
+  const {data : BuildDataResult} = useStarknetCall({
+    contract : cCore,
+    method : "get_build",
+    args : [id],
+    options : {watch : false}
+  })
+
+  useEffect(()=>{
+    async function asyncFn(){
+      if(BuildDataResult){
+        setBuild(await fetchBuildInfo(BuildDataResult, cCore, id));
+      }
+    }
+    asyncFn();
+  },[BuildDataResult]);
+
+  //get the curent pool number and create a array, pass to pools param.
 
   return (
     <Wrapper isShow={isShow}>
-      <BuildProject filteredProject={filteredProject} pools={pools}/>
+      <BuildProject filteredProject={build} pools={pools}/>
       <ToggleContainer>
         {isShow ? (
           <Toggle>

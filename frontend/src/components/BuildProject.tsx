@@ -29,14 +29,10 @@ export default function BuildProject({
     useState(false);
   const { contract: cCore } = useCoreContract();
   const { transactions } = useStarknetTransactionManager();
-  const { invoke: callRegister } = useStarknetInvoke({
-      contract: cCore,
-      method: "add_buidl",
-  });
-  // const { filteredProject } = project;
-  // if (!myProject) {
-  //   return <div>Loading...</div>;
-  // }
+  const myProject = filteredProject[0];
+  if (!myProject) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Wrapper>

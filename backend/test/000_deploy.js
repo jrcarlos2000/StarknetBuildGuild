@@ -87,6 +87,11 @@ describe("Deploying", function () {
         vote_start_time_ : 0n,
         vote_end_time_: 99990000000000n,
         stream_start_time_ : 999999999991111111n,
-        stream_end_time_: 99999999999111111n})
+        stream_end_time_: 99999999999111111n
+    });
+
+    const currPoolId = await cCore.call('get_current_pool_id');
+    console.log('currently %s pools deployed', currPoolId);
+
   });
 });

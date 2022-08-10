@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useStarknet, useStarknetCall } from "@starknet-react/core";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { SearchBar } from "~/components/commons/SearchBar";
 import Project from "~/components/Project";
-
+import { useCoreContract } from "~/hooks/Core";
+import { fetchAllBuildInfo } from "src/utils/core";
+// use this as template
 const projectList = [
   {
     title: "Project 1",
@@ -13,8 +16,8 @@ const projectList = [
     id: "1",
   },
   {
-    title: "Project 3",
-    description: "This is a jhbkjbk",
+    title: "Project 2",
+    description: "This is a Project 3",
     image: "https://source.unsplash.com/random",
     link: "http://localhost:3000/",
     id: "2",
@@ -94,6 +97,24 @@ const projectList = [
 
 export default function Builds() {
   const [searchText, setSearchText] = useState("");
+  const {contract : cCore} = useCoreContract();
+  const [allBuilds, setAllBuilds] = useState<any>([]);
+  const {data : allBuildResult} = useStarknetCall({
+    contract : cCore,
+    method : "get_all_builds",
+    args : [],
+    options : {watch : true}
+  });
+  useEffect(()=>{
+    async function asyncFn() {
+      if(allBuildResult && allBuildResult.length > 0){
+        setAllBuilds(await fetchAllBuildInfo(allBuildResult,cCore,{}));
+      }
+    }
+    asyncFn();
+  },[allBuildResult])
+
+
 
   return (
     <Wrapper>
@@ -105,7 +126,7 @@ export default function Builds() {
         />
       </SearchContainer>
       <ProjectList>
-        {projectList.map((project, index) => {
+        {allBuilds.map((project, index) => {
           return <Project key={index} project={project} />;
         })}
       </ProjectList>

@@ -25,7 +25,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.8.4",
   starknet : {
-    dockerizedVersion : '0.9.0-arm',
+    dockerizedVersion : '0.9.1-arm',
     network : "devnet"
   },
   networks: {

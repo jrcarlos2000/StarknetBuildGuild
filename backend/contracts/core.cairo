@@ -1,16 +1,16 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math import assert_le, assert_not_zero
-from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.alloc import alloc
+from starkware.cairo.common.math import assert_le, assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address, get_contract_address, deploy
+from structs.buidl_struct import BuidlInfo, PoolInfo, PoolReadInfo
 from openzeppelin.access.ownable.library import Ownable
-from openzeppelin.token.erc20.IERC20 import IERC20
-from structs.buidl_struct import BuidlInfo, BuidlProjectMapping
 from interfaces.IUserRegistrar import IUserRegistrar
 from interfaces.IQfPool import IQfPool
+from starkware.cairo.common.uint256 import Uint256
 
+# init stuff
 @storage_var
 func pool_contract_hash() -> (res: felt):
 end
@@ -27,36 +27,26 @@ end
 func user_registrar() -> (res: felt):
 end
 
+# pool stuff
 @storage_var
-func pool_address(pool_id: felt) -> (address: felt):
+func pool_info(pool_id: felt) -> (res: PoolInfo):
 end
 
 @storage_var
-func current_pool_id() -> (id: felt):
+func current_pool_length() -> (id: felt):
+end
+
+# buidl stuff
+@storage_var
+func total_buidl() -> (res: felt):
 end
 
 @storage_var
-func total_buidl_len() -> (len: felt):
+func buidls(buidl_id: felt) -> (res: BuidlInfo):
 end
 
 @storage_var
-func user_current_buidl_id(user_addr: felt) -> (id: felt):
-end
-
-@storage_var
-func user_buidl(user_addr: felt, buidl_id: felt) -> (res: BuidlInfo):
-end
-
-@storage_var
-func user_buidl_ipfs(user_addr: felt, buidl_id: felt, index: felt) -> (str: felt):
-end
-
-@storage_var
-func user_buidl_project_len(user_addr: felt) -> (len: felt):
-end
-
-@storage_var
-func user_buidl_project_mapping(user_addr: felt, index: felt) -> (res: BuidlProjectMapping):
+func buidl_ipfs(buidl_id: felt, index: felt) -> (str: felt):
 end
 
 @constructor
@@ -69,12 +59,12 @@ func constructor{
     Ownable.initializer(admin)
     pool_contract_hash.write(contract_hash)
     user_registrar.write(user_registrar_)
-    current_pool_id.write(1)
     token_address.write(erc20_addr_)
 
     return ()
 end
 
+# init stuff
 @view
 func get_admin{
     syscall_ptr : felt*,
@@ -125,26 +115,87 @@ func get_user_registrar{
     return (res=res)
 end
 
+# pool stuff
 @view
-func get_current_pool_id{
+func get_current_pool_length{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
 }() -> (res: felt):
-    let (res) = current_pool_id.read()
+    let (res) = current_pool_length.read()
     return (res=res)
 end
 
 @view 
-func get_pool_address{
+func get_pool_info_by_pool_id{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
-}(pool_id: felt) -> (res: felt):
-    let (res) = pool_address.read(pool_id)
+}(pool_id: felt) -> (res: PoolInfo):
+    let (res) = pool_info.read(pool_id)
     return (res=res)
 end
 
+# get all pools
+@view 
+func get_all_pools{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}() -> (res_len: felt, res: PoolReadInfo*):
+    let (pool_len) = current_pool_length.read()
+    let (info: PoolReadInfo*) = alloc()
+    let (res_len, res) = get_all_pools_internal(0, pool_len, 0, info)
+
+    return (res_len, res)
+end
+
+
+func get_all_pools_internal{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(
+    current_index: felt, 
+    total_length: felt, 
+    info_len: felt, 
+    info: PoolReadInfo*
+) -> (res_len: felt, res: PoolReadInfo*):
+
+    if total_length == 0: 
+        return (res_len=info_len, res=info)
+    end
+
+    let (current_info) = pool_info.read(current_index+1)
+    let (total_contributed_fund) = IQfPool.get_total_project_contributed_fund(
+                                            contract_address=current_info.address,
+                                            ) 
+    let (total_matched) = IQfPool.get_total_match(
+                                            contract_address=current_info.address,
+                                            ) 
+    let (total_divisor) = IQfPool.get_total_divisor(
+                                            contract_address=current_info.address,
+                                            ) 
+
+    let read_info = PoolReadInfo(
+                        current_info.address,
+                        current_info.vote_start_time,
+                        current_info.vote_end_time,
+                        current_info.stream_start_time,
+                        current_info.stream_end_time,
+                        total_matched,
+                        total_divisor, 
+                        total_contributed_fund
+                    ) 
+    assert info[current_index] = read_info
+
+    let (res_len, res) = get_all_pools_internal(current_index+1, total_length-1, info_len+1, info)
+
+    return (res_len, res)
+end
+
+
+# admin add pool
 @external
 func deploy_pool{
     syscall_ptr : felt*,
@@ -180,201 +231,16 @@ func deploy_pool{
 
     salt.write(value=current_salt + 1)
 
+    let info = PoolInfo(contract_address, vote_start_time_, vote_end_time_, stream_start_time_, stream_end_time_)
+
     # add address
-    let (pool_id) = current_pool_id.read()
-    current_pool_id.write(pool_id+1)
-    pool_address.write(pool_id, contract_address)
+    let (pool_id) = current_pool_length.read()
+    current_pool_length.write(pool_id+1)
+    pool_info.write(pool_id+1, info)
     return ()
 end
 
-@view
-func get_user_current_buidl_id{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-}(user_addr: felt) -> (id: felt):
-    let (res) = user_current_buidl_id.read(user_addr)
-
-    return (id=res)
-end
-
-@view
-func get_user_buidl{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-}(user_addr: felt, buidl_id: felt) -> (res: BuidlInfo):
-    let (res) = user_buidl.read(user_addr, buidl_id)
-    return (res=res)
-end
-
-@view
-func get_all_user_buidl{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-}(user_addr: felt) -> (res_len: felt, res: BuidlInfo*):
-    let (info: BuidlInfo*) = alloc()
-    let (length) = user_current_buidl_id.read(user_addr)
-    let (res_len, res) = get_all_user_buidl_internal(user_addr, 0, length, 0, info)
-
-    return (res_len, res)
-end
-
-func get_all_user_buidl_internal{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-}(
-    user_addr: felt,
-    current_index: felt, 
-    total_length: felt, 
-    info_len: felt, 
-    info: BuidlInfo*) -> (res_len: felt, res: BuidlInfo*):
-
-    if total_length == 0: 
-        return (res_len=info_len, res=info)
-    end
-
-    let (current_info) = user_buidl.read(user_addr, current_index+1)
-    assert info[current_index] = current_info
-
-    let (res_len, res) = get_all_user_buidl_internal(user_addr, current_index+1, total_length-1, info_len+1, info)
-
-    return (res_len, res)
-end
-
-@view 
-func get_user_buidl_ipfs_full{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*,
-        range_check_ptr,
-    }(
-        user_addr: felt, 
-        buidl_id: felt
-    ) -> (res_len: felt, res: felt*):
-
-    let (info) = user_buidl.read(user_addr, buidl_id)
-    let length = info.ipfs_link_len
-    let (link: felt*) = alloc()
-    let (res_len, res) = get_user_buidl_ipfs(user_addr, buidl_id, 0, length, 0, link)
-
-    return (res_len, res)
-end
-
-@view
-func get_user_buidl_ipfs{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*,
-        range_check_ptr,
-    }(
-        user_addr: felt, 
-        buidl_id: felt,
-        current_index: felt,
-        ipfs_len: felt, 
-        link_len: felt, 
-        link: felt*
-    ) -> (ipfs_res_link_len: felt, ipfs_res_link: felt*):
-    if ipfs_len == 0:
-        return (ipfs_res_link_len=link_len, ipfs_res_link=link)
-    end
-
-    let (ipfs_index_link) = user_buidl_ipfs.read(user_addr=user_addr, buidl_id=buidl_id, index=current_index)
-    assert [link + current_index] = ipfs_index_link
-
-    let (len, ipfs_link) = get_user_buidl_ipfs(
-                                                    user_addr=user_addr, 
-                                                    buidl_id=buidl_id,
-                                                    current_index=current_index+1,
-                                                    ipfs_len=ipfs_len-1,
-                                                    link_len=link_len+1,
-                                                    link=link
-                                                )
-                      
-    return (ipfs_res_link_len=len, ipfs_res_link=ipfs_link)     
-end
-
-@view
-func get_user_buidl_project_len{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-}(user_addr: felt) -> (len: felt):
-    let (res) = user_buidl_project_len.read(user_addr)
-    return (len=res)
-end
-
-@view
-func get_user_buidl_project_mapping{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-}(user_addr: felt, index: felt) -> (res: BuidlProjectMapping):
-
-    let (res) = user_buidl_project_mapping.read(user_addr, index)
-    return(res=res)
-end
-
-@view 
-func get_all_user_buidl_project_mapping{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-}(user_addr: felt) -> (res_len: felt, res: BuidlProjectMapping*):
-    let (length) = user_buidl_project_len.read(user_addr)
-    let (mapping: BuidlProjectMapping*) = alloc()
-    let (res_len, res) = get_all_user_buidl_project_mapping_internal(user_addr, 0, length, 0, mapping)
-    return (res_len, res)
-end
-
-func get_all_user_buidl_project_mapping_internal{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-}(
-    user_addr: felt,
-    current_index: felt, 
-    total_length: felt, 
-    mapping_len: felt, 
-    mapping: BuidlProjectMapping*) -> (res_len: felt, res: BuidlProjectMapping*):
-
-    if total_length == 0: 
-        return (res_len=mapping_len, res=mapping)
-    end
-
-    let (current_mapping) = user_buidl_project_mapping.read(user_addr, current_index)
-    assert mapping[current_index] = current_mapping
-
-    let (res_len, res) = get_all_user_buidl_project_mapping_internal(user_addr, current_index+1, total_length-1, mapping_len+1, mapping)
-
-    return (res_len, res)
-end
-
-
-# func get_all_user_buidl_internal{
-#     syscall_ptr : felt*,
-#     pedersen_ptr : HashBuiltin*,
-#     range_check_ptr,
-# }(
-#     user_addr: felt,
-#     current_index: felt, 
-#     total_length: felt, 
-#     info_len: felt, 
-#     info: BuidlInfo*) -> (res_len: felt, res: BuidlInfo*):
-
-#     if total_length == 0: 
-#         return (res_len=info_len, res=info)
-#     end
-
-#     let (current_info) = user_buidl.read(user_addr, current_index+1)
-#     assert info[current_index] = current_info
-
-#     let (res_len, res) = get_all_user_buidl_internal(user_addr, current_index+1, total_length-1, info_len+1, info)
-
-#     return (res_len, res)
-# end
-
-
+# user create buidl
 @external 
 func add_buidl{
     syscall_ptr : felt*,
@@ -383,32 +249,29 @@ func add_buidl{
 }(
     ipfs_len: felt,
     ipfs: felt*,
-
 ):
     alloc_locals
-    # buidl_id starts from 0 so we need to increment first
     let (caller_addr) = get_caller_address()
     local caller_addr = caller_addr
 
     # check if caller_exist in user registrar
     assert_user_is_registered(caller_addr)
 
-    let (current_buidl_id) = user_current_buidl_id.read(caller_addr)
-    let buidl_id = current_buidl_id + 1
-    user_current_buidl_id.write(caller_addr, buidl_id)
+    let (current_len) = total_buidl.read()
+    let buidl_id = current_len + 1
+    total_buidl.write(buidl_id)
 
-    let buidl_info = BuidlInfo(ipfs_len)
-    user_buidl.write(caller_addr, buidl_id, buidl_info)
-    store_ipfs(caller_addr, buidl_id, 0, ipfs_len, ipfs)
+    let buidl_info = BuidlInfo(ipfs_len, 0, 0, 0, buidl_id, caller_addr)
+    buidls.write(buidl_id, buidl_info)
+    store_buidl_ipfs(buidl_id, 0, ipfs_len, ipfs)
     return ()
 end
 
-func store_ipfs{
+func store_buidl_ipfs{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
 }(
-      user_addr: felt,
       buidl_id: felt,
       current_index: felt,
       ipfs_link_len: felt, 
@@ -419,9 +282,8 @@ func store_ipfs{
         return ()
     end
 
-    user_buidl_ipfs.write(user_addr=user_addr, buidl_id=buidl_id, index=current_index, value=ipfs_link[0])
-    store_ipfs(
-                    user_addr=user_addr, 
+    buidl_ipfs.write(buidl_id=buidl_id, index=current_index, value=ipfs_link[0])
+    store_buidl_ipfs(
                     buidl_id=buidl_id,
                     current_index=current_index+1, 
                     ipfs_link_len=ipfs_link_len-1, 
@@ -431,37 +293,117 @@ func store_ipfs{
     return ()
 end
 
-@external
-func admin_init_matched_fund_in_pool{
+# get current buidl count
+@view
+func get_current_build_count{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
-}(pool_id: felt, amount: Uint256):
-    alloc_locals
-    Ownable.assert_only_owner()
-
-    # check pool id exist
-    let (pool_addr) = pool_address.read(pool_id=pool_id)
-    local pool_addr = pool_addr
-    assert_not_zero(pool_addr)
-
-    # transfer erc20 to pool
-    let (erc20_addr) = token_address.read()
-    let (caller) = get_caller_address()
-    let (transfer_res) = IERC20.transferFrom(contract_address=erc20_addr,
-                        sender=caller,
-                        recipient=pool_addr,
-                        amount=amount)
-
-    with_attr error_message("Transfer Erc20 fail"):
-        assert transfer_res = 1
-    end
-
-    IQfPool.init_matched_pool(contract_address=pool_addr)
-
-    return ()
+}() -> (res: felt):
+    let (res) = total_buidl.read()
+    return (res=res)
 end
 
+@view
+func get_builds_by_id{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(
+    buidl_id: felt
+) -> (res: BuidlInfo):
+    let (build) = buidls.read(buidl_id)
+    return (build)
+end
+
+# get all buidl
+@view
+func get_all_builds{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(
+    current_index: felt, 
+    total_length: felt, 
+    res_len: felt, 
+    res: BuidlInfo*
+) -> (res_len: felt, res: BuidlInfo*): 
+    let (len) = total_buidl.read()
+    let (info: BuidlInfo*) = alloc()
+
+    let (res_len, res) = get_all_builds_internal(0, len, 0, info)
+    return (res_len, res)
+end
+
+func get_all_builds_internal{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(
+    current_index: felt, 
+    total_length: felt, 
+    info_len: felt, 
+    info: BuidlInfo*
+) -> (res_len: felt, res: BuidlInfo*): 
+
+    if total_length == 0: 
+        return (res_len=info_len, res=info)
+    end
+
+    let (build) = buidls.read(current_index+1)
+    assert info[current_index] = build
+
+    let (res_len, res) = get_all_builds_internal(current_index+1, total_length-1, info_len+1, info)
+
+    return (res_len, res)
+end
+
+# get build ipfs by buidl id
+@view
+func get_build_ipfs{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(buidl_id: felt) -> (ipfs_len: felt, ipfs: felt*):
+    let (info) = buidls.read(buidl_id)
+    let length = info.ipfs_link_len
+    let (link: felt*) = alloc()
+
+    let (res_len, res) = get_build_ipfs_internal(buidl_id, 0, length, 0, link)
+    return (res_len, res)
+end
+
+func get_build_ipfs_internal{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(
+        buidl_id: felt,
+        current_index: felt,
+        ipfs_len: felt, 
+        link_len: felt, 
+        link: felt*
+    ) -> (ipfs_res_link_len: felt, ipfs_res_link: felt*):
+
+    if ipfs_len == 0:
+        return (ipfs_res_link_len=link_len, ipfs_res_link=link)
+    end
+
+    let (ipfs_index_link) = buidl_ipfs.read(buidl_id=buidl_id, index=current_index)
+    assert [link + current_index] = ipfs_index_link
+
+    let (len, ipfs_link) = get_build_ipfs_internal(
+                                                    buidl_id=buidl_id,
+                                                    current_index=current_index+1,
+                                                    ipfs_len=ipfs_len-1,
+                                                    link_len=link_len+1,
+                                                    link=link
+                                                )
+                      
+    return (ipfs_res_link_len=len, ipfs_res_link=ipfs_link)  
+end
+
+# user add buidl to pool (as a project)
 @external 
 func add_buidl_to_pool{
     syscall_ptr : felt*,
@@ -469,71 +411,115 @@ func add_buidl_to_pool{
     range_check_ptr,
 }(buidl_id: felt, pool_id: felt):
     alloc_locals
-    let (caller) = get_caller_address()
-
-    # check if buidl_id < user_current_buidl_id
-    assert_not_zero(buidl_id)
-    let (current_buidl_id) = user_current_buidl_id.read(caller)
-    assert_le(buidl_id, current_buidl_id)
 
     # check pool id exist
-    let (pool_addr) = pool_address.read(pool_id=pool_id)
-    local pool_addr = pool_addr
-    assert_not_zero(pool_addr)
+    let (_pool_info) = pool_info.read(pool_id=pool_id)
+    local _pool_info = _pool_info
+    assert_not_zero(_pool_info.address)
 
-    let (buidl_info) = user_buidl.read(user_addr=caller, buidl_id=buidl_id)
+    # check if buidl is correct
+    assert_not_zero(buidl_id)
+    let (_buidl_info) = buidls.read(buidl_id)
+    let (caller) = get_caller_address()
+    assert _buidl_info.user_addr = caller
 
-    let (ipfs) = alloc()
+    # check ipfs
+    let (ipfs_len, ipfs) = get_build_ipfs(buidl_id)
 
-    let (ipfs_len, ipfs_res) = get_user_buidl_ipfs(
-                                        caller, 
-                                        buidl_id, 
-                                        0, 
-                                        buidl_info.ipfs_link_len, 
-                                        0, 
-                                        ipfs)
-
-
+    # create project in pool
     let (project_id) = IQfPool.add_project(
-                            contract_address=pool_addr,
+                            contract_address=_pool_info.address,
                             owner=caller,
-                            ipfs_link_len=buidl_info.ipfs_link_len,
-                            ipfs_link=ipfs_res
+                            ipfs_link_len=_buidl_info.ipfs_link_len,
+                            ipfs_link=ipfs
                             )
 
-    # store in build_project_mapping
-    let mapping = BuidlProjectMapping(pool_id, pool_addr, project_id, buidl_id, caller)
+    # override buidl in global
+    let new_buidl_info = BuidlInfo(
+                        ipfs_link_len=_buidl_info.ipfs_link_len, 
+                        pool_id=pool_id,
+                        pool_addr=_pool_info.address,
+                        project_id=project_id,
+                        buidl_id=buidl_id,
+                        user_addr=caller
+                        )
 
-    let (current_len) = user_buidl_project_len.read(caller)
-    user_buidl_project_len.write(caller, current_len+1)
-
-    user_buidl_project_mapping.write(caller, current_len, mapping)
+    buidls.write(buidl_id, new_buidl_info)
     return ()
 end
+
+# user submit proof of work (lol)
+@external
+func submit_work_proof{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(buidl_id: felt, ipfs_len: felt, ipfs: felt*):
+    alloc_locals
+    # check if user is registered to prevent QF from being gamed
+    let (caller) = get_caller_address()
+    assert_user_is_registered(caller)
+
+    let (build) = buidls.read(buidl_id)
+    assert build.user_addr = caller
+    assert_not_zero(build.pool_id)
+
+    IQfPool.submit_work_proof(contract_address=build.pool_addr, project_owner=caller, ipfs_len=ipfs_len, ipfs=ipfs)
+    return ()
+end
+
+# admin approve progress
+@external
+func admin_verify_work{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(build_id: felt, approved_percentage: felt):
+    alloc_locals
+    Ownable.assert_only_owner()
+
+    let (build) = buidls.read(buidl_id)
+     # check pool id exist
+    with_attr error_message("Build doesnt have a pool"):
+        assert_not_zero(build.pool_addr)
+    end
+
+    IQfPool.admin_verify_work(contract_address=build.pool_addr, project_id=build.project_id, approved_percentage=approved_percentage)
+
+    return ()
+end
+
+# vote
 
 @external 
 func vote{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
-}(pool_id: felt, project_id: felt, amount: Uint256):
+}(build_id: felt, amount: Uint256):
     alloc_locals
     # check if user is registered to prevent QF from being gamed
     let (caller) = get_caller_address()
     assert_user_is_registered(caller)
 
-    # check pool id exist
-    let (pool_addr) = pool_address.read(pool_id=pool_id)
-    local pool_addr = pool_addr
-    with_attr error_message("Invalid Pool Id"):
-        assert_not_zero(pool_addr)
+    let (build) = buidls.read(buidl_id)
+     # check pool id exist
+    with_attr error_message("Build doesnt have a pool"):
+        assert_not_zero(build.pool_addr)
     end
+
+    # # check pool id exist
+    # let (pool_addr) = pool_address.read(pool_id=pool_id)
+    # local pool_addr = pool_addr
+    # with_attr error_message("Invalid Pool Id"):
+    #     assert_not_zero(pool_addr)
+    # end
 
     # transfer erc20 to pool
     let (erc20_addr) = token_address.read()
     let (transfer_res) = IERC20.transferFrom(contract_address=erc20_addr,
                         sender=caller,
-                        recipient=pool_addr,
+                        recipient=build.pool_addr,
                         amount=amount)
 
     with_attr error_message("Transfer Erc20 fail"):
@@ -541,66 +527,25 @@ func vote{
     end
 
     # vote
-    IQfPool.vote(contract_address=pool_addr, project_id=project_id, amount=amount, voter_addr=caller)
+    IQfPool.vote(contract_address=build.pool_addr, project_id=build.project_id, amount=amount, voter_addr=caller)
 
     return ()
 end
 
-@external
-func submit_work_proof{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-}(pool_id: felt, ipfs_len: felt, ipfs: felt*):
-    alloc_locals
-    # check if user is registered to prevent QF from being gamed
-    let (caller) = get_caller_address()
-    assert_user_is_registered(caller)
-
-     # check pool id exist
-    let (pool_addr) = pool_address.read(pool_id=pool_id)
-    local pool_addr = pool_addr
-    with_attr error_message("Invalid Pool Id"):
-        assert_not_zero(pool_addr)
-    end
-
-    IQfPool.submit_work_proof(contract_address=pool_addr, project_owner=caller, ipfs_len=ipfs_len, ipfs=ipfs)
-    return ()
-end
-
-@external
-func admin_verify_work{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-}(pool_id: felt, project_id: felt, approved_percentage: felt):
-    alloc_locals
-    Ownable.assert_only_owner()
-     # check pool id exist
-    let (pool_addr) = pool_address.read(pool_id=pool_id)
-    local pool_addr = pool_addr
-    with_attr error_message("Invalid Pool Id"):
-        assert_not_zero(pool_addr)
-    end
-
-    IQfPool.admin_verify_work(contract_address=pool_addr, project_id=project_id, approved_percentage=approved_percentage)
-
-    return ()
-end
-
+# claim
 @external
 func claim{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
-}(pool_id: felt, owner: felt):
-    # check pool id exist
-    alloc_locals
-    let (pool_addr) = pool_address.read(pool_id=pool_id)
-    local pool_addr = pool_addr
-    assert_not_zero(pool_addr)
+}(buidl_id: felt):
+    let (build) = buidls.read(buidl_id)
+     # check pool id exist
+    with_attr error_message("Build doesnt have a pool"):
+        assert_not_zero(build.pool_addr)
+    end
 
-    IQfPool.claim(contract_address=pool_addr, project_owner=owner)
+    IQfPool.claim(contract_address=build.pool_addr, project_owner=build.user_addr)
     return ()
 end
 
