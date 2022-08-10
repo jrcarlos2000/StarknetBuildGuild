@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import {
   useStarknet,
-  useStarknetCall,
   useStarknetTransactionManager,
   useStarknetInvoke,
 } from "@starknet-react/core";
@@ -15,6 +14,8 @@ import { encodeShortString } from "starknet/dist/utils/shortString";
 import axios from "axios";
 import { Button } from "./commons/Button";
 import stark from "../../assets/image/stark.png";
+import { useCheckUserRegistered } from "~/hooks/user/useCheckUserRegistered";
+import { useRegisterUser } from "~/hooks/user/useRegisterUser";
 
 const info = {
   builders: 530,
@@ -24,32 +25,18 @@ const info = {
 
 export default function Main() {
   const { account } = useStarknet();
-  const { contract: cUserRegistry } = useUserRegistryContract();
+  const cUserRegistry = useUserRegistryContract();
+  const isUserRegistered = useCheckUserRegistered(cUserRegistry, account);
 
-  const { data: registryResult } = useStarknetCall({
-    contract: cUserRegistry,
-    method: "check_user_registered",
-    args: [hexToDecimalString(account ? account : "0")],
-    options: { watch: true },
-  });
   const { transactions } = useStarknetTransactionManager();
-  const { invoke: callRegister, data: CheckData } = useStarknetInvoke({
-    contract: cUserRegistry,
-    method: "register",
-  });
+  const { register, data } = useRegisterUser(cUserRegistry);
 
   ///DEBUGGING
   console.log("Debugging Transactions", transactions);
-  const registryValue = useMemo(() => {
-    if (registryResult && registryResult.length > 0) {
-      const value = toBN(registryResult[0]);
-      return value.toString(10);
-    }
-  }, [registryResult]);
 
   return (
     <Wrapper>
-      {registryValue == 0 && account ? (
+      {isUserRegistered === "1" && account ? (
         <>
           <MainContainer>
             <TitleContainer>
@@ -80,14 +67,7 @@ export default function Main() {
             <ButtonContainer>
               <Button
                 onClick={() => {
-                  callRegister({
-                    args: [
-                      encodeShortString("jrcassraalosss"),
-                      encodeShortString("2000"),
-                      ["0001", "0002", "0003"],
-                    ],
-                    metadata: { method: "register", message: "register user" },
-                  });
+                  register("jrcassraalosss", "2000", ["0001", "0002", "0003"]);
                 }}
               >
                 add dummy user

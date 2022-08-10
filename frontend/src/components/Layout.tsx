@@ -1,13 +1,9 @@
 import { useStarknet } from "@starknet-react/core";
 import Header from "./Header";
 import styled from "styled-components";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
-interface IProps {
-  children: React.ReactNode;
-}
-
-export default function Layout({ children }: IProps) {
+export default function Layout({ children }: PropsWithChildren<{}>) {
   const { account } = useStarknet();
 
   return (

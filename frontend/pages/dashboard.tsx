@@ -1,13 +1,8 @@
 import styled from "styled-components";
 import Profile from "~/components/Profile";
 import { useStarknet, useStarknetCall } from "@starknet-react/core";
-import { useState, useEffect } from "react";
-import { AiOutlineTwitter, AiOutlineGithub } from "react-icons/ai";
-import { BsTelegram } from "react-icons/bs";
 import DashboardContainer from "~/components/DashboardContainer";
 import { useUserRegistryContract } from "~/hooks/user/useUserRegistryContract";
-import { parseUserInfo } from "../src/utils/core";
-import { User } from "src/models/User";
 import { useGetUserInfo } from "~/hooks/user/useGetUserInfo";
 
 const projects = [

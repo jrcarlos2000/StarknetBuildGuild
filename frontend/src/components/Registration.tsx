@@ -8,6 +8,8 @@ import { useUserRegistryContract } from "~/hooks/user/useUserRegistryContract";
 import { encodeShortString } from "starknet/dist/utils/shortString";
 import { divideLongString } from "../utils/core";
 import { PrimaryBlueButton } from "./commons/PrimaryBlueButton";
+import { useRegisterUser } from "~/hooks/user/useRegisterUser";
+import { Button } from "./commons/Button";
 
 export type RegisterFormData = {
   name?: string;
@@ -21,11 +23,8 @@ export type RegisterFormData = {
 export default function Registration() {
   const [formData, setFormData] = useState<RegisterFormData>();
   const [buttonMsg, setButtonMsg] = useState("Register");
-  const { contract: cUserRegistry } = useUserRegistryContract();
-  const { invoke: callRegister } = useStarknetInvoke({
-    contract: cUserRegistry,
-    method: "register",
-  });
+  const cUserRegistry = useUserRegistryContract();
+  const { register } = useRegisterUser(cUserRegistry);
   const submitForm = async () => {
     if (
       formData === undefined ||
@@ -67,14 +66,7 @@ export default function Registration() {
 
       console.log(githubPrefix, githubSuffix, metadataURI);
 
-      await callRegister({
-        args: [
-          encodeShortString(githubPrefix),
-          encodeShortString(githubSuffix),
-          metadataURI,
-        ],
-        metadata: { method: "register", message: "register user" },
-      });
+      await register(githubPrefix, githubSuffix, metadataURI);
       setButtonMsg("Register");
     }
   };
@@ -136,7 +128,7 @@ export default function Registration() {
           />
         </FileUploaderContainer>
       </SectionContainer>
-      <PrimaryBlueButton onClick={submitForm}>Register</PrimaryBlueButton>
+      <Button onClick={submitForm}>{buttonMsg}</Button>
     </Wrapper>
   );
 }
