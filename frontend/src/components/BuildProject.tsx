@@ -1,20 +1,29 @@
 import styled, { css, keyframes } from "styled-components";
-import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { BiLinkExternal, BiAddToQueue } from "react-icons/bi";
 import Link from "next/link";
 import { useStarknet, useStarknetInvoke, useStarknetTransactionManager } from "@starknet-react/core";
 import Account from "./Account";
 import Image from "next/image";
 import castle from "../../assets/image/castle.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaDonate } from "react-icons/fa";
 import DonateModal from "./DonateModal";
+import { LikeButton } from "./commons/LikeButton";
+import { OutlineButton } from "../components/commons/OutlineButton";
+import { Button } from "./commons/Button";
+import { AiFillCheckCircle } from "react-icons/ai";
 import { AddProjectToPoolModal } from "./AddProjectToPoolModal";
 import { useCoreContract } from "~/hooks/Core";
 
-export default function BuildProject(project: any) {
-  const { account } = useStarknet();
-  const [liked, setLiked] = useState(false);
+export default function BuildProject({
+  filteredProject,
+  pools,
+}: {
+  filteredProject: any;
+  pools: any[];
+}) {
+  const [isLiked, setIsLiked] = useState(false);
+  const [isAddedToPool, setIsAddedToPool] = useState(false);
   const [isDonateModalOpen, setDonateModalOpen] = useState(false);
   const [isAddProjectToPoolModalOpen, setAddProjectToPoolModalOpen] =
     useState(false);
@@ -24,11 +33,10 @@ export default function BuildProject(project: any) {
       contract: cCore,
       method: "add_buidl",
   });
-  const { filteredProject } = project;
-  const myProject = filteredProject[0];
-  if (!myProject) {
-    return <div>Loading...</div>;
-  }
+  // const { filteredProject } = project;
+  // if (!myProject) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <Wrapper>
@@ -38,6 +46,7 @@ export default function BuildProject(project: any) {
         onClose={() => setDonateModalOpen(false)}
       />
       <AddProjectToPoolModal
+        pools={pools}
         isOpen={isAddProjectToPoolModalOpen}
         onClose={() => setAddProjectToPoolModalOpen(false)}
       />
@@ -45,14 +54,30 @@ export default function BuildProject(project: any) {
       {/* Contents */}
       <MainContainer>
         <ProjectInfo>
-          <TitleContainer>
-            <Title>{myProject.title}</Title>
-            <FaDonate
-              onClick={() => {
-                setDonateModalOpen(true);
-              }}
-            />
-          </TitleContainer>
+          <Flex>
+            <TitleContainer>
+              <Title>{myProject.title}</Title>
+              <FaDonate
+                onClick={() => {
+                  setDonateModalOpen(true);
+                }}
+              />
+            </TitleContainer>
+            <AddProjectToPoolButton
+              isAddedToPool={isAddedToPool}
+              onClick={() => setAddProjectToPoolModalOpen(true)}
+            >
+              {isAddedToPool ? (
+                <Pool>
+                  Project is Added <AiFillCheckCircle />
+                </Pool>
+              ) : (
+                <Pool>
+                  Add Project To Pool <BiAddToQueue />
+                </Pool>
+              )}
+            </AddProjectToPoolButton>
+          </Flex>
           <ButtonContainer>
             <Link href="/">
               <CodeButton onClick={() => console.log("code clicked")}>
@@ -66,20 +91,11 @@ export default function BuildProject(project: any) {
                 <BiLinkExternal />
               </DemoButton>
             </Link>
-            <LikeButton onClick={() => setLiked(!liked)}>
-              {liked ? (
-                <BsSuitHeartFill style={{ color: "red" }} />
-              ) : (
-                <BsSuitHeart />
-              )}
-              <span>31</span>
-            </LikeButton>
-            <AddProjectToPoolButton
-              onClick={() => setAddProjectToPoolModalOpen(true)}
-            >
-              Add Project To Pool
-              <BiAddToQueue />
-            </AddProjectToPoolButton>
+            <LikeButton
+              likeCount={31}
+              isLiked={isLiked}
+              onClick={() => setIsLiked(!isLiked)}
+            />
           </ButtonContainer>
           <Description>{myProject.description}</Description>
         </ProjectInfo>
@@ -135,9 +151,13 @@ const flashIcon = css`
   animation: ${flashing} 1500ms linear infinite;
 `;
 
-const TitleContainer = styled.div`
+const Flex = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+`;
+
+const TitleContainer = styled(Flex)`
   & > svg {
     font-size: 1.3rem;
     ${flashIcon}
@@ -164,25 +184,43 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const Button = styled.button`
-  border: 1px solid black;
-  border-radius: 3px;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  margin-right: 0.3rem;
-  &:hover {
-    cursor: pointer;
+const CodeButton = styled(OutlineButton)`
+  margin-right: 0.5rem;
+  & > svg {
+    margin-left: 0.3rem;
   }
 `;
 
-const CodeButton = styled(Button)``;
+const DemoButton = styled(OutlineButton)`
+  margin-right: 0.5rem;
+  & > svg {
+    margin-left: 0.3rem;
+  }
+`;
 
-const DemoButton = styled(Button)``;
+const poolButtonStyle = css<{ isAddedToPool: boolean }>`
+  ${(props) =>
+    props.isAddedToPool === true &&
+    css`
+      color: #7853f7;
+      border: 1px solid #7853f7;
+      background-color: #fff;
+    `}
+`;
 
-const AddProjectToPoolButton = styled(Button)``;
+const AddProjectToPoolButton = styled(Button)`
+  ${poolButtonStyle}
+`;
 
-const LikeButton = styled(Button)`
-  background-color: #fff;
+const Pool = styled.div`
+  padding: 0.3rem;
+  display: flex;
+  align-items: center;
+  & > p {
+    line-height: 0;
+    margin-right: 0.5rem;
+  }
+  & > svg {
+    margin-left: 0.3rem;
+  }
 `;

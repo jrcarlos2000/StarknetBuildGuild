@@ -1,5 +1,10 @@
 import styled from "styled-components";
-import { useStarknet , useStarknetCall} from "@starknet-react/core";
+import {
+  useStarknet,
+  useStarknetCall,
+  useStarknetTransactionManager,
+  useStarknetInvoke,
+} from "@starknet-react/core";
 import { useMemo } from "react";
 import Image from "next/image";
 import stark from "../../assets/image/stark.png";
@@ -7,7 +12,9 @@ import { FaEthereum } from "react-icons/fa";
 import Registration from "./Registration";
 import { toBN, hexToDecimalString } from "starknet/dist/utils/number";
 import { useUserRegistryContract } from "~/hooks/UserRegistry";
-import axios from "axios";
+import { encodeShortString } from "starknet/dist/utils/shortString";
+import axios from "Axios";
+import { Button } from "./commons/Button";
 
 const info = {
   builders: 530,
@@ -17,15 +24,22 @@ const info = {
 
 export default function Main() {
   const { account } = useStarknet();
-  const {contract : cUserRegistry} = useUserRegistryContract();
+  const { contract: cUserRegistry } = useUserRegistryContract();
 
   const { data: registryResult } = useStarknetCall({
     contract: cUserRegistry,
     method: "check_user_registered",
-    args: [account],
-    options: { watch : true },
+    args: [hexToDecimalString(account ? account : "0")],
+    options: { watch: true },
+  });
+  const { transactions } = useStarknetTransactionManager();
+  const { invoke: callRegister, data: CheckData } = useStarknetInvoke({
+    contract: cUserRegistry,
+    method: "register",
   });
 
+  ///DEBUGGING
+  console.log("Debugging Transactions", transactions);
   const registryValue = useMemo(() => {
     if (registryResult && registryResult.length > 0) {
       const value = toBN(registryResult[0]);
@@ -35,8 +49,8 @@ export default function Main() {
 
   return (
     <Wrapper>
-      {registryValue == 0 && account? (
-        <Registration/>
+      {registryValue == 0 && account ? (
+        <Registration />
       ) : (
         <>
           <MainContainer>
@@ -45,7 +59,8 @@ export default function Main() {
               <Version>v1</Version>
             </TitleContainer>
             <Description>
-            A decentralized group of Builders of Starknet creating products, prototypes, and tutorials to enrich the web3 ecosystem.
+              A decentralized group of Builders of Starknet creating products,
+              prototypes, and tutorials to enrich the web3 ecosystem.
             </Description>
             <InfoBoxContainer>
               <InfoBox>
@@ -64,10 +79,41 @@ export default function Main() {
                 <Unit>streamed</Unit>
               </InfoBox>
             </InfoBoxContainer>
+            <ButtonContainer>
+              <Button
+                onClick={() => {
+                  callRegister({
+                    args: [
+                      encodeShortString("jrcassraalosss"),
+                      encodeShortString("2000"),
+                      ["0001", "0002", "0003"],
+                    ],
+                    metadata: { method: "register", message: "register user" },
+                  });
+                }}
+              >
+                add dummy user
+              </Button>
+              <Button
+                onClick={async () => {
+                  await axios.post("http://localhost:5050/mint", {
+                    address: account,
+                    amount: 1000000000000000000,
+                  });
+                }}
+              >
+                get testnet eth
+              </Button>
+            </ButtonContainer>
           </MainContainer>
           <PictureContainer>
             <Picture>
-              <Image width="800px" height="600px" src={stark} />
+              <Image
+                style={{ opacity: 0.5 }}
+                width="600px"
+                height="400px"
+                src={stark}
+              />
             </Picture>
           </PictureContainer>
         </>
@@ -83,9 +129,11 @@ export default function Main() {
 }
 
 const Wrapper = styled.div`
+  color: #7753f6;
+  background-color: #0d122b;
   display: flex;
-  background-color: #fcfbf8;
   padding-top: 1.5rem;
+  height: 100vh;
 `;
 
 const MainContainer = styled.div`
@@ -108,13 +156,14 @@ const Title = styled.h1`
 const Version = styled.p`
   font-size: 1.7rem;
   font-weight: 600;
-  color: #cacbcb;
+  color: #fff;
 `;
 
 const Description = styled.p`
   line-height: 1.6rem;
   width: 500px;
   margin-top: -1.6rem;
+  color: #fff;
 `;
 
 const InfoBoxContainer = styled.div`
@@ -123,12 +172,12 @@ const InfoBoxContainer = styled.div`
 `;
 
 const InfoBox = styled.div`
-  border: 1px solid #cacbcb;
+  border: 1px solid #fff;
   border-radius: 2px;
-  margin-right: 0.6rem;
+  margin-right: 1.5rem;
   padding: 1rem;
-  width: 90px;
-  height: 90px;
+  width: 120px;
+  height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -138,6 +187,9 @@ const InfoBox = styled.div`
 const IconContainer = styled.div`
   display: flex;
   align-items: center;
+  & > svg {
+    color: #b3b4b5;
+  }
 `;
 
 const Number = styled.p`
@@ -149,11 +201,19 @@ const Number = styled.p`
 const Unit = styled.p`
   font-size: 1rem;
   line-height: 0rem;
-  color: #a6a7a7;
+  color: #fff;
 `;
 
 const PictureContainer = styled.div``;
 const Picture = styled.div`
   margin-top: 5rem;
   margin-right: 5rem;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  margin-top: 3rem;
+  & > button {
+    margin-right: 1rem;
+  }
 `;
