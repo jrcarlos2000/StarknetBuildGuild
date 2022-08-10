@@ -19,7 +19,7 @@ export default function ReadMe({ url }: any) {
 
   return (
     <Wrapper>
-      <ReactMarkdown children={repo} remarkPlugins={[remarkGfm]} />
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{repo}</ReactMarkdown>
     </Wrapper>
   );
 }

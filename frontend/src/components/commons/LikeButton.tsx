@@ -1,4 +1,4 @@
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler } from "react";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import styled from "styled-components";
 import { OutlineButton } from "./OutlineButton";

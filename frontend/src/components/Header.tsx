@@ -77,10 +77,10 @@ const Logo = styled.a`
 
 const NavItem = styled.a<{ selected: boolean }>`
   text-decoration: none;
-  color: ${(props) => props.selected ? props.theme.purple : props.theme.white};
+  color: ${(props) => props.selected ? props.theme.lightPurple : props.theme.white};
   margin-left: 1.3rem;
   &:hover {
     cursor: pointer;
-    color: ${(props) => props.theme.lightPurple};
+    color: ${(props) => props.theme.purple};
   }
 `;

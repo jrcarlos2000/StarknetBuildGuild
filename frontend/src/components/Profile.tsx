@@ -1,19 +1,7 @@
+import { User } from "src/models/User";
 import styled from "styled-components";
-import Account from "./Account";
 
-type SocialMediaProps = {
-  name: string;
-  link: string;
-  icon: any;
-};
 
-export type UserProps = {
-  image: string;
-  description: string;
-  joined: string;
-  socialMedia: SocialMediaProps[];
-  name: string;
-};
 
 export default function Profile({
   account,
@@ -21,7 +9,7 @@ export default function Profile({
   className,
 }: {
   account: any;
-  user: UserProps;
+  user: User;
   className?: string;
 }) {
   if (!account) {
@@ -38,11 +26,11 @@ export default function Profile({
       <Description>{user.description}</Description>
       <SocialMediaContainer>
         {user.socialMedia.map((item) => (
-          <SocialMediaItem>{item.icon}</SocialMediaItem>
+          <SocialMediaItem key={item.name}>{item.icon}</SocialMediaItem>
         ))}
       </SocialMediaContainer>
       <DateJoined>
-        <p>Joined {user.joined}</p>
+        <p>Joined {user.joinDate}</p>
       </DateJoined>
     </Wrapper>
   );

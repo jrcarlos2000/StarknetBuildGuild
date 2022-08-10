@@ -7,14 +7,14 @@ import {
 } from "@starknet-react/core";
 import { useMemo } from "react";
 import Image from "next/image";
-import stark from "../../assets/image/stark.png";
 import { FaEthereum } from "react-icons/fa";
 import Registration from "./Registration";
 import { toBN, hexToDecimalString } from "starknet/dist/utils/number";
-import { useUserRegistryContract } from "~/hooks/UserRegistry";
+import { useUserRegistryContract } from "~/hooks/user/useUserRegistryContract";
 import { encodeShortString } from "starknet/dist/utils/shortString";
 import axios from "axios";
 import { Button } from "./commons/Button";
+import stark from "../../assets/image/stark.png";
 
 const info = {
   builders: 530,
@@ -50,8 +50,6 @@ export default function Main() {
   return (
     <Wrapper>
       {registryValue == 0 && account ? (
-        <Registration />
-      ) : (
         <>
           <MainContainer>
             <TitleContainer>
@@ -109,6 +107,7 @@ export default function Main() {
           <PictureContainer>
             <Picture>
               <Image
+                alt="Starknet astronaut"
                 style={{ opacity: 0.5 }}
                 width="600px"
                 height="400px"
@@ -117,6 +116,8 @@ export default function Main() {
             </Picture>
           </PictureContainer>
         </>
+      ) : (
+        <Registration />
       )}
     </Wrapper>
   );

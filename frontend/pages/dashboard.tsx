@@ -2,12 +2,13 @@ import styled from "styled-components";
 import Profile from "~/components/Profile";
 import { useStarknet, useStarknetCall } from "@starknet-react/core";
 import { useState, useEffect } from "react";
-import { UserProps } from "~/components/Profile";
 import { AiOutlineTwitter, AiOutlineGithub } from "react-icons/ai";
 import { BsTelegram } from "react-icons/bs";
 import DashboardContainer from "~/components/DashboardContainer";
-import { useUserRegistryContract } from "~/hooks/UserRegistry";
+import { useUserRegistryContract } from "~/hooks/user/useUserRegistryContract";
 import { parseUserInfo } from "../src/utils/core";
+import { User } from "src/models/User";
+import { useGetUserInfo } from "~/hooks/user/useGetUserInfo";
 
 const projects = [
   {
@@ -58,61 +59,13 @@ const projects = [
 
 export default function Dashboard() {
   const { account } = useStarknet();
-  const { contract: cUserRegistry } = useUserRegistryContract();
-  const { data: registryResult } = useStarknetCall({
-    contract: cUserRegistry,
-    method: "get_user_info",
-    args: [account ? account : 0],
-    options: { watch: false },
-  });
-  const [userInfo, setUserInfo] = useState<any>({});
-  useEffect(() => {
-    async function asyncFn() {
-      if (registryResult && registryResult.length > 0) {
-        setUserInfo(await parseUserInfo(registryResult));
-      }
-    }
-    asyncFn();
-  }, [registryResult]);
-
-  const [user, setUser] = useState<UserProps>({
-    image: "",
-    description: "",
-    joined: "",
-    socialMedia: [{ name: "", link: "", icon: "" }],
-    name: "",
-  });
-
+  const userRegistryContract = useUserRegistryContract();
+  const userInfo = useGetUserInfo(userRegistryContract, account);
   console.log("Debugging Dashboard : ", userInfo);
 
-  useEffect(() => {
-    setUser({
-      image: userInfo.image,
-      name: userInfo.name,
-      description: userInfo.description,
-      joined: userInfo.joinDate,
-      socialMedia: [
-        {
-          name: "twitter",
-          link: "https://twitter.com/",
-          icon: <AiOutlineTwitter />,
-        },
-        {
-          name: "telegram",
-          link: "https://telegram.com/",
-          icon: <BsTelegram />,
-        },
-        {
-          name: "github",
-          link: "https://github.com/",
-          icon: <AiOutlineGithub />,
-        },
-      ],
-    });
-  }, [userInfo]);
   return (
     <Wrapper>
-      <Profile account={account} user={user} className="profile" />
+      <Profile account={account} user={userInfo} className="profile" />
       <DashboardContainer className="dashboard-container" projects={projects} />
     </Wrapper>
   );

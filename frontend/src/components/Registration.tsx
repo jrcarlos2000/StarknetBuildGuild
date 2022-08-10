@@ -1,14 +1,10 @@
 import styled from "styled-components";
 import { PropsWithChildren, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
-import {
-  useStarknet,
-  useStarknetInvoke,
-  useStarknetTransactionManager,
-} from "@starknet-react/core";
+import { useStarknetInvoke } from "@starknet-react/core";
 import { NFTStorage } from "nft.storage";
 import process from "process";
-import { useUserRegistryContract } from "~/hooks/UserRegistry";
+import { useUserRegistryContract } from "~/hooks/user/useUserRegistryContract";
 import { encodeShortString } from "starknet/dist/utils/shortString";
 import { divideLongString } from "../utils/core";
 import { PrimaryBlueButton } from "./commons/PrimaryBlueButton";
@@ -24,10 +20,8 @@ export type RegisterFormData = {
 
 export default function Registration() {
   const [formData, setFormData] = useState<RegisterFormData>();
-  const { account } = useStarknet();
   const [buttonMsg, setButtonMsg] = useState("Register");
   const { contract: cUserRegistry } = useUserRegistryContract();
-  const { transactions } = useStarknetTransactionManager();
   const { invoke: callRegister } = useStarknetInvoke({
     contract: cUserRegistry,
     method: "register",
