@@ -5,15 +5,15 @@ import { ChangeEventHandler } from "react";
 export const SearchBar = ({
   placeholder,
   width,
-  onChange
+  onChange,
 }: {
   placeholder: string;
   width: string;
-  onChange: ChangeEventHandler<HTMLInputElement>
+  onChange: ChangeEventHandler<HTMLInputElement>;
 }) => {
   return (
     <SearchBarContainer width={width}>
-      <SearchBarInput placeholder={placeholder} onChange={onChange}/>
+      <SearchBarInput placeholder={placeholder} onChange={onChange} />
       <SearchBarIcon>
         <AiOutlineSearch size={26} color="#cccccc" />
       </SearchBarIcon>
@@ -53,5 +53,4 @@ const SearchBarIcon = styled.div`
   right: 0;
   align-items: center;
   padding-right: 0.75rem;
-}
 `;

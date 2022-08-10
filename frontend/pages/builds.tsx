@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { SearchBar } from "~/components/commons/SearchBar";
 import Project from "~/components/Project";
 
-const projectList = [
+const projects = [
   {
     title: "Project 1",
     description:
@@ -94,6 +94,20 @@ const projectList = [
 
 export default function Builds() {
   const [searchText, setSearchText] = useState("");
+  const [projectList, setProjectList] = useState<any>();
+
+  useEffect(() => {
+    setProjectList(projects);
+  }, []);
+
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    setSearchText(e.target.value);
+  };
+
+  const filteredProject = projectList?.filter((project: any) => {
+    return project.title.toUpperCase().includes(searchText.toUpperCase());
+  });
 
   return (
     <Wrapper>
@@ -101,11 +115,11 @@ export default function Builds() {
         <SearchBar
           width="280px"
           placeholder="Search builds"
-          onChange={(e) => setSearchText(e.target.value)}
+          onChange={handleSearch}
         />
       </SearchContainer>
       <ProjectList>
-        {projectList.map((project, index) => {
+        {filteredProject?.map((project: any, index: any) => {
           return <Project key={index} project={project} />;
         })}
       </ProjectList>
@@ -116,6 +130,7 @@ export default function Builds() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 10rem;
 `;
 
 const ProjectList = styled.div`
