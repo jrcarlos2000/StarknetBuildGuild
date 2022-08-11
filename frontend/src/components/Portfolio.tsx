@@ -54,7 +54,7 @@ export default function Builds() {
           onRequestClose={() => setIsOpen(false)}
           style={customStyles}
         >
-          <NewBuildModal setIsOpen={setIsOpen} onSubmit={onSubmit}/>
+          <NewBuildModal isOpen={isOpen} onSubmit={onSubmit}/>
         </Modal>
       </TitleContainer>
       <BuildsContainer>
