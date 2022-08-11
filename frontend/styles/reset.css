@@ -1,8 +1,16 @@
+
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100vh;
+  min-height: 100vh;
 }
 
 body {
-    margin: 0;
-    padding: 0;
+  background-color: #0d122b;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
