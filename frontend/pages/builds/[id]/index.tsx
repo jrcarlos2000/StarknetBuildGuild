@@ -8,53 +8,12 @@ import { useStarknet, useStarknetCall } from "@starknet-react/core";
 import { useCoreContract } from "~/hooks/Core";
 import { fetchBuildInfo, parseReadMeFromRepo,fetchAllPoolInfo } from "src/utils/core";
 
-const projectList = [
-  {
-    title: "Project 1",
-    description:
-      "This is a project1 is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    image: "https://source.unsplash.com/random",
-    link: "https://raw.githubusercontent.com/scaffold-eth/scaffold-eth/punk-wallet/README.md",
-    id: "1",
-  },
-  {
-    title: "Project 2",
-    description: "This is a project2",
-    image: "https://source.unsplash.com/random",
-    link: "https://raw.githubusercontent.com/scaffold-eth/scaffold-eth/punk-wallet/README.md",
-    id: "2",
-  },
-  {
-    title: "Project 3",
-    description: "This is a project3",
-    image: "https://source.unsplash.com/random",
-    link: "https://raw.githubusercontent.com/scaffold-eth/scaffold-eth/punk-wallet/README.md",
-    id: "3",
-  },
-];
-
-// const pools = [
-//   {
-//     id: 1,
-//     name: "pool-1",
-//   },
-//   {
-//     id: 2,
-//     name: "pool-2",
-//   },
-//   {
-//     id: 3,
-//     name: "pool-3",
-//   },
-// ];
-
 const Build = () => {
   const [isShow, setIsShow] = useState(false);
   const [build, setBuild] = useState<any>();
   const [pools,setPools] = useState<any>([]);
   const router = useRouter();
   const { id } = router.query;
-  const filteredProject = projectList.filter((project) => project.id === id);
   const {contract : cCore} = useCoreContract();
   const {account} = useStarknet();
   const {data : BuildDataResult} = useStarknetCall({
@@ -90,7 +49,7 @@ const Build = () => {
 
   return (
     <Wrapper isShow={isShow}>
-      {build ? <BuildProject filteredProject={build} pools={pools} isOwner={account && build.owner == account}/> : <></>}
+      {build ? <BuildProject filteredProject={build} pools={pools} isOwner={account && build.owner.toLowerCase() == account.toLowerCase()}/> : <></>}
       <ToggleContainer>
         {isShow ? (
           <Toggle>

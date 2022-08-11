@@ -128,7 +128,14 @@ async function fetchIpfsArrayData(ipfsArray) {
   }
 
   ipfsURI = ipfsURI.slice(7);
-  let { data } = await axios.get(`https://ipfs.io/ipfs/${ipfsURI}`);
-
-  return data;
+  try {
+    let { data } = await axios.get(`https://ipfs.io/ipfs/${ipfsURI}`);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return {
+      github: "",
+      image: "",
+    };
+  }
 }
