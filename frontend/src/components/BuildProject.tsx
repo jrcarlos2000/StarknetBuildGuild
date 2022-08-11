@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from "styled-components";
-import { BiLinkExternal, BiAddToQueue } from "react-icons/bi";
+import { BiLinkExternal, BiAddToQueue, BiMoney } from "react-icons/bi";
 import Link from "next/link";
 import Account from "./Account";
 import Image from "next/image";
@@ -16,12 +16,14 @@ import { AddProjectToPoolModal } from "./AddProjectToPoolModal";
 export default function BuildProject({
   filteredProject,
   pools,
+  isProjectOwner,
 }: {
   filteredProject: any;
   pools: any[];
+  isProjectOwner: boolean;
 }) {
   const [isLiked, setIsLiked] = useState(false);
-  const [isAddedToPool, setIsAddedToPool] = useState(false);
+  const [isAddedToPool, setIsAddedToPool] = useState(true);
   const [isDonateModalOpen, setDonateModalOpen] = useState(false);
   const [isAddProjectToPoolModalOpen, setAddProjectToPoolModalOpen] =
     useState(false);
@@ -50,26 +52,45 @@ export default function BuildProject({
           <Flex>
             <TitleContainer>
               <Title>{myProject.title}</Title>
-              <FaDonate
-                onClick={() => {
-                  setDonateModalOpen(true);
-                }}
-              />
-            </TitleContainer>
-            <AddProjectToPoolButton
-              isAddedToPool={isAddedToPool}
-              onClick={() => setAddProjectToPoolModalOpen(true)}
-            >
-              {isAddedToPool ? (
-                <Pool>
-                  Project is Added <AiFillCheckCircle />
-                </Pool>
+              {isProjectOwner ? (
+                <></>
               ) : (
-                <Pool>
-                  Add Project To Pool <BiAddToQueue />
-                </Pool>
+                <FaDonate
+                  onClick={() => {
+                    setDonateModalOpen(true);
+                  }}
+                />
               )}
-            </AddProjectToPoolButton>
+            </TitleContainer>
+            {isProjectOwner ? (
+              <PoolButtonContainer>
+                {isAddedToPool ? (
+                  <ClaimButton>
+                    <ButtonContent>
+                      Claim <BiMoney size={20} />
+                    </ButtonContent>
+                  </ClaimButton>
+                ) : (
+                  <></>
+                )}
+                <AddProjectToPoolButton
+                  isAddedToPool={isAddedToPool}
+                  onClick={() => setAddProjectToPoolModalOpen(true)}
+                >
+                  {isAddedToPool ? (
+                    <ButtonContent>
+                      Project Added <AiFillCheckCircle />
+                    </ButtonContent>
+                  ) : (
+                    <ButtonContent>
+                      Add Project To Pool <BiAddToQueue />
+                    </ButtonContent>
+                  )}
+                </AddProjectToPoolButton>
+              </PoolButtonContainer>
+            ) : (
+              <></>
+            )}
           </Flex>
           <ButtonContainer>
             <Link href="/">
@@ -203,10 +224,12 @@ const poolButtonStyle = css<{ isAddedToPool: boolean }>`
 
 const AddProjectToPoolButton = styled(Button)`
   ${poolButtonStyle}
+  margin-left: 1rem;
 `;
 
-const Pool = styled.div`
-  padding: 0.3rem;
+const ClaimButton = styled(Button)``;
+
+const ButtonContent = styled.div`
   display: flex;
   align-items: center;
   & > p {
@@ -217,3 +240,5 @@ const Pool = styled.div`
     margin-left: 0.3rem;
   }
 `;
+
+const PoolButtonContainer = styled.div``;

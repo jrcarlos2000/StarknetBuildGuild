@@ -13,6 +13,9 @@ const projectList = [
     image: "https://source.unsplash.com/random",
     link: "https://raw.githubusercontent.com/scaffold-eth/scaffold-eth/punk-wallet/README.md",
     id: "1",
+    pool: 'pool-1',
+    claimable: '0.5',
+    totalClaimable: '2.0',
   },
   {
     title: "Project 2",
@@ -46,6 +49,7 @@ const pools = [
 ];
 
 const Build = () => {
+  const [isProjectOwner, setIsProjectOwner] = useState(true);
   const [isShow, setIsShow] = useState(false);
   const router = useRouter();
   const { id } = router.query;
@@ -53,7 +57,11 @@ const Build = () => {
 
   return (
     <Wrapper isShow={isShow}>
-      <BuildProject filteredProject={filteredProject} pools={pools}/>
+      <BuildProject
+        filteredProject={filteredProject}
+        pools={pools}
+        isProjectOwner={isProjectOwner}
+      />
       <ToggleContainer>
         {isShow ? (
           <Toggle>
