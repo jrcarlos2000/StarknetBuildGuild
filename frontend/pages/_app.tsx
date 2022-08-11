@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <StarknetProvider
         autoConnect={true}
         connectors={connectors}
-        defaultProvider={new Provider({ baseUrl: "http://localhost:5050" })}
+        // defaultProvider={new Provider({ baseUrl: "http://localhost:5050" })}
       >
         <ThemeProvider theme={theme}>
           <Layout>
