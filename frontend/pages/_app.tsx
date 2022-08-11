@@ -7,11 +7,10 @@ import {
 } from "@starknet-react/core";
 import Layout from "~/components/Layout";
 import "../styles/reset.css";
-import { ThemeProvider } from "styled-components";
-import { theme } from "../styles/theme";
 import ReactModal from "react-modal";
 
 ReactModal.setAppElement("#__next");
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   const connectors = getInstalledInjectedConnectors();
@@ -28,16 +27,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   } else {
     return (
       <StarknetProvider
-        autoConnect={true}
+        autoConnect={false}
         connectors={connectors}
         defaultProvider={new Provider({ baseUrl: "http://localhost:5050" })}
       >
-        <ThemeProvider theme={theme}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ThemeProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </StarknetProvider>
+      
     );
   }
 }
