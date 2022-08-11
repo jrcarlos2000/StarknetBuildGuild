@@ -40,7 +40,7 @@ export default function Dashboard() {
   useEffect(() => {
     async function asyncFn() {
       if (account && allBuildResult && allBuildResult.length > 0) {
-        setUserBuilds(await fetchAllBuildInfo(allBuildResult, cCore, { 'owner' : account}));
+        setUserBuilds(await fetchAllBuildInfo(allBuildResult, cCore, { 'owner' : account.toLowerCase()}));
       }
     }
     asyncFn();
