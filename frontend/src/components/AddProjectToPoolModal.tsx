@@ -12,7 +12,7 @@ export const AddProjectToPoolModal = ({
   isOpen,
   onClose,
   id,
-}: Omit<ComponentProps<typeof CustomModal>, "title"> & { pools: any[] }) => {
+}: Omit<ComponentProps<typeof CustomModal>, "title"> & { id: string, pools: any[] }) => {
   const [selectedPoolId, setPoolId] = useState<any>("");
   const [buttonMsg, setButtonMsg] = useState<any>("Submit");
   const { contract: cCore } = useCoreContract();
