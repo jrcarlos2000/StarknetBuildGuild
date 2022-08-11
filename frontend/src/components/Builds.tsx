@@ -6,7 +6,7 @@ import { PrimaryBlueButton } from "./commons/PrimaryBlueButton";
 import { useCoreContract } from "~/hooks/Core";
 import { useStarknet, useStarknetInvoke, useStarknetTransactionManager } from "@starknet-react/core";
 import { NFTStorage } from "nft.storage";
-import { divideLongString } from "src/utils/core";
+import { divideLongString, getCurrentDateStr } from "src/utils/core";
 import { encodeShortString } from "starknet/dist/utils/shortString";
 
 export default function Builds({ projects }: { projects: any[] }) {
@@ -23,22 +23,24 @@ export default function Builds({ projects }: { projects: any[] }) {
     method : "add_buidl_to_pool"
   })
 
-  console.log('debugging add new buidl',transactions);
-
   const onSubmit = async (data: NewBuildFormData) => {
 
     // UNCOMMENT HERE
     const nftStorageClient = new NFTStorage({
       token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
     });
+    const currDateStr = getCurrentDateStr();
     const blob = new Blob([JSON.stringify(data, null, 2)], {type : 'application/json'});
     const nftMetadata = await nftStorageClient.store({
       image : data.images? data.images[0] : blob,
-      name : data.name,
-      description : data.description
+      name : data.name? data.name : '',
+      description : data.description? data.description : '',
+      repoUrl : data.repoUrl,
+      liveDemoUrl : data.liveDemoUrl,
+      youtubeUrl : data.youtubeUrl,
+      dateAdded : currDateStr
     });
     //COMMENT HERE
-    // let nftMetadata = {"url" : "www.google.com"};
     let metadataURI = divideLongString(nftMetadata["url"]).map((item) => {
       return encodeShortString(item);
     });

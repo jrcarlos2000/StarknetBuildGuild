@@ -43,7 +43,8 @@ describe("Deploying", function () {
 
   it("All Contracts", async function () {
     if (starknet.network == "devnet") {
-      cAccount = await starknet.deployAccount("OpenZeppelin");
+        let account = (await starknet.devnet.getPredeployedAccounts())[0];
+        cAccount = await starknet.getAccountFromAddress(account.address,account.private_key,'OpenZeppelin');
     }
 
     const cfUserRegistry = await starknet.getContractFactory(REGISTRY);
@@ -82,7 +83,14 @@ describe("Deploying", function () {
       console.error(err);
     }
   });
-  it("Deploy first Pool by admin", async function () {
+  it("Deploy 2 Pools by admin", async function () {
+    await cAccount.invoke(cCore,'deploy_pool',{
+        vote_start_time_ : 0n,
+        vote_end_time_: 99990000000000n,
+        stream_start_time_ : 999999999991111111n,
+        stream_end_time_: 99999999999111111n
+    });
+
     await cAccount.invoke(cCore,'deploy_pool',{
         vote_start_time_ : 0n,
         vote_end_time_: 99990000000000n,
@@ -91,7 +99,7 @@ describe("Deploying", function () {
     });
 
     const currPoolId = await cCore.call('get_current_pool_length');
-    console.log('currently %s pools deployed', currPoolId);
+    console.log('currently %s pools deployed', currPoolId.res);
 
   });
 });

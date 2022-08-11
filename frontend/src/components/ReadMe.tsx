@@ -8,10 +8,16 @@ export default function ReadMe({ url }: any) {
   useEffect(() => {
     const getRepo = async () => {
       try {
-        const repo = await fetch(url);
+        const repo = await fetch(url[0]);
         setRepo(await repo.text());
       } catch (error) {
         console.log(error);
+        try {
+          const repo = await fetch(url[1]);
+          setRepo(await repo.text());
+        } catch (error) {
+          console.log(error);
+        }
       }
     };
     getRepo();

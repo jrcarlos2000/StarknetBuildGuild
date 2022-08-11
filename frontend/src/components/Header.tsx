@@ -17,7 +17,6 @@ export default function Header({ account }: any) {
     e.preventDefault();
     router.push(href);
   };
-  console.log(router.asPath);
 
   return (
     <Wrapper>

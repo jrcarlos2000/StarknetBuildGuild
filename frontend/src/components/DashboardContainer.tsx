@@ -6,20 +6,20 @@ const data: ChallengeData[] = [
   {
     contract: 'someContract',
     demo: 'someDemo',
-    name: 'AwesomeContract',
-    status: 'accepted'
+    name: 'ERC721',
+    status: 'done'
   },
   {
     contract: 'someContract1',
     demo: 'someDemo1',
-    name: 'AwesomeContractAgain',
-    status: 'rejected'
+    name: 'Bridge',
+    status: 'in-progress'
   },
   {
     contract: 'someContract2',
     demo: 'someDemo2',
-    name: 'DecentContract',
-    status: 'in-progress'
+    name: 'ERC20',
+    status: 'not started'
   },
 ]
 

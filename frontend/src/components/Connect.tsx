@@ -9,7 +9,6 @@ export default function Connect({ account }: ConnectProps) {
   const filteredAvailable = available.filter((item) => {
     return item.options.id == "argent-x";
   });
-  console.log("filetered connectors", filteredAvailable);
   return (
     <Wrapper>
       {account ? (

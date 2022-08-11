@@ -62,7 +62,7 @@ export default function Dashboard() {
   const { contract: cUserRegistry } = useUserRegistryContract();
   const { contract: cCore } = useCoreContract();
   const [userInfo, setUserInfo] = useState<any>({});
-  const [userBuilds, setUserBuilds] = useState<any>({});
+  const [userBuilds, setUserBuilds] = useState<any>([]);
   const { data: registryResult } = useStarknetCall({
     contract: cUserRegistry,
     method: "get_user_info",
@@ -92,9 +92,6 @@ export default function Dashboard() {
     asyncFn();
   }, [allBuildResult]);
 
-  console.log('debugging dashboard : userInfo', userInfo);
-  console.log('debugging dashboard : userbuilds', userBuilds);
-
   const [user, setUser] = useState<UserProps>({
     image: "",
     description: "",
@@ -108,21 +105,21 @@ export default function Dashboard() {
       image: userInfo.image,
       name: userInfo.name,
       description: userInfo.description,
-      joined: userInfo.joinDate,
+      joined: userInfo.dateJoined,
       socialMedia: [
         {
           name: "twitter",
-          link: "https://twitter.com/",
+          link: userInfo.twitter,
           icon: <AiOutlineTwitter />,
         },
         {
           name: "telegram",
-          link: "https://telegram.com/",
+          link: userInfo.telegram,
           icon: <BsTelegram />,
         },
         {
           name: "github",
-          link: "https://github.com/",
+          link: userInfo.githubLink,
           icon: <AiOutlineGithub />,
         },
       ],

@@ -10,7 +10,7 @@ import { NFTStorage } from "nft.storage";
 import process from "process";
 import { useUserRegistryContract } from "~/hooks/UserRegistry";
 import { encodeShortString } from "starknet/dist/utils/shortString";
-import { divideLongString } from "../utils/core";
+import { divideLongString, getCurrentDateStr } from "../utils/core";
 import { PrimaryBlueButton } from "./commons/PrimaryBlueButton";
 
 export type RegisterFormData = {
@@ -48,10 +48,16 @@ export default function Registration() {
       const nftStorageClient = new NFTStorage({
         token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
       });
+
+      let today_str = getCurrentDateStr();
       const nftMetadata = await nftStorageClient.store({
         image: formData.file,
         name: formData.name,
         description: formData.description,
+        dateJoined : today_str,
+        twitter : `https://twitter.com/${formData.twitter}`,
+        telegram : `https://t.me/${formData.telegram}`,
+        githubLink : `https://github.com/${formData.github}`,
       });
       setButtonMsg("Loading...");
 
@@ -76,10 +82,6 @@ export default function Registration() {
       let metadataURI = divideLongString(nftMetadata["url"]).map((item) => {
         return encodeShortString(item);
       });
-
-      console.log(metadataURI);
-
-      console.log(githubPrefix, githubSuffix, metadataURI);
 
       await callRegister({
         args: [
@@ -137,7 +139,7 @@ export default function Registration() {
           placeholder="Your telegram handle"
           onChange={makeChangeHandler("telegram")}
         />
-        <SectionTitle>Website</SectionTitle>
+        <SectionTitle>Twitter Handle</SectionTitle>
         <SectionInput
           placeholder="Your twitter handle"
           onChange={makeChangeHandler("twitter")}

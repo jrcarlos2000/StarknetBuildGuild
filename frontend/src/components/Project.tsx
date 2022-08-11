@@ -25,7 +25,7 @@ export default function Project({ project }: any) {
           <Link href={`/builds/${project.id}`}>
             <Title>{project.name}</Title>
           </Link>
-          <PoolTag>{project.poolId}</PoolTag>
+          <PoolTag>{project.poolId=="0" ? "No Pool" : "Pool " + project.poolId}</PoolTag>
         </TitleContainer>
         <Description>{shortenParagraph(project.description, 140)}</Description>
         <Whitespaces />

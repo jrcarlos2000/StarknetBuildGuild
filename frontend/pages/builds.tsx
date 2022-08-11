@@ -105,7 +105,7 @@ export default function Builds() {
     args : [],
     options : {watch : true}
   });
-  
+
   useEffect(()=>{
     async function asyncFn() {
       if(allBuildResult && allBuildResult.length > 0){
@@ -121,7 +121,7 @@ export default function Builds() {
   };
 
   const filteredProject = allBuilds?.filter((project: any) => {
-    return project.title.toUpperCase().includes(searchText.toUpperCase());
+    return project.name.toUpperCase().includes(searchText.toUpperCase());
   });
 
   return (

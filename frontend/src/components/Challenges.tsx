@@ -8,7 +8,7 @@ import Link from "next/link";
 import { capitalize } from "src/utils/capitalize";
 import styled from "styled-components";
 
-export type ChallengeStatus = "accepted" | "in-progress" | "rejected";
+export type ChallengeStatus = "done" | "in-progress" | "not started";
 
 export type ChallengeData = {
   name: string;
@@ -146,15 +146,15 @@ const ChallengeStatusPill = styled.span<{ status: ChallengeStatus }>`
   font-size: 12px;
   font-weight: 600;
   background: ${(props) =>
-    props.status === "accepted"
+    props.status === "done"
       ? "#C6F6D5"
-      : props.status === "rejected"
+      : props.status === "not started"
       ? "#F56565"
       : "#F6E05E"};
   color: ${(props) =>
-    props.status === "accepted"
+    props.status === "done"
       ? "#22543D"
-      : props.status === "rejected"
+      : props.status === "not started"
       ? "#822727"
       : "#9C4221"};
 `;

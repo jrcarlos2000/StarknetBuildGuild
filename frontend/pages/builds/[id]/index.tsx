@@ -4,9 +4,9 @@ import BuildProject from "~/components/BuildProject";
 import ReadMe from "~/components/ReadMe";
 import { useEffect, useState } from "react";
 import { BsFillCaretRightFill, BsFillCaretDownFill } from "react-icons/bs";
-import { useStarknetCall } from "@starknet-react/core";
+import { useStarknet, useStarknetCall } from "@starknet-react/core";
 import { useCoreContract } from "~/hooks/Core";
-import { fetchBuildInfo } from "src/utils/core";
+import { fetchBuildInfo, parseReadMeFromRepo,fetchAllPoolInfo } from "src/utils/core";
 
 const projectList = [
   {
@@ -33,33 +33,41 @@ const projectList = [
   },
 ];
 
-const pools = [
-  {
-    id: 1,
-    name: "pool-1",
-  },
-  {
-    id: 2,
-    name: "pool-2",
-  },
-  {
-    id: 3,
-    name: "pool-3",
-  },
-];
+// const pools = [
+//   {
+//     id: 1,
+//     name: "pool-1",
+//   },
+//   {
+//     id: 2,
+//     name: "pool-2",
+//   },
+//   {
+//     id: 3,
+//     name: "pool-3",
+//   },
+// ];
 
 const Build = () => {
   const [isShow, setIsShow] = useState(false);
-  const [build, setBuild] = useState<any>([]);
+  const [build, setBuild] = useState<any>();
+  const [pools,setPools] = useState<any>([]);
   const router = useRouter();
   const { id } = router.query;
   const filteredProject = projectList.filter((project) => project.id === id);
   const {contract : cCore} = useCoreContract();
+  const {account} = useStarknet();
   const {data : BuildDataResult} = useStarknetCall({
     contract : cCore,
-    method : "get_build",
+    method : "get_builds_by_id",
     args : [id],
     options : {watch : false}
+  })
+  const {data : allPoolsResult} = useStarknetCall({
+    contract : cCore,
+    method : "get_all_pools",
+    args : [],
+    options : {watch : true}
   })
 
   useEffect(()=>{
@@ -71,11 +79,18 @@ const Build = () => {
     asyncFn();
   },[BuildDataResult]);
 
-  //get the curent pool number and create a array, pass to pools param.
+  useEffect(()=>{
+    async function asyncFn(){
+      if(allPoolsResult){
+        setPools(await fetchAllPoolInfo(allPoolsResult));
+      }
+    }
+    asyncFn();
+  },[allPoolsResult]);
 
   return (
     <Wrapper isShow={isShow}>
-      <BuildProject filteredProject={build} pools={pools}/>
+      {build ? <BuildProject filteredProject={build} pools={pools} isOwner={account && build.owner == account}/> : <></>}
       <ToggleContainer>
         {isShow ? (
           <Toggle>
@@ -96,7 +111,7 @@ const Build = () => {
         )}
         <p>ReadMe.md</p>
       </ToggleContainer>
-      {isShow && <ReadMe url={projectList[0].link} />}
+      {isShow && build && <ReadMe url={parseReadMeFromRepo(build.repoUrl)} />}
     </Wrapper>
   );
 };

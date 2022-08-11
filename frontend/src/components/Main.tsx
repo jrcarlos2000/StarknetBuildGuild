@@ -38,8 +38,6 @@ export default function Main() {
     method: "register",
   });
 
-  ///DEBUGGING
-  console.log("Debugging Transactions", transactions);
   const registryValue = useMemo(() => {
     if (registryResult && registryResult.length > 0) {
       const value = toBN(registryResult[0]);
@@ -80,30 +78,6 @@ export default function Main() {
               </InfoBox>
             </InfoBoxContainer>
             <ButtonContainer>
-              <Button
-                onClick={() => {
-                  callRegister({
-                    args: [
-                      encodeShortString("jrcassraalosss"),
-                      encodeShortString("2000"),
-                      ["0001", "0002", "0003"],
-                    ],
-                    metadata: { method: "register", message: "register user" },
-                  });
-                }}
-              >
-                add dummy user
-              </Button>
-              <Button
-                onClick={async () => {
-                  await axios.post("http://localhost:5050/mint", {
-                    address: account,
-                    amount: 1000000000000000000,
-                  });
-                }}
-              >
-                get testnet eth
-              </Button>
             </ButtonContainer>
           </MainContainer>
           <PictureContainer>
@@ -118,12 +92,6 @@ export default function Main() {
           </PictureContainer>
         </>
       )}
-      <button onClick={async ()=>{
-        await axios.post("http://localhost:5050/mint", {
-          'address' : `${account}`,
-          'amount' : 1000000000000000000
-        });
-      }}> get testnet tokens</button>
     </Wrapper>
   );
 }

@@ -28,9 +28,12 @@
   "scripts": {
     "compile": "./scripts/compile.sh",
     "deploy": "FLAGS=deploy npx hardhat test ",
-    "test" : "npx hardhat test"
+    "test": "FLAGS=test npx hardhat test",
+    "demo": "FLAGS=demo npx hardhat test",
+    "demo:pool" : "FLAGS=pool npx hardhat test"
   },
   "dependencies": {
-    "axios": "^0.27.2"
+    "axios": "^0.27.2",
+    "nft.storage": "^7.0.0"
   }
 }

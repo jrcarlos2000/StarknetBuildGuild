@@ -326,7 +326,6 @@ func get_all_builds{
 }() -> (res_len: felt, res: BuidlInfo*): 
     let (len) = total_buidl.read()
     let (info: BuidlInfo*) = alloc()
-
     let (res_len, res) = get_all_builds_internal(0, len, 0, info)
     return (res_len, res)
 end
