@@ -40,7 +40,7 @@ export default function Profile({
       <Description>{user.description}</Description>
       <SocialMediaContainer>
         {user.socialMedia.map((item) => (
-          <SocialMediaItem onClick={() => {window.open(item.link)}}>{item.icon}</SocialMediaItem>
+          <SocialMediaItem key={item.name} onClick={() => {window.open(item.link)}}>{item.icon}</SocialMediaItem>
         ))}
       </SocialMediaContainer>
       <DateJoined>

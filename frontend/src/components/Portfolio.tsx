@@ -7,7 +7,6 @@ import { Button } from "./commons/Button";
 
 Modal.setAppElement("#__next");
 
-
 const BuildsList = [
   { name: "Build 1", id: 1 },
   { name: "Build 2", id: 2 },
@@ -34,9 +33,7 @@ export default function Builds() {
     },
   };
 
-  const onSubmit = (data: NewBuildFormData) => {
-  }
-
+  const onSubmit = (data: NewBuildFormData) => {};
 
   return (
     <Wrapper>
@@ -54,7 +51,11 @@ export default function Builds() {
           onRequestClose={() => setIsOpen(false)}
           style={customStyles}
         >
-          <NewBuildModal isOpen={isOpen} onSubmit={onSubmit}/>
+          <NewBuildModal
+            onClose={() => setIsOpen(false)}
+            isOpen={isOpen}
+            onSubmit={onSubmit}
+          />
         </Modal>
       </TitleContainer>
       <BuildsContainer>

@@ -13,7 +13,6 @@ import Registration from "./Registration";
 import { toBN, hexToDecimalString } from "starknet/dist/utils/number";
 import { useUserRegistryContract } from "~/hooks/UserRegistry";
 import { encodeShortString } from "starknet/dist/utils/shortString";
-import axios from "Axios";
 import { Button } from "./commons/Button";
 
 const info = {
