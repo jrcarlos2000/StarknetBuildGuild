@@ -33,7 +33,7 @@ export const AddProjectToPoolModal = ({
     setButtonMsg("done");
     onClose;
   };
-  const handleChange = (e) => {
+  const handleChange = (e : any) => {
     setSelectedPool(e.target.value);
   };
   return (
