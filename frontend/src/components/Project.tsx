@@ -7,6 +7,7 @@ import { shortenParagraph } from "src/utils/shortenParagraph";
 import { LikeButton } from "./commons/LikeButton";
 import { useState } from "react";
 import { PoolTag } from "./commons/PoolTag";
+import placeholderImage from '../../assets/image/placeholder-image.png';
 
 export default function Project({ project }: any) {
   const [isLiked, setIsLiked] = useState(false);
@@ -17,7 +18,10 @@ export default function Project({ project }: any) {
     <Wrapper>
       <Link href={`http://localhost:3000/builds/${project.id}`}>
         <Thumbnail>
-          <img src={project.image} />
+          <img src={project.image} onError={({currentTarget}) => {
+            currentTarget.onerror = null;
+            currentTarget.src = placeholderImage.src;
+          }}/>
         </Thumbnail>
       </Link>
       <ProjectInfo>
@@ -68,6 +72,7 @@ const Thumbnail = styled.a`
     object-fit: contain;
   }
   height: 200px;
+  min-height: 200px;
   width: 100%;
   background: #f2f2f2;
   text-align: center;

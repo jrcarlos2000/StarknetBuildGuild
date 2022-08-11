@@ -12,8 +12,6 @@ import { FaEthereum } from "react-icons/fa";
 import Registration from "./Registration";
 import { toBN, hexToDecimalString } from "starknet/dist/utils/number";
 import { useUserRegistryContract } from "~/hooks/UserRegistry";
-import { encodeShortString } from "starknet/dist/utils/shortString";
-import { Button } from "./commons/Button";
 
 const info = {
   builders: 530,
