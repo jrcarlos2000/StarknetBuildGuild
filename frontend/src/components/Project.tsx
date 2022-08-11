@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
 import { Button } from "./commons/Button";
-import { OutlineButton } from "./commons/OutlineButton";
 import { Whitespaces } from "./commons/Whitespaces";
 import { shortenParagraph } from "src/utils/shortenParagraph";
 import { LikeButton } from "./commons/LikeButton";

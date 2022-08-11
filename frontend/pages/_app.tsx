@@ -1,6 +1,5 @@
 import { AppProps } from "next/app";
 import React, { useState, useEffect } from "react";
-import { Provider } from "starknet";
 import {
   getInstalledInjectedConnectors,
   StarknetProvider,

@@ -15,7 +15,6 @@ export default function Header({ account }: any) {
     e.preventDefault();
     router.push(href);
   };
-  console.log(router.asPath);
 
   return (
     <Wrapper>
@@ -77,7 +76,8 @@ const Logo = styled.a`
 
 const NavItem = styled.a<{ selected: boolean }>`
   text-decoration: none;
-  color: ${(props) => props.selected ? props.theme.purple : props.theme.white};
+  color: ${(props) =>
+    props.selected ? props.theme.purple : props.theme.white};
   margin-left: 1.3rem;
   &:hover {
     cursor: pointer;

@@ -6,50 +6,65 @@ import { useEffect, useState } from "react";
 import { BsFillCaretRightFill, BsFillCaretDownFill } from "react-icons/bs";
 import { useStarknet, useStarknetCall } from "@starknet-react/core";
 import { useCoreContract } from "~/hooks/Core";
-import { fetchBuildInfo, parseReadMeFromRepo,fetchAllPoolInfo } from "src/utils/core";
+import {
+  fetchBuildInfo,
+  parseReadMeFromRepo,
+  fetchAllPoolInfo,
+} from "src/utils/core";
+import { isAddressEqual } from "src/utils/address";
 
 const Build = () => {
   const [isShow, setIsShow] = useState(false);
   const [build, setBuild] = useState<any>();
-  const [pools,setPools] = useState<any>([]);
+  const [pools, setPools] = useState<any>([]);
   const router = useRouter();
   const { id } = router.query;
-  const {contract : cCore} = useCoreContract();
-  const {account} = useStarknet();
-  const {data : BuildDataResult} = useStarknetCall({
-    contract : cCore,
-    method : "get_builds_by_id",
-    args : [id],
-    options : {watch : false}
-  })
-  const {data : allPoolsResult} = useStarknetCall({
-    contract : cCore,
-    method : "get_all_pools",
-    args : [],
-    options : {watch : true}
-  })
+  const { contract: cCore } = useCoreContract();
+  const { account } = useStarknet();
+  const { data: BuildDataResult } = useStarknetCall({
+    contract: cCore,
+    method: "get_builds_by_id",
+    args: [id],
+    options: { watch: false },
+  });
+  const { data: allPoolsResult } = useStarknetCall({
+    contract: cCore,
+    method: "get_all_pools",
+    args: [],
+    options: { watch: true },
+  });
 
-  useEffect(()=>{
-    async function asyncFn(){
-      if(BuildDataResult){
+  useEffect(() => {
+    async function asyncFn() {
+      if (BuildDataResult) {
         setBuild(await fetchBuildInfo(BuildDataResult, cCore, id));
       }
     }
     asyncFn();
-  },[BuildDataResult]);
+  }, [BuildDataResult]);
 
-  useEffect(()=>{
-    async function asyncFn(){
-      if(allPoolsResult){
+  useEffect(() => {
+    async function asyncFn() {
+      if (allPoolsResult) {
         setPools(await fetchAllPoolInfo(allPoolsResult));
       }
     }
     asyncFn();
-  },[allPoolsResult]);
+  }, [allPoolsResult]);
 
   return (
     <Wrapper isShow={isShow}>
-      {build ? <BuildProject filteredProject={build} pools={pools} isOwner={account && build.owner.toLowerCase() == account.toLowerCase()}/> : <></>}
+      {build ? (
+        <BuildProject
+          filteredProject={build}
+          pools={pools}
+          isOwner={
+            account && build.owner && isAddressEqual(build.owner, account)
+          }
+        />
+      ) : (
+        <></>
+      )}
       <ToggleContainer>
         {isShow ? (
           <Toggle>

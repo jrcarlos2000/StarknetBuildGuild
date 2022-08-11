@@ -9,6 +9,7 @@ import DashboardContainer from "~/components/DashboardContainer";
 import { useUserRegistryContract } from "~/hooks/UserRegistry";
 import { parseUserInfo, fetchAllBuildInfo } from "../src/utils/core";
 import { useCoreContract } from "~/hooks/Core";
+import { normalizeAddress } from "src/utils/address";
 
 export default function Dashboard() {
   const { account } = useStarknet();
@@ -19,14 +20,14 @@ export default function Dashboard() {
   const { data: registryResult } = useStarknetCall({
     contract: cUserRegistry,
     method: "get_user_info",
-    args: [account ? account : '0'],
+    args: [account ? account : "0"],
     options: { watch: false },
   });
-  const {data : allBuildResult} = useStarknetCall({
-    contract : cCore,
-    method : "get_all_builds",
-    args : [],
-    options : {watch : true}
+  const { data: allBuildResult } = useStarknetCall({
+    contract: cCore,
+    method: "get_all_builds",
+    args: [],
+    options: { watch: true },
   });
   useEffect(() => {
     async function asyncFn() {
@@ -36,11 +37,15 @@ export default function Dashboard() {
     }
     asyncFn();
   }, [registryResult]);
-  
+
   useEffect(() => {
     async function asyncFn() {
       if (account && allBuildResult && allBuildResult.length > 0) {
-        setUserBuilds(await fetchAllBuildInfo(allBuildResult, cCore, { 'owner' : account.toLowerCase()}));
+        setUserBuilds(
+          await fetchAllBuildInfo(allBuildResult, cCore, {
+            owner: normalizeAddress(account),
+          })
+        );
       }
     }
     asyncFn();
@@ -82,7 +87,10 @@ export default function Dashboard() {
   return (
     <Wrapper>
       <Profile account={account} user={user} className="profile" />
-      <DashboardContainer className="dashboard-container" projects={userBuilds} />
+      <DashboardContainer
+        className="dashboard-container"
+        projects={userBuilds}
+      />
     </Wrapper>
   );
 }

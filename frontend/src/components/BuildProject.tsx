@@ -1,12 +1,7 @@
 import styled, { css, keyframes } from "styled-components";
 import { BiLinkExternal, BiAddToQueue } from "react-icons/bi";
 import Link from "next/link";
-import {
-  useContract,
-  useStarknet,
-  useStarknetCall,
-  useStarknetTransactionManager,
-} from "@starknet-react/core";
+import { useContract, useStarknetCall } from "@starknet-react/core";
 import Account from "./Account";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -17,10 +12,10 @@ import { OutlineButton } from "../components/commons/OutlineButton";
 import { Button } from "./commons/Button";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { AddProjectToPoolModal } from "./AddProjectToPoolModal";
-import { useCoreContract } from "~/hooks/Core";
 import QFPoolAbi from "../abis/qf_pool.json";
 import { Abi } from "starknet";
 import { parseAmountFunded } from "../utils/core";
+import placeholderImage from "../../assets/image/placeholder-image.png";
 
 export default function BuildProject({
   filteredProject,
@@ -37,8 +32,7 @@ export default function BuildProject({
   const [amountFunded, setAmountFunded] = useState<any>();
   const [isAddProjectToPoolModalOpen, setAddProjectToPoolModalOpen] =
     useState(false);
-  const { contract: cCore } = useCoreContract();
-  const { transactions } = useStarknetTransactionManager();
+
   const myProject = filteredProject;
   const { contract: poolContract } = useContract({
     abi: QFPoolAbi as Abi,
@@ -86,29 +80,31 @@ export default function BuildProject({
         <ProjectInfo>
           <Flex>
             <TitleContainer>
-              <Title>{myProject.title}</Title>
+              <Title>{myProject.name}</Title>
               <FaDonate
                 onClick={() => {
                   setDonateModalOpen(true);
                 }}
               />
             </TitleContainer>
-            <AddProjectToPoolButton
-              isAddedToPool={isAddedToPool}
-              onClick={() => setAddProjectToPoolModalOpen(true)}
-            >
-              {isAddedToPool ? (
-                <Pool>
-                  Project is Added <AiFillCheckCircle />
-                </Pool>
-              ) : isOwner ? (
-                <Pool>
-                  Add Project To Pool <BiAddToQueue />
-                </Pool>
-              ) : (
-                <></>
-              )}
-            </AddProjectToPoolButton>
+            {isOwner ? (
+              <AddProjectToPoolButton
+                isAddedToPool={isAddedToPool}
+                onClick={() => setAddProjectToPoolModalOpen(true)}
+              >
+                {isAddedToPool ? (
+                  <Pool>
+                    Project is Added <AiFillCheckCircle />
+                  </Pool>
+                ) : (
+                  <Pool>
+                    Add Project To Pool <BiAddToQueue />
+                  </Pool>
+                )}
+              </AddProjectToPoolButton>
+            ) : (
+              <></>
+            )}
           </Flex>
           <ButtonContainer>
             <Link href="/">
@@ -148,7 +144,13 @@ export default function BuildProject({
       </MainContainer>
       <Link href={`http://localhost:3000/builds/${myProject.id}`}>
         <ThumbnailContainer>
-          <Thumbnail src={myProject.image} layout="fill" objectFit="cover" />
+          <Thumbnail
+            src={myProject.image}
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null;
+              currentTarget.src = placeholderImage.src;
+            }}
+          />
         </ThumbnailContainer>
       </Link>
     </Wrapper>
@@ -172,7 +174,12 @@ const ThumbnailContainer = styled.div`
   height: 240px;
   position: relative;
 `;
-const Thumbnail = styled(Image)``;
+const Thumbnail = styled.img`
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  background-color: white;
+`;
 
 const MainContainer = styled.div`
   width: 100%;

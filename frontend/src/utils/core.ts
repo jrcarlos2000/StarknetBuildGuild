@@ -8,7 +8,7 @@ import { Contract } from "starknet";
 import { uint256ToBN } from "starknet/dist/utils/uint256";
 import { formatEther } from "ethers/lib/utils";
 
-export function divideLongString(longString) {
+export function divideLongString(longString: string) {
   let str_arr = [];
   let i = 0;
   while (i < longString.length - 31) {
@@ -21,7 +21,7 @@ export function divideLongString(longString) {
   return str_arr;
 }
 
-export async function parseUserInfo(userDataResult) {
+export async function parseUserInfo(userDataResult: any[]) {
   let github = decodeShortString(toHex(userDataResult[0].prefix).toString());
   github = github.concat(
     decodeShortString(toHex(userDataResult[0].suffix).toString())
@@ -32,7 +32,7 @@ export async function parseUserInfo(userDataResult) {
   return data;
 }
 
-export async function fetchBuildInfo(result, contract, id) {
+export async function fetchBuildInfo(result: any[], contract: any, id: any) {
   let ipfsResult = await contract.get_build_ipfs(id);
   let ipfsData = await fetchIpfsArrayData(ipfsResult[0]);
   let data = {
@@ -48,7 +48,11 @@ export async function fetchBuildInfo(result, contract, id) {
 
   return data;
 }
-export async function fetchAllBuildInfo(result, contract, map) {
+export async function fetchAllBuildInfo(
+  result: any[],
+  contract: any,
+  map: any
+) {
   let output = [];
   let upper = result[0].length;
   for (let i = 1; i <= upper; i++) {
@@ -75,14 +79,14 @@ export async function fetchAllBuildInfo(result, contract, map) {
   });
   return mappedOutput;
 }
-export function convertToAddress(address) {
+export function convertToAddress(address: string) {
   let output = address;
   while (output.length < 66) {
     output = "0x0" + output.slice(2);
   }
   return output;
 }
-export function parseReadMeFromRepo(repoLink) {
+export function parseReadMeFromRepo(repoLink: string) {
   let output1 =
     "https://raw.githubusercontent.com/" +
     repoLink.slice(19) +
@@ -103,7 +107,7 @@ export function getCurrentDateStr() {
   return mm + "/" + dd + "/" + yyyy;
 }
 
-export async function fetchAllPoolInfo(allResult) {
+export async function fetchAllPoolInfo(allResult: any[][]) {
   let output = allResult[0];
   output = output.map((item, key) => {
     return {
@@ -115,13 +119,13 @@ export async function fetchAllPoolInfo(allResult) {
   return output;
 }
 
-export async function parseAmountFunded(result) {
+export async function parseAmountFunded(result: any[]) {
   let output = uint256ToBN(result[0].sum_c).toString();
   output = formatEther(output);
   return output;
 }
 
-async function fetchIpfsArrayData(ipfsArray) {
+async function fetchIpfsArrayData(ipfsArray: any[]) {
   let ipfsURI = "";
   for (let i = 0; i < ipfsArray.length; i++) {
     ipfsURI = ipfsURI.concat(decodeShortString(toHex(ipfsArray[i]).toString()));
