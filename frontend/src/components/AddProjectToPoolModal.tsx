@@ -1,5 +1,5 @@
 import { useStarknetInvoke } from "@starknet-react/core";
-import { ComponentProps, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useCoreContract } from "~/hooks/Core";
 import { FormSelect, FormSelectItem } from "./commons/FormSelect";
@@ -13,7 +13,6 @@ export const AddProjectToPoolModal = ({
   onClose,
   id,
 }: Omit<ComponentProps<typeof CustomModal>, "title"> & { id: string, pools: any[] }) => {
-  const [selectedPoolId, setPoolId] = useState<any>("");
   const [buttonMsg, setButtonMsg] = useState<any>("Submit");
   const { contract: cCore } = useCoreContract();
   const [selectedPool, setSelectedPool] = useState<any>("");
@@ -23,6 +22,7 @@ export const AddProjectToPoolModal = ({
   });
   const onClickAddButton = async () => {
     setButtonMsg("loading...");
+    console.log([id, selectedPool]);
     await callAddToPool({
       args: [id, selectedPool],
       metadata: {
@@ -30,9 +30,13 @@ export const AddProjectToPoolModal = ({
         message: "add this build to pool",
       },
     });
-    setButtonMsg("done");
+    setButtonMsg("Submit");
     onClose;
   };
+  useEffect(()=>{
+    console.log(pools, "enetering here");
+   if(pools.length > 0) setSelectedPool("1");
+  },[pools])
   const handleChange = (e: any) => {
     setSelectedPool(e.target.value);
   };
