@@ -39,7 +39,7 @@ export default function DonateModal({
   const onDonateSubmit = async () =>{
     setButtonMsg('Loading...');
     const Account = await connectors[0].account();
-    const balance = await cToken.balanceOf(account);
+    const balance = await cToken?.balanceOf(account);
     const finalBalance = uint256ToBN(balance[0]).toString();
 
     await Account.execute([
