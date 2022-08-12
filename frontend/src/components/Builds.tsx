@@ -4,57 +4,55 @@ import NewBuildModal, { NewBuildFormData } from "./NewBuildModal";
 import Project from "./Project";
 import { PrimaryBlueButton } from "./commons/PrimaryBlueButton";
 import { useCoreContract } from "~/hooks/Core";
-import { useStarknet, useStarknetInvoke, useStarknetTransactionManager } from "@starknet-react/core";
+import {
+  useStarknet,
+  useStarknetInvoke,
+  useStarknetTransactionManager,
+} from "@starknet-react/core";
 import { NFTStorage } from "nft.storage";
 import { divideLongString, getCurrentDateStr } from "src/utils/core";
 import { encodeShortString } from "starknet/dist/utils/shortString";
 
 export default function Builds({ projects }: { projects: any[] }) {
   const [isOpen, setIsOpen] = useState(false);
-  const {account} = useStarknet();
+  const { account } = useStarknet();
   const { contract: cCore } = useCoreContract();
   const { transactions } = useStarknetTransactionManager();
   const { invoke: callAddBuidl } = useStarknetInvoke({
-      contract: cCore,
-      method: "add_buidl",
+    contract: cCore,
+    method: "add_buidl",
   });
-  const {invoke : callAddBuildToPool} = useStarknetInvoke({
-    contract : cCore,
-    method : "add_buidl_to_pool"
-  })
+  const { invoke: callAddBuildToPool } = useStarknetInvoke({
+    contract: cCore,
+    method: "add_buidl_to_pool",
+  });
 
   const onSubmit = async (data: NewBuildFormData) => {
-
     // UNCOMMENT HERE
     const nftStorageClient = new NFTStorage({
       token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
     });
     const currDateStr = getCurrentDateStr();
-    const blob = new Blob([JSON.stringify(data, null, 2)], {type : 'application/json'});
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
     const nftMetadata = await nftStorageClient.store({
-      image : data.images? data.images[0] : blob,
-      name : data.name? data.name : '',
-      description : data.description? data.description : '',
-      repoUrl : data.repoUrl,
-      liveDemoUrl : data.liveDemoUrl,
-      youtubeUrl : data.youtubeUrl,
-      dateAdded : currDateStr
+      image: data.images ? data.images[0] : blob,
+      name: data.name ? data.name : "",
+      description: data.description ? data.description : "",
+      repoUrl: data.repoUrl,
+      liveDemoUrl: data.liveDemoUrl,
+      youtubeUrl: data.youtubeUrl,
+      dateAdded: currDateStr,
     });
     //COMMENT HERE
     let metadataURI = divideLongString(nftMetadata["url"]).map((item) => {
       return encodeShortString(item);
     });
     await callAddBuidl({
-      args: [
-        metadataURI,
-      ],
+      args: [metadataURI],
       metadata: { method: "add_buidl", message: "adding build" },
     });
-    // await callAddBuildToPool({
-    //   args : [1,1],
-    //   metadata : { method : "add_buidl_to_pool", message : "lets add this build to a pool"},
-    // }
-    // )
   };
 
   return (
@@ -77,13 +75,15 @@ export default function Builds({ projects }: { projects: any[] }) {
           Submit New Build
         </PrimaryBlueButton>
       </TitleContainer>
-      <BuildsContainer>
-        {!projects || projects.length === 0 ? (
-          <NoBuilds />
-        ) : (
-          projects.map((p) => <Project key={p.id} project={p} />)
-        )}
-      </BuildsContainer>
+      {!projects || projects.length === 0 ? (
+        <NoBuilds />
+      ) : (
+        <BuildsContainer>
+          {projects.map((p) => (
+            <Project key={p.id} project={p} />
+          ))}
+        </BuildsContainer>
+      )}
     </Wrapper>
   );
 }
@@ -121,6 +121,7 @@ const NoBuildsContainer = styled.div`
   border-radius: 0.5rem;
   min-height: 200px;
   align-items: center;
+  width: 100%;
 `;
 
 const NoBuildsText = styled.p`

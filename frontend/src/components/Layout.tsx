@@ -19,11 +19,9 @@ export default function Layout({ children }: IProps) {
 }
 
 const Wrapper = styled.div`
-  display: flex;
   max-width: 100vw;
   display: grid;
   place-items: center;
   font-family: "Poppins", sans-serif;
-  flex: 1;
   background-color: #0d122b;
 `;

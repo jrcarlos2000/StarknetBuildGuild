@@ -1,6 +1,5 @@
 import { AppProps } from "next/app";
 import React, { useState, useEffect } from "react";
-import { Provider } from "starknet";
 import {
   getInstalledInjectedConnectors,
   StarknetProvider,
@@ -29,7 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <StarknetProvider
         autoConnect={false}
         connectors={connectors}
-        defaultProvider={new Provider({ baseUrl: "http://localhost:5050" })}
+        // defaultProvider={new Provider({ baseUrl: "http://localhost:5050" })}
       >
         <Layout>
           <Component {...pageProps} />

@@ -12,7 +12,7 @@ export const AddProjectToPoolModal = ({
   isOpen,
   onClose,
   id,
-}: Omit<ComponentProps<typeof CustomModal>, "title"> & { pools: any[], id : string }) => {
+}: Omit<ComponentProps<typeof CustomModal>, "title"> & { id: string, pools: any[] }) => {
   const [selectedPoolId, setPoolId] = useState<any>("");
   const [buttonMsg, setButtonMsg] = useState<any>("Submit");
   const { contract: cCore } = useCoreContract();
@@ -33,7 +33,7 @@ export const AddProjectToPoolModal = ({
     setButtonMsg("done");
     onClose;
   };
-  const handleChange = (e : any) => {
+  const handleChange = (e: any) => {
     setSelectedPool(e.target.value);
   };
   return (
